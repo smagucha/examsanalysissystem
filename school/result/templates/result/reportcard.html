@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>report card</title>
+<style>
+#customers {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 75%;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 4px;
+}
+body{
+  font-size: 15px;
+}
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+  text-align: left;
+  background-color: #04AA6D;
+  color: white;
+}
+p {
+  color: navy;
+  text-indent: 30px;
+  text-transform: uppercase;
+}
+.table{
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 75%
+}
+.table td{
+  padding: 2px;
+}
+.table tr:nth-child(even){background-color: #f2f2f2;}
+
+.table tr:hover {background-color: #ddd;}
+</style>
+</head>
+<body>
+<h1>kisumu boys high school</h1>
+<table class='table'>
+  <tr><td>Name: {{student.first_name}} {{student.middle_name}} {{student.last_name}}</td><td>{{Term}} {{student.year.year}}</td></tr>
+  <tr><td>Admin_no: {{student.Admin_no}} </td><td>stream rank {{streamnumber}} out of {{streamtotal}}</td></tr>
+  <tr><td>Class: {{student.class_name}} {{student.stream}}</td> <td>Class rank {{classnumber}} out of {{totalclass}}</td></tr>
+  <tr><td>Grade: {{Grade}}</td></tr>
+</table>
+<table id="customers">
+  <tr>
+  <th colspan="4">{{Term}} {{myvar.year.year}}</th>
+  </tr>
+  <tr>
+    <th>Subject</th>
+    <th>Marks</th>
+    <th>Grade</th>
+    <th>class rank</th>
+  </tr>
+  {%for i in q%}
+    <tr>
+      {%for j in i%}
+      <td>{{j}}</td>
+      {%endfor%}
+    </tr>
+  {%endfor%}
+</table>
+<p></p>
+<p>Total marks: {{totalmarks}} out of {{outsubject}}</p>
+<p>class teacher comments</p>
+</body>
+</html>

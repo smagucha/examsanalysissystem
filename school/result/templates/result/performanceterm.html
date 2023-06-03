@@ -1,0 +1,72 @@
+{% extends 'student/base.html'%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+<h1>{{name|capfirst}}</h1>
+   <h1>Class Subject Average </h1>
+{% if stream %}
+    <a class='link' href="{% url 'result:streamanalysispdf' name stream term%}">download pdf</a>
+{%else%}
+    <a class='link' href="{% url 'result:streamanalysispdf' name  term%}">download pdf</a>
+{%endif%}
+<table class='table'>
+<thead>
+    <tr>
+    {%for subject in subject%}
+        <th>{{subject}}</th>
+    {%endfor%}
+    </tr>
+</thead>
+<tbody>
+    <tr> 
+        {%for avg in avgsubject.items%}
+             <td>{{avg.1|floatformat:"0"}}</td>
+        {%endfor%}
+    </tr>          
+</tbody>
+</table>
+
+<h1>Best Student Per Subject</h1>
+<table class= 'table'>
+<thead>
+    <tr>
+        <td>Subject</td>
+        <th>Student</th>
+        <th>Marks</th>
+    </tr>
+</thead>
+<tbody>
+       {%for a,b,c in z%}
+        <tr>
+            <td>
+                {{a}}
+            </td>
+            <td>
+                {{b}}
+            </td>
+            <td>
+                {{c}}
+            </td>
+       </tr>
+       {%endfor%}
+</tbody>
+</table>
+
+<h1>Grades</h1>
+<table class= 'table'>
+    <thead>
+        <tr>
+            {%for i in Count.keys%}
+            <th>{{i}}</th>
+            {%endfor%}
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            {%for i, j in Count.items%}
+            <td> {{j}}</td>  
+            {%endfor%}
+        </tr>           
+    </tbody>
+</table>
+
+{%endblock%}

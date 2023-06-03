@@ -1,0 +1,35 @@
+{% extends 'student/base.html'%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+{%load static%}
+<h1>{{name}}</h1>
+{%if stream%}
+<a class='link' href="{% url 'result:subjectperrankstreamtermpdf' name stream term subject %}">download pdf</a>
+{%else%}
+<a class='link' href="{% url 'result:subjectperrankclasspdf' name  term subject %}">download pdf</a>
+{%endif%}
+<table class='table'>
+    <thead>
+        <tr>
+            <th>Ranking</th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Subject</th>
+            <th>Marks</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for mark in  rankings_data %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            {% for i in mark %}
+            <td>
+                {{i}} 
+            </td> 
+            {%endfor%}
+        </tr>
+        {%endfor%}          
+    </tbody>
+</table>
+{%endblock%}

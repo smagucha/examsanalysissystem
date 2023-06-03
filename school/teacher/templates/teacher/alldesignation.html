@@ -1,0 +1,25 @@
+{% extends 'student/base.html'%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+<h1>List of All Grade</h1>
+ <table class='table'>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+    	{% for alldesign in alldesignation%}
+        <tr>
+            <td>{{alldesign.title|capfirst }}</a></td>
+            <td><a class='link' href="{% url 'updatedesignation' alldesign.id%}">update</a></td>
+            <td><a class= 'link' href="{% url 'deletedesignation' alldesign.id %}">delete</a></td>            
+        </tr>
+           {%endfor%}              
+    </tbody>
+</table>
+
+
+{%endblock%}

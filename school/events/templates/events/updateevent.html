@@ -1,0 +1,9 @@
+{% extends 'student/base.html'%}
+{%load static%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+{% if request.user|has_group:"Admin" or request.user|has_group:"Teacher" %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
+{% include 'student/form.html' %}
+{%endif%}
+{%endblock%}

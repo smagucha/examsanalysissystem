@@ -1,0 +1,20 @@
+{% extends 'student/base.html'%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+{%for subject in subjects%}
+<div class="col-xxl-4 col-md-6">
+    <div class="card info-card sales-card">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                <i class="bi bi-house"></i>
+            </div>
+            <div class="ps-3">
+                <h6><a href="{% url 'result:subjectperrankstreamterm' classname streamname term subject %}">{{subject}}</a></h6>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%endfor%}
+{%endblock%}

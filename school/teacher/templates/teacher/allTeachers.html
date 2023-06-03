@@ -1,0 +1,39 @@
+{% extends 'student/base.html'%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+<a href="{% url 'addTeacher' %}"> add teacher</a>
+<table class="table ">
+<thead>
+    <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Id No</th>
+        <th>Phone Number</th>
+        <th>Email</th>
+        <th>Physical Adddress</th>
+        <th>Date Of Appointment</th>
+        <th>Gender</th>
+        <th>Designation</th>
+        <th>Update</th>
+        <th>Delete</th>
+    </tr>
+</thead>
+<tbody>
+	{% for Teacher in listTeacher%}
+    <tr>
+        <td>{{Teacher.user.first_name|capfirst}}</td>
+        <td>{{Teacher.user.last_name|capfirst}}</td>
+        <td>{{Teacher.Idno}}</td>
+        <td>{{Teacher.phonenumber}}</td>
+        <td>{{Teacher.email}}</td>
+        <td>{{Teacher.physical_add|capfirst}}</td>
+        <td>{{Teacher.date_of_appointment}}</td>
+        <td>{{Teacher.gender|capfirst}}</td>
+        <td>{{Teacher.designation|capfirst}}</td>
+        <td><a href="{% url 'updateTeacher' Teacher.id%}">Update</a></td>
+        <td><a href="{% url 'deleteTeacher' Teacher.id%}">Delete</a></td>
+    </tr>
+       {%endfor%}              
+</tbody>
+</table>
+{%endblock%}

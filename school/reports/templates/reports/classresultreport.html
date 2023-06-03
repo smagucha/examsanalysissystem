@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+	table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+ td, th {
+  border: 1px solid #ddd;
+  padding: 2px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2;}
+
+tr:hover {background-color: #ddd;}
+
+th {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  text-align: left;
+  background-color: #04AA6D;
+  color: white;
+}
+
+</style>
+</head>
+<body>
+<table>
+        <tr>
+            <th>Rank</th>
+            <th>Student</th>
+            {%for subjects in Subject%}
+            <th>{{subjects.name|capfirst}}</th>
+            {%endfor%}
+            <th>Total</th>
+            <th>Grade</th>
+            <th>Points</th>
+        </tr>
+
+  {%for student in sorttotalfinal%}
+        <tr>
+            {%for stu in student%}
+                <td>{{stu}}</td>
+            {%endfor%}
+        </tr>
+        {%endfor%}  
+  
+</table>
+
+</body>
+</html>
+
+
+

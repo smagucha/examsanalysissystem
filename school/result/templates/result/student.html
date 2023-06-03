@@ -1,0 +1,84 @@
+{% extends 'student/base.html'%}
+{%load custom_tags%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+{{idstudent.first_name|capfirst}}
+{{idstudent.middle_name|capfirst}}
+{{idstudent.last_name|capfirst}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script> 
+<h1>Parent Details</h1>
+<table class='table'>
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Physical Address</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{student.parent.user.first_name|capfirst}}</a></td>
+            <td>{{student.parent.user.last_name|capfirst}}</td>
+            <td>{{student.parent.phonenumber}}</td>
+            <td>{{student.parent.user.email}}</td>
+            <td>{{student.parent.physical_add|capfirst}}</td>
+        </tr>              
+    </tbody>
+</table>
+<h1> student results </h1>
+<table  class="table " >
+    <thead>
+        <tr>
+            <th>Term</th>
+            <th>Rank Stream</th>
+            <th>Rank Class</th>
+            {%for subject in subject%}
+                <th>{{subject|capfirst}}</th>
+            {%endfor%}
+            <th>Total</th>
+            <th>Grade</th>
+            <th>Points</th>
+            <th>report card</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pupil, marks in getterm.items%}
+                <tr>
+                    <td>{{pupil}}</td>
+                    {%for mark in marks%}
+                    <td>{{mark}}</td>
+                    {%endfor%}
+                    <td><a class="link" href="{% url 'result:reportcard' classname student.id %}">Report Card {{student.id}}</a></td>
+                </tr>
+        {%endfor%}            
+    </tbody>
+</table>
+<h1>Performance Trend</h1>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+<script>
+new Chart("myChart", {
+  type: "line",
+  data: {
+    labels:  {{terms|safe}},
+    datasets: [{
+      fill: false,
+      backgroundColor: 'rgb(255, 99, 132)',
+      borderColor: 'rgb(255, 99, 132)',
+      data: {{points|safe}},
+    }]
+  },
+  options: {
+    legend: {display: false},
+    scales: {
+      yAxes: [{ticks: {min: 0, max:12}}],
+    }
+  }
+});
+</script>
+{{ data|safe }}
+{%endblock%}
+
+

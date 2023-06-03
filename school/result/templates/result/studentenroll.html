@@ -1,0 +1,33 @@
+{% extends 'student/base.html'%}
+{%block content%}
+<form method= 'POST'>
+	{% csrf_token %}
+	<table class='table'>
+		<tr>
+			<th>
+				student
+			</th>
+			<th>
+				subject
+			</th>
+		</tr>
+		{% for detail in getstudents %}
+		<tr>
+			<td>
+				{{detail.first_name}}
+			</td>
+			<td>
+				<select  name='subjectid'>
+						<option value=''></option>
+						{% for detail in getsubjects %}
+						<option value={{detail.name}}>{{detail.name}}</option>
+						{% endfor %}
+				</select>
+			</td>
+		</tr>
+		{% endfor %}	
+</table>
+<br/>
+<input type="submit" name="submit" id="submit">
+</form>
+{%endblock%}

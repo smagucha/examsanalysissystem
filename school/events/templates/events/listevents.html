@@ -1,0 +1,28 @@
+{% extends 'student/base.html'%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+<a href="{% url 'event:event' %}">add event</a>
+
+<table class="table">
+<thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Date</th>
+        <th>Update</th>
+        <th>Delete</th>
+    </tr>
+</thead>
+<tbody>
+	{% for events in eventlist%}
+    <tr>
+        <td>{{events.name|capfirst}}</td>
+        <td>{{events.description|capfirst}}</td>
+        <td>{{events.date}}</td>
+        <td><a class="link" href="{% url 'event:updateevent' events.id%}">Update</a></td>
+        <td><a class="link" href="{% url 'event:deleteevent' events.id%}">Delete</a></td>
+    </tr>
+       {%endfor%}              
+</tbody>
+</table>
+{%endblock%}

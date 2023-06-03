@@ -1,0 +1,10 @@
+{% extends 'student/base.html'%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+<p>choose a subject to enter results</p>
+{%for subject in subjects%}
+<a href="{% url 'result:terms' classname streamname subject %}">{{subject}}</a>
+{%endfor%}
+{%endblock%}
+
+

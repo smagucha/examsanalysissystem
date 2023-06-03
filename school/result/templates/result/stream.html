@@ -1,0 +1,10 @@
+{% extends 'student/base.html' %}
+{%block content%}
+class {{name}}
+{%for stream in allstream%}
+<a href="">{{stream.name}}</a>
+{%endfor%}
+{%endblock%}
+
+
+

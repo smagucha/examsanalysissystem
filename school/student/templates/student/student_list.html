@@ -1,0 +1,90 @@
+{% extends 'student/base.html'%}
+{%block title%}{{title}}{%endblock title%}
+{%block content%}
+{%for class in allclasses%}
+	<a href="{% url 'student:classstudent' class %}">{{class}}</a>
+{%endfor%}
+{%for stream in allstream%}
+	<a href="{% url 'student:streamstudent' name stream %}">{{stream}}</a>
+{%endfor%}
+<table class="table">
+	<tr>
+		<th>
+			first name
+		</th>
+		<th>
+			middle name
+		</th>
+		<th>
+			admission no
+		</th>
+		<th>
+			date of birth
+		</th>
+		<th>
+			date of admission
+		</th>
+		<th>
+			class
+		</th>
+		<th>
+			stream
+		</th>
+		<th>
+			gender
+		</th>
+		<th>
+			year
+		</th>
+		<th>
+			update
+		</th>
+		<th>
+			delete
+		</th>
+	</tr>
+	
+	{% for detail in student%}
+	<tr>
+
+		<td>
+			{%if name %}
+			<a href="{% url 'result:student-detail' name detail.id %}">{{detail.first_name}}</a>
+			{%else%}
+			{{detail.first_name}}
+			{%endif%}
+		</td>
+		<td>
+			{{detail.middle_name}}
+		</td>
+		<td>
+			{{detail.Admin_no}}
+		</td>
+		<td>
+			{{detail.date_of_birth}}
+		</td>
+		<td>
+			{{detail.date_of_admission}}
+		</td>
+		<td>
+			{{detail.class_name}}
+		</td>
+		<td>
+			{{detail.stream}}
+		</td>
+		<td>
+			{{detail.gender}}
+		</td>
+		<td>
+			{{detail.year}}
+		</td>
+		<td>
+			<a href="{% url 'student:updatestudent' detail.id%}">update</a>
+		</td>
+		<td>
+			<a href="{% url 'student:updatestudent' detail.id%}">delete</a>
+		</td>
+	</tr>
+	{%endfor%}
+</table>
+{%endblock%}

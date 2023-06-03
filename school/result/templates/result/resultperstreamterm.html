@@ -1,0 +1,31 @@
+{% extends 'student/base.html'%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+<h1>results for {{name}} {{stream}} {{term}}</h1>
+link for {{name}} {{stream}}  for {{term}} result analysis  <a href="{% url 'result:streamexamanalysis' name stream term %}">link</a>
+<p><a href="{% url 'result:resultpertermexcelstream' name stream term %}">download excel</a></p>
+<table class= 'table'>
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Student</th>
+
+            {%for subjects in Subject%}
+                <th>{{subjects.name|capfirst}}</th>
+            {%endfor%}
+            <th>Total</th>
+          <th>Grade</th>
+        <th>Points</th>
+        </tr>
+    </thead>
+    <tbody>
+        {%for student in page_obj%}
+        <tr>
+            {%for stu in student%}
+                <td>{{stu}}</td>
+            {%endfor%}
+        </tr>
+        {%endfor%}           
+    </tbody>
+</table>
+{%endblock%}

@@ -1,0 +1,41 @@
+{% extends 'student/base.html'%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+
+
+<a class="link" href="{% url 'parent:addparent' %}">add parent</a>
+
+
+<table class="table">
+<thead>
+    <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Id No</th>
+        <th>Phone Number</th>
+        <th>Email</th>
+        <th>Physical Adddress</th>
+        {% if request.user %}
+        <th>Update</th>
+        <th>Delete</th>
+        {%endif%}
+    </tr>
+</thead>
+<tbody>
+	{% for parent in getParents%}
+    <tr>
+        <td>{{parent.user.first_name}}</td>
+        <td>{{parent.user.last_name}}</td>
+        <td>{{parent.Idno}}</td>
+        <td>{{parent.phonenumber}}</td>
+        <td>{{parent.user.email}}</td>
+        <td>{{parent.physical_add}}</td>
+        <td><a href="{% url 'parent:updateparent' parent.id %}">update</a></td>
+        <td><a href="{% url 'parent:delparent' parent.id %}">delete</a></td>
+    </tr>
+       {%endfor%} 
+
+</tbody>
+</table>
+{%endblock%}
+

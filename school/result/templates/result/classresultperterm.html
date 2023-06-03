@@ -1,0 +1,42 @@
+{% extends 'student/base.html'%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+<h1>results for {{name}} {{term}}</h1>
+{% if stream %}
+<p>link for class result analysis <a href="{% url 'result:subjectperftermstream' class_name stream term %}"> {{class_name}}</a></p>
+{%else%} 
+<p>link for class result analysis <a href="{% url 'result:subjectperfterm' class_name term %}"> {{class_name}}</a></p>
+{%endif%}
+{% if stream %}
+    <p><a href="{% url 'result:resultpertermexcelstream' class_name stream term %}">download excel</a></p>
+{%else%}
+    <p><a href="{% url 'result:resultpertermexcel' class_name term %}">download excel</a></p>
+{%endif%}
+<table class='table' >
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Student</th>
+
+            {%for subjects in subject_list%}
+                <th>{{subjects.name|capfirst}}</th>
+            {%endfor%}
+            <th>Total</th>
+            <th>Grade</th>
+            <th>Points</th>
+        </tr>
+    </thead>
+    <tbody>
+        {%for student in page_obj%}
+        <tr>
+            {%for stu in student%}
+                <td>{{stu}}</td>
+            {%endfor%}
+        </tr>
+        {%endfor%}     
+    </tbody>
+</table>
+
+{%endblock%}
+
+

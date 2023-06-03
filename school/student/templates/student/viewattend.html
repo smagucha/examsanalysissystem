@@ -1,0 +1,27 @@
+{% extends 'student/base.html'%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+ <table class="table ">
+<thead>
+    <tr>
+        <th>Student </th>
+        <th>Class</th>
+        <th>Date</th>
+        <th>Present Status</th>
+        <th>Reason</th>
+        <th>Update</th>
+    </tr>
+</thead>
+<tbody>
+	{% for student in attend%}
+    <tr>
+        <td>{{student.student|capfirst }}</td>
+        <td>{{student.class_name|capfirst }}</td>
+        <td>{{student.dateattend }}</td>
+        <td>{{student.present_status|capfirst }}</td>
+        <td>{{student.absentwhy|capfirst }}</td>
+    </tr>
+       {%endfor%}              
+</tbody>
+</table>
+{%endblock%}

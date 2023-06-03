@@ -1,0 +1,25 @@
+{% extends 'student/base.html'%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+<h1>List of All Grade</h1>
+ <table class='table'>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>subject</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+    	{% for enroll in allenroll%}
+        <tr>
+            <td>{{enroll.student }}</a></td>
+            <td>{{enroll.subject}}</td>
+            <td><a class='link' href="{% url 'Enrollupdate' enroll.id %}">Update</a></td>
+            <td><a class='link' href="{% url 'enrolldelete' enroll.id %}">delete</a></td>            
+        </tr>
+           {%endfor%}              
+    </tbody>
+</table>
+{%endblock%}
