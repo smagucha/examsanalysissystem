@@ -1,6 +1,7 @@
 {% extends 'student/base.html'%}
 {%block title%}{{title}}{%endblock title%}
 {%block content%}
+{%if student%}
 {%for class in allclasses%}
 	<a href="{% url 'student:classstudent' class %}">{{class}}</a>
 {%endfor%}
@@ -87,4 +88,7 @@
 	</tr>
 	{%endfor%}
 </table>
+{%else%}
+<a href="{% url 'student:addstudent' %}">add student to the system</a>
+{%endif%}
 {%endblock%}

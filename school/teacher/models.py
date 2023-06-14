@@ -1,7 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from student.models import Klass, Stream
-from django.contrib.auth import get_user_model
+from useraccounts.models import MyUser
 from django.conf import settings
 from result.models import subject
 
@@ -24,14 +24,11 @@ class Teacher(models.Model):
     )
     limit_choices_to = ({"groups__name": "Teacher"},)
     user = models.ForeignKey(
-        User,
+        MyUser,
         on_delete=models.SET(get_sentinel_user),
         null=True,
         blank=True,
     )
-    Idno = models.CharField(max_length=10, blank=True)
-    phonenumber = models.CharField(max_length=13, blank=True)
-    physical_add = models.CharField(max_length=50, blank=True)
     date_of_appointment = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=6, choices=Gender, blank=True)
     designation = models.ForeignKey(Designation, on_delete=models.CASCADE, blank=True)
@@ -39,7 +36,7 @@ class Teacher(models.Model):
 
 class Teachersubjects(models.Model):
     user = models.ForeignKey(
-        User, limit_choices_to={"groups__name": "Teacher"}, on_delete=models.CASCADE
+        MyUser, limit_choices_to={"groups__name": "Teacher"}, on_delete=models.CASCADE
     )
     Subject = models.ForeignKey(subject, on_delete=models.CASCADE)
     Class = models.ForeignKey(Klass, on_delete=models.CASCADE)

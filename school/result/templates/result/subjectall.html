@@ -1,0 +1,16 @@
+{% extends 'student/base.html'%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+{%if allsubjects%}
+please add more subjects
+<p><a href="{% url 'result:addsubject' %}">add subject</a></p>
+{%for subject in allsubjects%}
+{{subject}}
+{%endfor%}
+{%else%}
+please add a subject
+<p><a href="{% url 'result:addsubject' %}">add subject</a></p>
+{%endif%}
+{%endblock%}
+
+

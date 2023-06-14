@@ -4,8 +4,9 @@ from student.views import getclasses, getstreams
 
 app_name = "result"
 urlpatterns = [
-    # path("allsubject/", views.allsubject, name="allsubject"),
+    path("allsubject/", views.allsubject, name="allsubject"),
     path("allGrade/", views.allGrade, name="allGrade"),
+    path("allterm", views.allterm, name="allterm"),
     path(
         "enrollStudenttosubectall/",
         views.enrollStudenttosubectall,
@@ -44,14 +45,12 @@ urlpatterns = [
         {"template_name": "result/classrankingsubjectterms.html"},
         name="classrankingsubjectterms",
     ),
-    
     path("updategrade/<int:id>/", views.updategrade, name="updategrade"),
     path("deletegrade/<int:id>/", views.deletegrade, name="deletegrade"),
     path("updatesubject/<int:id>/", views.updatesubject, name="updatesubject"),
     path("subjectdelete/<int:id>/", views.subjectdelete, name="subjectdelete"),
     path("Enrollupdate/<int:id>/", views.Enrollupdate, name="Enrollupdate"),
     path("enrolldelete/<int:id>/", views.enrolldelete, name="enrolldelete"),
-   
     path(
         "getstreamsforsubjectranking/<str:name>/",
         getstreams,
@@ -99,7 +98,7 @@ urlpatterns = [
         {"template_name": "result/performanceterm.html"},
         name="subjectperfterm",
     ),
-     path(
+    path(
         "subjectperftermstream/<str:name>/<str:stream>/<str:term>/",
         views.streamexamanalysis,
         {"template_name": "result/performanceterm.html"},
@@ -130,11 +129,11 @@ urlpatterns = [
         name="subjectperrankclass",
     ),
     path(
-        'gettermsforsubjectrankstream/<str:classname>/<str:streamname>/', 
+        "gettermsforsubjectrankstream/<str:classname>/<str:streamname>/",
         views.terms,
         {"template_name": "result/gettermsforsubjectrankstream.html"},
-        name='gettermsforsubjectrankstream'
-        ),
+        name="gettermsforsubjectrankstream",
+    ),
     path(
         "resultstreamterm/<str:name>/<str:stream>/<str:term>/",
         views.getresultstreamterm,
@@ -158,38 +157,40 @@ urlpatterns = [
         {"template_name": "result/analysis.html"},
         name="subjectperrankstreamterm",
     ),
-    path('student-detail/<str:name>/<int:id>/', views.student_view, name='student-detail'),
-     # new pdf paths
     path(
-    "streamanalysis/<str:name>/<str:stream>/<str:term>/",
-    views.streamexamanalysis,
-    {"template_name": "result/streamranalysisdownload.html",'format':'pdf'},
-    name="streamanalysispdf",
+        "student-detail/<str:name>/<int:id>/", views.student_view, name="student-detail"
     ),
-     path(
-    "streamanalysis/<str:name>/<str:term>/",
-    views.streamexamanalysis,
-    {"template_name": "result/streamranalysisdownload.html",'format':'pdf'},
-    name="streamanalysispdf",
+    # new pdf paths
+    path(
+        "streamanalysis/<str:name>/<str:stream>/<str:term>/",
+        views.streamexamanalysis,
+        {"template_name": "result/streamranalysisdownload.html", "format": "pdf"},
+        name="streamanalysispdf",
+    ),
+    path(
+        "streamanalysis/<str:name>/<str:term>/",
+        views.streamexamanalysis,
+        {"template_name": "result/streamranalysisdownload.html", "format": "pdf"},
+        name="streamanalysispdf",
     ),
     path(
         "subjectperrankstreamterm/<str:name>/<str:stream>/<str:term>/<str:subject>/pdf/",
         views.subjectperrank,
-        {"template_name": "result/subjectperrankclassdownload.html", 'format':'pdf'},
+        {"template_name": "result/subjectperrankclassdownload.html", "format": "pdf"},
         name="subjectperrankstreamtermpdf",
     ),
     path(
         "subjectperrankclasspdf/<str:name>/<str:term>/<str:subject>/pdf/",
         views.subjectperrank,
-        {"template_name": "result/subjectperrankclassdownload.html", 'format':'pdf'},
+        {"template_name": "result/subjectperrankclassdownload.html", "format": "pdf"},
         name="subjectperrankclasspdf",
     ),
-     path(
-        'reportcard/<str:name>/<int:id>/',
+    path(
+        "reportcard/<str:name>/<int:id>/",
         views.student_view,
-        {"template_name": "result/reportcard.html", 'format':'pdf'},
-        name='reportcard'
-        ),
+        {"template_name": "result/reportcard.html", "format": "pdf"},
+        name="reportcard",
+    ),
     # links for excels
     path(
         "downresultexcel/<str:name>/<str:term>/",
@@ -203,5 +204,4 @@ urlpatterns = [
         {"format": "ms-excel"},
         name="resultpertermexcelstream",
     ),
-   
 ]

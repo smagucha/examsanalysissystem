@@ -1,0 +1,16 @@
+{% extends 'student/base.html'%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+{%if allterm%}
+please add more terms
+<p><a href="{% url 'result:addterm' %}">add term</a></p>
+{%for term in allterm%}
+{{term}}
+{%endfor%}
+{%else%}
+please add a term
+<p><a href="{% url 'result:addterm' %}">add term</a></p>
+{%endif%}
+{%endblock%}
+
+

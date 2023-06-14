@@ -78,7 +78,7 @@ class Student(models.Model):
     Admin_no = models.CharField(max_length=50, blank=True, null=True)
     date_of_birth = models.DateField()
     date_of_admission = models.DateField()
-    parent = models.ForeignKey(Parent, on_delete=models.CASCADE, blank=True, null=True)
+    parent = models.CharField(max_length=50)
     class_name = models.ForeignKey(
         Klass,
         on_delete=models.CASCADE,
@@ -136,3 +136,8 @@ class Attendance(models.Model):
 
     objects = models.Manager()
     attend = AttendManager()
+
+
+class StudentParent(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    parent = models.ForeignKey(Parent, on_delete=models.CASCADE)

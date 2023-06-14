@@ -1,12 +1,13 @@
 from django.db.models import signals
 from django.dispatch import receiver
-from django.contrib.auth.models import User
+from useraccounts.models import MyUser
 from django.contrib.auth.models import Group
+from django.db.models.signals import post_save
 from .models import Parent
-from teacher.models import Teacher
 
 
-@receiver(signals.post_save, sender=User)
-def create_parent(sender, instance, created, **kwargs):
-    if instance.groups.filter(name="Parent"):
-        Parent.objects.create(user=instance)
+@receiver(post_save, sender=MyUser)
+def update_profile(sender, created, instance, **kwargs):
+    if created:
+        parent = Parent.objects.create(user=instance)
+        parent.save()

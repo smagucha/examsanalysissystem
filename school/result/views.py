@@ -103,6 +103,7 @@ def student_view(request, id, name, format=None, template_name=None):
     points = []
     totalmarks = 0
     finalsub = []
+    a = 0
     getsubjectcount = EnrollStudenttosubect.enroll.get_subjects_for_student_count(
         student=student
     )
@@ -394,7 +395,7 @@ def AddTerm(request):
         form = TermForm(request.POST)
         if form.is_valid():
             form.save()
-            form = TermForm()
+            return redirect("result:allterm")
     else:
         form = TermForm()
     context = {"form": form, "title": "add term"}
@@ -409,7 +410,7 @@ def AddGrade(request):
         if form.is_valid():
             form.save()
             form = GradeForm()
-            return redirect("home")
+            return redirect("student:home")
     else:
         form = GradeForm()
     context = {"form": form, "title": "add Grade"}
@@ -423,6 +424,24 @@ def allGrade(request):
         request,
         "result/allgrading.html",
         context={"allgrade": Grading.objects.all().order_by("name")},
+    )
+
+
+@login_required(login_url="/accounts/login/")
+def allsubject(request):
+    return render(
+        request,
+        "result/subjectall.html",
+        context={"allsubjects": subject.objects.all()},
+    )
+
+
+@login_required(login_url="/accounts/login/")
+def allterm(request):
+    return render(
+        request,
+        "result/allterm.html",
+        context={"allterm": term.objects.all()},
     )
 
 

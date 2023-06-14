@@ -1,29 +1,38 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from .models import MyUser
 from django.forms import ModelForm
 
 
-class SignUpForm(UserCreationForm):
+from .models import MyUser
+
+
+class CustomUserCreationForm(UserCreationForm):
     class Meta:
-        model = User
+        model = MyUser
         fields = (
-            "username",
+            "email",
             "first_name",
             "last_name",
-            "email",
-            "password1",
-            "password2",
+            "date_of_birth",
+            "city",
+            "phone",
         )
 
 
-class userupdateform(ModelForm):
+class CustomUserChangeForm(ModelForm):
     class Meta:
-        model = User
-        fields = ["username", "first_name", "last_name", "email"]
+        model = MyUser
+        fields = (
+            "first_name",
+            "last_name",
+            "date_of_birth",
+            "city",
+            "phone",
+        )
 
 
 class activeform(ModelForm):
     class Meta:
-        model = User
-        fields = ["first_name", "last_name", "is_active"]
+        model = MyUser
+        fields = ["first_name", "last_name", "active"]

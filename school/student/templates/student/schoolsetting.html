@@ -1,0 +1,14 @@
+{% extends 'student/base.html'%}
+{%block title%}
+{{title}}
+{%endblock title%}
+{% block content%}
+<p><a href="{% url 'result:allGrade' %}">allGrade</a></p>
+<p><a href="{% url 'result:allsubject' %}">all subject</a></p>
+<p><a href="{% url 'result:allterm' %}">all term</a></p>
+<p><a href="">enroll student to subject</a></p>
+<p><a href="">all users</a></p>
+<p><a href="">all stream</a></p>
+<p><a href="">all classes</a></p>
+{%endblock content%}
+

@@ -146,3 +146,8 @@ def deleteattend(request, id):
         attend.delete()
     except ObjectDoesNotExist:
         return redirect("home")
+
+
+@login_required(login_url="accounts/login")
+def schoolsetting(request):
+    return render(request, "student/schoolsetting.html")

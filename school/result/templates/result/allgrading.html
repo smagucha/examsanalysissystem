@@ -1,0 +1,12 @@
+{% extends 'student/base.html'%}
+{%block title%}
+{{title}}
+{%endblock title%}
+{% block content%}
+<a href="{% url 'result:addgrade' %}">add grade</a>
+grades
+{% for i in allgrade %}
+	{{i.name}}
+{%endfor%}
+{%endblock content%}
+
