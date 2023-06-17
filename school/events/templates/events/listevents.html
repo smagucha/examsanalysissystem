@@ -1,8 +1,8 @@
 {% extends 'student/base.html'%}
 {%block title%}{{title}}{%endblock%}
 {%block content%}
+{%if eventlist%}
 <a href="{% url 'event:event' %}">add event</a>
-
 <table class="table">
 <thead>
     <tr>
@@ -25,4 +25,8 @@
        {%endfor%}              
 </tbody>
 </table>
+{%else%}
+<h1>there are no events</h1>
+<a href="{% url 'event:event' %}">please add event</a>
+{%endif%}
 {%endblock%}

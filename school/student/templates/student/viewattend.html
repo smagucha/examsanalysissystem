@@ -1,6 +1,7 @@
 {% extends 'student/base.html'%}
 {%block title%}{{title}}{%endblock%}
 {%block content%}
+{% if attend%}
  <table class="table ">
 <thead>
     <tr>
@@ -24,4 +25,7 @@
        {%endfor%}              
 </tbody>
 </table>
+{%else%}
+<h1>no attendances have been taken</h1>
+{%endif%}
 {%endblock%}

@@ -1,6 +1,7 @@
 {% extends 'student/base.html'%}
 {%block title%}{{title}}{%endblock%}
 {%block content%}
+{%if listTeacher%}
 <a href="{% url 'addTeacher' %}"> add teacher</a>
 <table class="table ">
 <thead>
@@ -36,4 +37,8 @@
        {%endfor%}              
 </tbody>
 </table>
+{%else%}
+<h1>There are no teachers in the system</h1>
+<p><a href="{% url 'addTeacher' %}"> please add teachers</a></p>
+{%endif%}
 {%endblock%}

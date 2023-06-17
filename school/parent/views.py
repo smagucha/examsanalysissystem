@@ -5,12 +5,14 @@ from student.models import Student
 from datetime import date
 from django.contrib.auth.decorators import login_required
 
+
 @login_required(login_url="/accounts/login/")
 def list_parent(request):
-    parents = Parent.objects.filter(student__year=str(date.today().year)).distinct()
+    # parents = Parent.objects.filter(student__year=str(date.today().year)).distinct()
+    parents = Parent.objects.all()
     context = {
-    "title": "all parents",
-    "getParents": parents,
+        "title": "all parents",
+        "getParents": parents,
     }
     return render(request, "parent/allparents.html", context)
 
@@ -22,7 +24,7 @@ def updateparent(request, id):
         form = ParentForm(request.POST or None, request.FILES, instance=idparent)
         if form.is_valid():
             form.save()
-            return redirect("listparent")
+            return redirect("parent:listparent")
     else:
         form = ParentForm(request.POST or None, instance=idparent)
     context = {
@@ -38,7 +40,7 @@ def deleteparent(request, id):
     delparent = get_object_or_404(Parent, id=id)
     if request.method == "POST":
         delparent.delete()
-        redirect("listparent")
+        redirect("parent:listparent")
     context = {
         "title": "remove parent",
         "delparent": delparent,
@@ -52,7 +54,7 @@ def addparent(request):
         form = ParentForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("listparent")
+            return redirect("parent:listparent")
     else:
         form = ParentForm()
     context = {

@@ -1,6 +1,7 @@
 {% extends 'student/base.html'%}
 {%block title%}{{title}}{%endblock%}
 {%block content%}
+{%if allstream%}
     <h1>choose a stream to view attendance</h1>
     {%for stream in allstream%}
     <div class="col-xxl-4 col-md-6">
@@ -18,4 +19,7 @@
         </div>
     </div>
     {%endfor%}
+{%else%}
+<a href="{% url 'student:addstreams' %}">add stream</a>
+{%endif%}
 {%endblock%}

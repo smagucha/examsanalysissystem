@@ -14,6 +14,7 @@ class CustomUserCreationForm(UserCreationForm):
             "email",
             "first_name",
             "last_name",
+            "country",
             "date_of_birth",
             "city",
             "phone",
@@ -26,6 +27,7 @@ class CustomUserChangeForm(ModelForm):
         fields = (
             "first_name",
             "last_name",
+            "country",
             "date_of_birth",
             "city",
             "phone",

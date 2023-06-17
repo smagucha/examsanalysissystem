@@ -66,5 +66,7 @@ urlpatterns = [
         {"template_name": "student/enterstreamresult.html"},
         name="enterstreamresult",
     ),
-    path("schoolsetting", views.schoolsetting, name="schoolsetting"),
+    path("schoolsetting/", views.schoolsetting, name="schoolsetting"),
+    path("addclasses/", views.addclasses, name="addclasses"),
+    path("addstreams/", views.addstreams, name="addstreams"),
 ]

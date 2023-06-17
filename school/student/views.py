@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Student, Klass, Attendance, Stream
-from .forms import StudentForm, AttendForm
+from .forms import StudentForm, AttendForm, KlassForm, StreamForm
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -112,7 +112,7 @@ def Take_Attandance(request, name, stream):
                 stream_id=result[4],
             )
             attend.save()
-        return redirect("viewattendanceperstream", name=name, stream=stream)
+        return redirect("student:viewattendanceperstream", name=name, stream=stream)
 
     context = {"exam": takeattendance}
     return render(request, "student/attend.html", context)
@@ -148,6 +148,32 @@ def deleteattend(request, id):
         return redirect("home")
 
 
-@login_required(login_url="accounts/login")
+@login_required(login_url="accounts/login/")
 def schoolsetting(request):
     return render(request, "student/schoolsetting.html")
+
+
+@login_required(login_url="accounts/login/")
+def addclasses(request):
+    if request.method == "POST":
+        form = KlassForm(request.POST)
+        if form.is_valid:
+            form.save()
+            return redirect("student:home")
+    else:
+        form = KlassForm()
+    context = {"title": "add classes", "form": form}
+    return render(request, "student/generalform.html", context)
+
+
+@login_required(login_url="accounts/login")
+def addstreams(request):
+    if request.method == "POST":
+        form = StreamForm(request.POST)
+        if form.is_valid:
+            form.save()
+            return redirect("student:home")
+    else:
+        form = StreamForm()
+    context = {"title": "add classes", "form": form}
+    return render(request, "student/generalform.html", context)

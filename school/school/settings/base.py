@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # third party up
     "debug_toolbar",
+    "django_countries",
     # my apps
     "student",
     "teacher",

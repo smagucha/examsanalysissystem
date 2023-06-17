@@ -6,6 +6,8 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 from django.utils import timezone
+from django.core.validators import RegexValidator
+from django_countries.fields import CountryField
 
 
 class MyUserManager(BaseUserManager):
@@ -14,6 +16,7 @@ class MyUserManager(BaseUserManager):
         email,
         first_name,
         last_name,
+        country,
         date_of_birth,
         phone,
         city,
@@ -27,6 +30,7 @@ class MyUserManager(BaseUserManager):
             email=self.normalize_email(email),
             first_name=first_name,
             last_name=last_name,
+            country=country,
             date_of_birth=date_of_birth,
             phone=phone,
             city=city,
@@ -43,6 +47,7 @@ class MyUserManager(BaseUserManager):
         email,
         first_name,
         last_name,
+        country,
         date_of_birth,
         phone,
         city,
@@ -52,6 +57,7 @@ class MyUserManager(BaseUserManager):
             email,
             first_name,
             last_name,
+            country,
             date_of_birth,
             phone,
             city,
@@ -69,6 +75,7 @@ class MyUserManager(BaseUserManager):
         email,
         first_name,
         last_name,
+        country,
         date_of_birth,
         phone,
         city,
@@ -78,6 +85,7 @@ class MyUserManager(BaseUserManager):
             email,
             first_name,
             last_name,
+            country,
             date_of_birth,
             phone,
             city,
@@ -99,7 +107,16 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     )
     first_name = models.CharField(max_length=150, blank=True, null=True)
     last_name = models.CharField(max_length=150, blank=True, null=True)
-    phone = models.CharField(max_length=50, blank=True, null=True)
+    country = CountryField(blank=True, null=True)
+    phone_regex = RegexValidator(
+        regex=r"^\+(?:[0-9]?){6,14}[0-9]$",
+        message=(
+            "Enter a valid international mobile phone number starting with +(country code)"
+        ),
+    )
+    phone = models.CharField(
+        validators=[phone_regex], max_length=17, blank=True, null=True
+    )
     date_of_birth = models.DateField(blank=True, null=True)
     city = models.CharField(max_length=150, blank=True, null=True)
     picture = models.ImageField(blank=True, null=True)
@@ -109,7 +126,14 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now, blank=True, null=True)
     objects = MyUserManager()
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["first_name", "last_name", "phone", "date_of_birth", "city"]
+    REQUIRED_FIELDS = [
+        "first_name",
+        "last_name",
+        "country",
+        "phone",
+        "date_of_birth",
+        "city",
+    ]
 
     def __str__(self):
         return self.email
@@ -126,7 +150,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 
     @property
     def is_staff(self):
-        return self.staff
+        return self.superuser
 
     @property
     def is_superuser(self):
