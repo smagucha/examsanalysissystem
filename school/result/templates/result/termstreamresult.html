@@ -1,6 +1,7 @@
 {% extends 'student/base.html'%}
 {%block title%}{{title}}{%endblock%}
 {%block content%}
+{%if allterms%}
 class {{classname}} stream {{streamname}}
 <p>choose a subject to enter results</p>
 {%for term in allterms%}
@@ -19,4 +20,7 @@ class {{classname}} stream {{streamname}}
     </div>
 </div>
 {%endfor%}
+{%else%}
+<a href="">add terms to the system</a>
+{%endif%}
 {%endblock%}

@@ -1,6 +1,7 @@
 {% extends 'student/base.html'%}
 {%block title%}{{title}}{%endblock%}
 {%block content%}
+{%if allenroll%}
 <h1>List of All Grade</h1>
  <table class='table'>
     <thead>
@@ -22,4 +23,7 @@
            {%endfor%}              
     </tbody>
 </table>
+{%else%}
+<a href="">enroll students to the system</a>
+{%endif%}
 {%endblock%}

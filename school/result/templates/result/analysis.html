@@ -2,6 +2,7 @@
 {%block title%}{{title}}{%endblock%}
 {%block content%}
 {%load static%}
+{%if rankings_data%}
 <h1>{{name}}</h1>
 {%if stream%}
 <a class='link' href="{% url 'result:subjectperrankstreamtermpdf' name stream term subject %}">download pdf</a>
@@ -32,4 +33,7 @@
         {%endfor%}          
     </tbody>
 </table>
+{%else%}
+<h1>add results to the systems</h1>
+{%endif%}
 {%endblock%}

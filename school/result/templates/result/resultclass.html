@@ -1,6 +1,7 @@
 {% extends 'student/base.html'%}
 {%block title%}{{title}}{%endblock%}
 {%block content%}
+{%if allclasses%}
     <h1>choose a class to enter results</h1>
     {%for class in allclasses%}
     
@@ -21,4 +22,7 @@
         </div>
       </div>
     {%endfor%}
+{%else%}
+<a href="">add classes to the system</a>
+{%endif%}
 {%endblock%}

@@ -1,8 +1,12 @@
 {% extends 'student/base.html'%}
 {%block title%}{{title}}{%endblock%}
 {%block content%}
+{%if allterms%}
 <p>choose a subject to enter results</p>
 {%for term in allterms%}
 	<a href="{% url 'result:resultperterm' classname  term %}">{{term}}</a>
 {%endfor%}
+{%else%}
+<a href="">add terms to the system</a>
+{%endif%}
 {%endblock%}

@@ -1,9 +1,13 @@
 {% extends 'student/base.html' %}
 {%block content%}
+{%if allstream%}
 class {{name}}
 {%for stream in allstream%}
 <a href="">{{stream.name}}</a>
 {%endfor%}
+{%else%}
+<a href="">add streams to the system</a>
+{%endif%}
 {%endblock%}
 
 

@@ -3,10 +3,14 @@
 {{title}}
 {%endblock title%}
 {% block content%}
-<a href="{% url 'result:addgrade' %}">add grade</a>
+{%if allgrade%}
 grades
 {% for i in allgrade %}
 	{{i.name}}
 {%endfor%}
+{%else%}
+<a href="{% url 'result:addgrade' %}">add grade</a>
+
+{%endif%}
 {%endblock content%}
 

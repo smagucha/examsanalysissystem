@@ -1,6 +1,7 @@
 {% extends 'student/base.html'%}
 {%block title%}{{title}}{%endblock%}
 {%block content%}
+{%if subjects%}
 {%for subject in subjects%}
 <div class="col-xxl-4 col-md-6">
     <div class="card info-card sales-card">
@@ -17,4 +18,7 @@
     </div>
 </div>
 {%endfor%}
+{%else%}
+<a href="">add subjects to the system</a>
+{%endif%}
 {%endblock%}
