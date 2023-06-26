@@ -5,6 +5,6 @@
 		<a href="">stream</a>
 	{%endfor%}
 {%else%}
-<a href="">add stream to the system</a>
+<a href="{% url 'student:addstream' %}">add stream to the system</a>
 {%endif%}
 {%endblock%}

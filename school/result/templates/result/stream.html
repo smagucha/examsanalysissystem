@@ -6,7 +6,7 @@ class {{name}}
 <a href="">{{stream.name}}</a>
 {%endfor%}
 {%else%}
-<a href="">add streams to the system</a>
+<a href="{% url 'student:addstream' %}">add streams to the system</a>
 {%endif%}
 {%endblock%}
 

@@ -7,7 +7,7 @@
 <a href="{% url 'result:terms' classname streamname subject %}">{{subject}}</a>
 {%endfor%}
 {%else%}
-<a href=""add subjects to the system></a>
+<a href="{% url 'result:addsubject' %}"add subjects to the system></a>
 {%endif%}
 {%endblock%}
 

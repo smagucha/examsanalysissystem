@@ -7,6 +7,6 @@
 <a href="{% url 'result:enterexam' classname streamname term subject %}">{{term}}</a>
 {%endfor%}
 {%else%}
-<a href="">ad terms to the system</a>
+<a href="{% url 'result:addterm' %}">ad terms to the system</a>
 {%endif%}
 {%endblock%}
