@@ -1,0 +1,7 @@
+{% extends 'student/base.html'%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+{%for stream in allstream%}
+<a href="{% url 'result:enrollstudentstosubject' name stream%}"><li>{{stream}}</li></a>  
+{%endfor%}
+{%endblock%}

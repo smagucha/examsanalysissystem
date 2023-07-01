@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.conf.urls import handler404
 from django.urls import path, include
 
 urlpatterns = [
@@ -12,3 +13,6 @@ urlpatterns = [
     path("useraccounts/", include("useraccounts.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
 ]
+handler404 = "student.views.not_found"
+handler400 = "student.views.bad_request"
+handler500 = "student.views.server_error"

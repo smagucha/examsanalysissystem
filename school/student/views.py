@@ -13,7 +13,7 @@ def getclasses(request, template_name):
 
 
 @login_required(login_url="/accounts/login/")
-def getstreams(request, name, template_name):
+def getstreams(request, template_name, name=None):
     getstream = Stream.objects.all()
     context = {"allstream": getstream, "name": name}
     return render(request, template_name, context)
@@ -54,7 +54,7 @@ def add_student(request):
         form = StudentForm(request.POST)
         if form.is_valid:
             form.save()
-            return redirect("home")
+            return redirect("student:home")
     else:
         form = StudentForm()
     context = {"title": "add student", "form": form}
@@ -177,3 +177,15 @@ def addstreams(request):
         form = StreamForm()
     context = {"title": "add classes", "form": form}
     return render(request, "student/generalform.html", context)
+
+
+def not_found(request, exception):
+    return render(request, "student/404.html")
+
+
+def server_error(request, exception=None):
+    return render(request, "student/500.html")
+
+
+def bad_request(request, exception):
+    return render(request, "student/400.html")

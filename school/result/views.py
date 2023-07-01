@@ -261,7 +261,7 @@ def enteresult(request, name, stream, Term, Subject):
                 marks=int(result[3][j]),
             )
             Marks.save()
-        return redirect("home")
+        return redirect("student:home")
     context = {
         "exam": exam,
         "name": name,
@@ -307,15 +307,9 @@ def streamexamanalysis(
     best_marks = []
     best_subjects = []
 
+    filter_kwargs = {"student__class_name__name": name, "Term__name": term}
     if stream:
-        filter_kwargs = {
-            "student__class_name__name": name,
-            "Term__name": term,
-            "student__stream__name": stream,
-        }
-    else:
-        filter_kwargs = {"student__class_name__name": name, "Term__name": term}
-
+        filter_kwargs["student__stream__name"] = stream
     for Subject in subjects:
         subject_filter_kwargs = {"name__name": Subject}
         marks = Mark.objects.filter(
@@ -670,3 +664,7 @@ def getresultstreamterm(
 
     # Render the template with the context dictionary
     return render(request, template_name, context)
+
+
+def error_404(request, exception):
+    return render(request, "student/404.html")

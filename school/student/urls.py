@@ -69,4 +69,16 @@ urlpatterns = [
     path("schoolsetting/", views.schoolsetting, name="schoolsetting"),
     path("addclasses/", views.addclasses, name="addclasses"),
     path("addstreams/", views.addstreams, name="addstreams"),
+    path(
+        "allclasses",
+        views.getclasses,
+        {"template_name": "student/classes.html"},
+        name="allclasses",
+    ),
+    path(
+        "stream",
+        views.getstreams,
+        {"template_name": "student/stream.html"},
+        name="stream",
+    ),
 ]

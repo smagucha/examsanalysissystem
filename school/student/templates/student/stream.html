@@ -1,0 +1,11 @@
+{% extends 'student/base.html'%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+{%if allstream%}
+    {%for stream in allstream%}
+    <li>{{stream}}</li>
+    {%endfor%}
+{%else%}
+<a href="{% url 'student:addstreams' %}">add streams</a>
+{%endif%}
+{%endblock%}

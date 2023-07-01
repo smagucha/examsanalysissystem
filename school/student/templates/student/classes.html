@@ -1,0 +1,9 @@
+{% extends 'student/base.html' %}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+{% for class in allclasses %}
+<li>
+  {{class}}
+</li>
+{%endfor%}
+{%endblock%}

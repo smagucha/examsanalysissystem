@@ -1,0 +1,9 @@
+{% extends 'student/base.html' %}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+{% for class in allclasses %}
+<li>
+  <a href="{% url 'result:enrollstream' class %}">{{class}}</a>
+</li>
+{%endfor%}
+{%endblock%}

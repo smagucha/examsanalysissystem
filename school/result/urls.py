@@ -58,7 +58,7 @@ urlpatterns = [
         name="getstreamsforsubjectranking",
     ),
     path(
-        "<str:name>/",
+        "k/<str:name>/",
         getstreams,
         {"template_name": "result/streams.html"},
         name="viewstreamresult",
@@ -76,10 +76,22 @@ urlpatterns = [
         name="getallsubjects",
     ),
     path(
-        "<str:classname>/<str:streamname>/",
+        "g/<str:classname>/<str:streamname>/",
         views.getsubjects,
         {"template_name": "result/allsubject.html"},
         name="getsubjects",
+    ),
+    path(
+        "enrollclasses/",
+        getclasses,
+        {"template_name": "result/enrollclasses.html"},
+        name="enrollclasses",
+    ),
+    path(
+        "enrollstream/<str:name>/",
+        getstreams,
+        {"template_name": "result/enrollstream.html"},
+        name="enrollstream",
     ),
     path(
         "enrollstudentstosubject/<str:name>/<str:stream>/",

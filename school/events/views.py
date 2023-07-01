@@ -11,7 +11,7 @@ def addevent(request):
         form = eventsforms(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("listevents")
+            return redirect("event:listevents")
     else:
         form = eventsforms()
     context = {"form": form}
@@ -31,7 +31,7 @@ def updateevent(request, id):
         form = eventsforms(request.POST or None, instance=updateid)
         if form.is_valid():
             form.save()
-            return redirect("listevents")
+            return redirect("event:listevents")
     else:
         form = eventsforms(request.POST or None, instance=updateid)
     context = {
@@ -47,7 +47,7 @@ def delevent(request, id):
     deleteevent = get_object_or_404(SchoolEvents, id=id)
     if request.method == "POST":
         deleteevent.delete()
-        return redirect("listevents")
+        return redirect("event:listevents")
     context = {
         "title": "delete events",
         "deleteevent": deleteevent,
