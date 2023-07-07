@@ -37,4 +37,4 @@ class CustomUserChangeForm(ModelForm):
 class activeform(ModelForm):
     class Meta:
         model = MyUser
-        fields = ["first_name", "last_name", "active"]
+        fields = ["first_name", "last_name", "is_active"]

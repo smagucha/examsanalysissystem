@@ -15,9 +15,10 @@ from .models import Parent
 
 @receiver(post_save, sender=MyUser)  # Update with the actual User model name
 def assign_parent_group(sender, instance, created, **kwargs):
-    if created and instance.groups.filter(name="Parent").exists():
+    if created and instance in MyUser.objects.filter(groups__name="Parent"):
         parent = Parent.objects.create(user=instance)
         parent.save()
+        print(parent)
 
 
 # @receiver(post_save, sender=MyUser)  # Update with the actual User model name

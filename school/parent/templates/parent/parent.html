@@ -1,0 +1,24 @@
+{% extends 'student/base.html'%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+{%if getParents%}
+<a class="link" href="{% url 'parent:addparent' %}">add parent</a>
+<table class="table">
+<thead>
+    <tr>
+        <th>Parents</th>
+    </tr>
+</thead>
+<tbody>
+	{% for parent in getParents%}
+    <tr>
+        <td>{{parent}}</td>
+    </tr>
+       {%endfor%} 
+</tbody>
+</table>
+{%else%}
+<a class="link" href="{% url 'parent:addparent' %}">add parent</a>
+{%endif%}
+{%endblock%}
+

@@ -4,10 +4,11 @@ from student.models import Klass, Stream
 from useraccounts.models import MyUser
 from django.conf import settings
 from result.models import subject
+from django.contrib.auth.models import User
 
 
-def get_sentinel_user():
-    return get_user_model().objects.all()
+# def get_sentinel_user():
+#     return get_user_model().objects.all()
 
 
 class Designation(models.Model):
@@ -22,10 +23,16 @@ class Teacher(models.Model):
         ("Male", "Male"),
         ("Female", "Female"),
     )
-    limit_choices_to = ({"groups__name": "Teacher"},)
+    # limit_choices_to = ({"groups__name": "Teacher"},)
+    # user = models.ForeignKey(
+    #     MyUser,
+    #     on_delete=models.SET(get_sentinel_user),
+    #     null=True,
+    #     blank=True,
+    # )
     user = models.ForeignKey(
         MyUser,
-        on_delete=models.SET(get_sentinel_user),
+        on_delete=models.CASCADE,
         null=True,
         blank=True,
     )
@@ -35,9 +42,7 @@ class Teacher(models.Model):
 
 
 class Teachersubjects(models.Model):
-    user = models.ForeignKey(
-        MyUser, limit_choices_to={"groups__name": "Teacher"}, on_delete=models.CASCADE
-    )
+    user = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     Subject = models.ForeignKey(subject, on_delete=models.CASCADE)
     Class = models.ForeignKey(Klass, on_delete=models.CASCADE)
     stream = models.ForeignKey(Stream, on_delete=models.CASCADE)

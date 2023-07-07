@@ -37,7 +37,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = MyUser
-        fields = ("email", "password", "active")
+        fields = ("email", "password", "is_active")
 
 
 class UserAdmin(BaseUserAdmin):
@@ -49,9 +49,9 @@ class UserAdmin(BaseUserAdmin):
         "last_name",
         "city",
         "phone",
-        "superuser",
-        "staff",
-        "active",
+        "is_admin",
+        "is_staff",
+        "is_active",
     )
     list_filter = (
         "email",
@@ -67,6 +67,7 @@ class UserAdmin(BaseUserAdmin):
                     "first_name",
                     "last_name",
                     "date_of_birth",
+                    "country",
                     "city",
                     "phone",
                     "picture",
@@ -77,9 +78,9 @@ class UserAdmin(BaseUserAdmin):
             "Permissions",
             {
                 "fields": (
-                    "superuser",
-                    "active",
-                    "staff",
+                    "is_active",
+                    # "is_staff",
+                    "is_admin",
                     "groups",
                     "user_permissions",
                 )
@@ -109,9 +110,9 @@ class UserAdmin(BaseUserAdmin):
                     "date_of_birth",
                     "city",
                     "phone",
-                    "active",
-                    "staff",
-                    "superuser",
+                    "is_active",
+                    # "is_staff",
+                    "is_admin",
                     "picture",
                     "groups",
                     "user_permissions",

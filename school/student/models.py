@@ -30,36 +30,36 @@ class Stream(CommonInfo):
 class StudentManager(models.Manager):
     def get_total_students(self):
         return (
-            self.select_related("class_name", "stream")
+            self.prefetch_related("class_name", "stream")
             .filter(year=str(date.today().year))
             .count()
         )
 
     def get_student_list(self):
-        return self.select_related("class_name", "stream").filter(
+        return self.prefetch_related("class_name", "stream").filter(
             year=str(date.today().year)
         )
 
     def get_student_list_class(self, name):
-        return self.select_related("class_name", "stream").filter(
+        return self.prefetch_related("class_name", "stream").filter(
             class_name__name=name, year=str(date.today().year)
         )
 
     def get_student_list_stream(self, name, stream):
-        return self.select_related("class_name", "stream").filter(
+        return self.prefetch_related("class_name", "stream").filter(
             class_name__name=name, stream__name=stream, year=str(date.today().year)
         )
 
     def class_count(self, name):
         return (
-            self.select_related("class_name", "stream")
+            self.prefetch_related("class_name", "stream")
             .filter(class_name__name=name, year=str(date.today().year))
             .count()
         )
 
     def stream_count(self, name, stream):
         return (
-            self.select_related("class_name", "stream")
+            self.prefetch_related("class_name", "stream")
             .filter(
                 class_name__name=name, stream__name=stream, year=str(date.today().year)
             )
@@ -108,7 +108,7 @@ class Student(models.Model):
 
 class AttendManager(models.Manager):
     def get_student_list_stream(self, name, stream):
-        return self.select_related("class_name", "stream").filter(
+        return self.prefetch_related("class_name", "stream").filter(
             class_name__name=name, stream__name=stream, year=str(date.today().year)
         )
 

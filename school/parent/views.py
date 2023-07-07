@@ -14,7 +14,7 @@ def list_parent(request):
         "title": "all parents",
         "getParents": parents,
     }
-    return render(request, "parent/allparents.html", context)
+    return render(request, "parent/parent.html", context)
 
 
 @login_required(login_url="/accounts/login/")

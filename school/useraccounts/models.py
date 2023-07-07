@@ -35,9 +35,8 @@ class MyUserManager(BaseUserManager):
             phone=phone,
             city=city,
         )
-        user.superuser = False
-        user.staff = False
-        user.active = True
+        user.is_admin = False
+        user.is_active = True
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -63,9 +62,8 @@ class MyUserManager(BaseUserManager):
             city,
             password=password,
         )
-        user.superuser = False
-        user.staff = True
-        user.active = True
+        user.is_admin = False
+        user.is_active = True
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -91,9 +89,8 @@ class MyUserManager(BaseUserManager):
             city,
             password=password,
         )
-        user.superuser = True
-        user.staff = True
-        user.active = True
+        user.is_admin = True
+        user.is_active = True
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -120,19 +117,18 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     date_of_birth = models.DateField(blank=True, null=True)
     city = models.CharField(max_length=150, blank=True, null=True)
     picture = models.ImageField(blank=True, null=True)
-    superuser = models.BooleanField(default=False)
-    staff = models.BooleanField(default=False)
-    active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now, blank=True, null=True)
     objects = MyUserManager()
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = [
         "first_name",
         "last_name",
-        "country",
         "phone",
         "date_of_birth",
         "city",
+        "country",
     ]
 
     def __str__(self):
@@ -145,16 +141,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return True
 
     @property
-    def is_active(self):
-        return self.active
-
-    @property
     def is_staff(self):
-        return self.superuser
-
-    @property
-    def is_superuser(self):
-        return self.superuser
+        return self.is_admin
 
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}"
@@ -166,6 +154,6 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
-new_group, created = Group.objects.get_or_create(name="Admin")
-new_group1, created = Group.objects.get_or_create(name="Teacher")
-new_group2, created = Group.objects.get_or_create(name="Parent")
+# new_group, created = Group.objects.get_or_create(name="Admin")
+# new_group1, created = Group.objects.get_or_create(name="Teacher")
+# new_group2, created = Group.objects.get_or_create(name="Parent")

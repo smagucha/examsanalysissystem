@@ -13,8 +13,8 @@ def parentsignup(request):
             form.save()
             email = form.cleaned_data["email"]
             user = MyUser.objects.get(email=email)
-            group = Group.objects.get(name="Parent")
-            user.groups.add(group)
+            # group = Group.objects.get(name="Parent")
+            # user.groups.add(group)
             user.save()
             return redirect("student:home")
     else:
@@ -30,8 +30,8 @@ def teachersignup(request):
             form.save()
             username = form.cleaned_data["username"]
             user = User.objects.get(username=username)
-            group = Group.objects.get(name="Teacher")
-            user.groups.add(group)
+            # group = Group.objects.get(name="Teacher")
+            # user.groups.add(group)
             user.save()
             return redirect("home")
     else:

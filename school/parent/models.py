@@ -1,5 +1,6 @@
 from django.db import models
 from useraccounts.models import MyUser
+from django.contrib.auth.models import User
 
 
 class Parent(models.Model):
@@ -10,6 +11,13 @@ class Parent(models.Model):
         null=True,
         blank=True,
     )
+    # user = models.ForeignKey(
+    #     User,
+    #     on_delete=models.CASCADE,
+    #     limit_choices_to={"groups__name": "Parent"},
+    #     null=True,
+    #     blank=True,
+    # )
 
     def __str__(self):
         return "%s" % (self.user)
