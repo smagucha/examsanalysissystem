@@ -11,6 +11,7 @@
         <th>Present Status</th>
         <th>Reason</th>
         <th>Update</th>
+        <th>delete</th>
     </tr>
 </thead>
 <tbody>
@@ -21,6 +22,8 @@
         <td>{{student.dateattend }}</td>
         <td>{{student.present_status|capfirst }}</td>
         <td>{{student.absentwhy|capfirst }}</td>
+        <td><a href="{% url 'student:updateattend' student.id %}">update</a></td>
+        <td><a href="{% url 'student:deleteattend' student.id %}">delete</a></td>
     </tr>
        {%endfor%}              
 </tbody>

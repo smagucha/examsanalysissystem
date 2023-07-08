@@ -1,0 +1,11 @@
+{%extends 'student/base.html'%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+<form method='POST'>
+	
+	{%csrf_token%}
+	are you sure you want to delete {{getsubject.name}} 
+	<input type="submit" name="delete subject">
+	
+</form>
+{%endblock content%}

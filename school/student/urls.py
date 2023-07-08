@@ -54,6 +54,7 @@ urlpatterns = [
         {"template_name": "student/viewattendancestream.html"},
         name="viewattendancestream",
     ),
+    path("deleteattend/<int:id>/", views.deleteattend, name="deleteattend"),
     path(
         "enterresults/",
         views.getclasses,
@@ -81,4 +82,6 @@ urlpatterns = [
         {"template_name": "student/stream.html"},
         name="stream",
     ),
+    path("objectnotfound/", views.objectnotfound, name="objectnotfound"),
+    path("deletestudent/<int:id>/", views.delete_student, name="delete_student"),
 ]

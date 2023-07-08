@@ -18,7 +18,7 @@
     <tr>
         <td>{{events.name|capfirst}}</td>
         <td>{{events.description|capfirst}}</td>
-        <td>{{events.date}}</td>
+        <td>{{events.dateevents}}</td>
         <td><a class="link" href="{% url 'event:updateevent' events.id%}">Update</a></td>
         <td><a class="link" href="{% url 'event:deleteevent' events.id%}">Delete</a></td>
     </tr>

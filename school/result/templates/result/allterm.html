@@ -4,9 +4,24 @@
 {%if allterm%}
 please add more terms
 <p><a href="{% url 'result:addterm' %}">add term</a></p>
-{%for term in allterm%}
-{{term}}
-{%endfor%}
+<table class='table'>
+<thead>
+    <tr>
+    	<th>Term</th>
+        <th>Update</th>
+        <th>Delete</th>
+    </tr>
+</thead>
+<tbody>
+	{%for term in allterm%}
+    <tr>
+        <td>{{term}}</td>
+		<td><a href="">update</a></td>
+		<td><a href="">delete</a></td>	
+    </tr> 
+    {%endfor%}          
+</tbody>
+</table>
 {%else%}
 please add a term
 <p><a href="{% url 'result:addterm' %}">add term</a></p>

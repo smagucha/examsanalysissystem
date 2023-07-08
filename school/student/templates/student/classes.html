@@ -1,9 +1,15 @@
 {% extends 'student/base.html' %}
 {%block title%}{{title}}{%endblock%}
 {%block content%}
+{%if allclasses%}
+<a href="{% url 'student:addclasses' %}">add classes</a>
 {% for class in allclasses %}
 <li>
   {{class}}
 </li>
 {%endfor%}
+{%else%}
+add class
+{%endif%}
+<a href="{% url 'student:addclasses' %}">add classes</a>
 {%endblock%}

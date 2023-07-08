@@ -10,6 +10,7 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.http import HttpResponse
 import xlwt
+from student.views import database_operation, delete_database_operation
 
 year = str(date.today().year)
 
@@ -372,44 +373,22 @@ def streamexamanalysis(
 
 @login_required(login_url="/accounts/login/")
 def addsubject(request):
-    if request.method == "POST":
-        form = subjectForm(request.POST)
-        if form.is_valid():
-            form.save()
-            form = subjectForm()
-    else:
-        form = subjectForm()
-    context = {"form": form, "title": "add subjects"}
-    return render(request, "student/generalform.html", context)
+    return database_operation(subjectForm, request)
 
 
 @login_required(login_url="/accounts/login/")
 def AddTerm(request):
-    if request.method == "POST":
-        form = TermForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("result:allterm")
-    else:
-        form = TermForm()
-    context = {"form": form, "title": "add term"}
+    return database_operation(TermForm, request)
 
-    return render(request, "student/generalform.html", context)
+
+@login_required(login_url="/accounts/login/")
+def addGrade(request):
+    return database_operation(GradeForm, request)
 
 
 @login_required(login_url="/accounts/login/")
 def AddGrade(request):
-    if request.method == "POST":
-        form = GradeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            form = GradeForm()
-            return redirect("student:home")
-    else:
-        form = GradeForm()
-    context = {"form": form, "title": "add Grade"}
-
-    return render(request, "student/generalform.html", context)
+    return database_operation(GradeForm, request)
 
 
 @login_required(login_url="/accounts/login/")
@@ -439,6 +418,11 @@ def allterm(request):
     )
 
 
+@login_required(login_url="accounts/login/")
+def deleteterm(request):
+    return delete_database_operation(request, term, id)
+
+
 @login_required(login_url="/accounts/login/")
 def enrollStudenttosubectall(request):
     allenroll = EnrollStudenttosubect.enroll.get_all_students_subject()
@@ -450,86 +434,28 @@ def enrollStudenttosubectall(request):
 
 
 @login_required(login_url="/accounts/login/")
-def updategrade(request, id):
-    grade = Grading.objects.get(id=id)
-    form = GradeForm()
-    if request.method == "POST":
-        form = GradeForm(request.POST, instance=grade or None)
-        if form.is_valid:
-            form.save()
-        return redirect("allGrade")
-    else:
-        form = GradeForm(instance=grade or None)
-
-    context = {
-        "grade": grade,
-        "form": form,
-    }
-    return render(request, "student/generalform.html", context)
+def deletegrade(request):
+    return delete_database_operation(request, Grading, id)
 
 
 @login_required(login_url="/accounts/login/")
-def deletegrade(request, id):
-    grade = Grading.objects.get(id=id)
-    if request.method == "POST":
-        grade.delete()
-        return redirect("allGrade")
-    context = {
-        "grade": grade,
-    }
-    return render(request, "result/deletegrade.html", context)
+def updatesubject(request):
+    return database_operation(request, subjectForm, id)
 
 
 @login_required(login_url="/accounts/login/")
-def updatesubject(request, id):
-    getsubject = subject.objects.get(id=id)
-    form = subjectForm()
-    if request.method == "POST":
-        form = subjectForm(request.POST or None, instance=getsubject)
-        if form.is_valid():
-            form.save()
-            return redirect("allsubject")
-    else:
-        form = subjectForm(instance=getsubject)
-    context = {"title": "update subject", "getsubject": getsubject, "form": form}
-    return render(request, "student/generalform.html", context)
-
-
-@login_required(login_url="/accounts/login/")
-def subjectdelete(request, id):
-    getsubject = subject.objects.get(id=id)
-    if request.method == "POST":
-        getsubject.delete()
-        return redirect("allsubject")
-        print(getsubject)
-    context = {
-        "getsubject": getsubject,
-    }
-    return render(request, "result/subjectdelete.html", context)
+def subjectdelete(request):
+    return delete_database_operation(request, subject, id)
 
 
 @login_required(login_url="/accounts/login/")
 def Enrollupdate(request, id):
-    enroll = EnrollStudenttosubect.objects.get(id=id)
-    if request.method == "POST":
-        form = EnrollForm(request.POST or None, instance=enroll)
-        if form.is_valid():
-            form.save()
-            return redirect("enrollStudenttosubectall")
-    else:
-        form = EnrollForm(instance=enroll)
-    context = {"title": "update enroll", "enroll": enroll, "form": form}
-    return render(request, "student/generalform.html", context)
+    return database_operation(request, EnrollForm, id)
 
 
 @login_required(login_url="/accounts/login/")
 def enrolldelete(request, id):
-    enroll = EnrollStudenttosubect.objects.get(id=id)
-    if request.method == "POST":
-        enroll.delete()
-        return redirect("enrollStudenttosubectall")
-    context = {"enroll": enroll}
-    return render(request, "result/enrolldelete.html", context)
+    return delete_database_operation(request, EnrollStudenttosubect, id)
 
 
 @login_required(login_url="/accounts/login")
@@ -579,7 +505,7 @@ def subjectperrank(
         "name": name,
         "term": term,
         "stream": stream,
-        "subject": subject,
+        "subject": subject7,
         "rankings_data": rankings_data,
     }
 

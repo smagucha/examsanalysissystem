@@ -8,6 +8,7 @@
 {%for stream in allstream%}
 	<a href="{% url 'student:streamstudent' name stream %}">{{stream}}</a>
 {%endfor%}
+<a href="{% url 'student:addstudent' %}">add student to the system</a>
 <table class="table">
 	<tr>
 		<th>
@@ -83,7 +84,7 @@
 			<a href="{% url 'student:updatestudent' detail.id%}">update</a>
 		</td>
 		<td>
-			<a href="{% url 'student:updatestudent' detail.id%}">delete</a>
+			<a href="{% url 'student:delete_student' detail.id%}">delete</a>
 		</td>
 	</tr>
 	{%endfor%}

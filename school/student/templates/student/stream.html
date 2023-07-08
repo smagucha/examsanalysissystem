@@ -2,6 +2,7 @@
 {%block title%}{{title}}{%endblock%}
 {%block content%}
 {%if allstream%}
+    <a href="{% url 'student:addstreams' %}">add streams</a>
     {%for stream in allstream%}
     <li>{{stream}}</li>
     {%endfor%}

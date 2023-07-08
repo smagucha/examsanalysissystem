@@ -1,8 +1,41 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Student, Klass, Attendance, Stream
 from .forms import StudentForm, AttendForm, KlassForm, StreamForm
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+
+
+@login_required(login_url="/accounts/login/")
+def database_operation(request, form_class, id=None):
+    if id:
+        instance = get_object_or_404(form_class.Meta.model, id=id)
+    else:
+        instance = None
+
+    if request.method == "POST":
+        form = form_class(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            form = form_class()
+    else:
+        form = form_class(instance=instance)
+
+    if id:
+        title = "Update Data"
+    else:
+        title = "Add Data"
+
+    context = {"form": form, "title": title}
+    return render(request, "student/generalform.html", context)
+
+
+@login_required(login_url="/accounts/login/")
+def delete_database_operation(request, mymodel, id):
+    try:
+        instance = get_object_or_404(mymodel, id=id).delete()
+    except:
+        return redirect("student:objectnotfound")
+    return render(request, "student/delete.html")
 
 
 @login_required(login_url="/accounts/login/")
@@ -50,38 +83,17 @@ def student_class(request, name, stream=None, template_name=None):
 
 @login_required(login_url="/accounts/login/")
 def add_student(request):
-    if request.method == "POST":
-        form = StudentForm(request.POST)
-        if form.is_valid:
-            form.save()
-            return redirect("student:home")
-    else:
-        form = StudentForm()
-    context = {"title": "add student", "form": form}
-    return render(request, "student/generalform.html", context)
+    return database_operation(request, StudentForm)
 
 
 @login_required(login_url="/accounts/login/")
 def update_student(request, id):
-    student = Student.objects.get(id=id)
-    if request.method == "POST":
-        form = StudentForm(request.POST or None, instance=student)
-        if form.is_valid:
-            form.save()
-            return redirect("home")
-    else:
-        form = StudentForm(instance=student)
-    context = {"title": "add student", "form": form}
-    return render(request, "student/generalform.html", context)
+    return database_operation(request, StudentForm, id)
 
 
 @login_required(login_url="/accounts/login/")
 def delete_student(request, id):
-    student = Student.objects.get(id=id)
-    try:
-        student.delete()
-    except ObjectDoesNotExist:
-        return redirect("home")
+    return delete_database_operation(request, Student, id)
 
 
 @login_required(login_url="/accounts/login/")
@@ -127,25 +139,12 @@ def viewattendanceperstream(request, name, stream):
 
 @login_required(login_url="/accounts/login/")
 def attendupdate(request, id):
-    attend = Attendance.objects.get(id=id)
-    if request.method == "POST":
-        form = AttendForm(request.POST or None, instance=attend)
-        if form.is_valid:
-            form.save()
-            return redirect("home")
-    else:
-        form = AttendForm(instance=attend)
-    context = {"title": "view attendance", "form": form}
-    return render(request, "student/generalform.html", context)
+    return database_operation(request, AttendForm, id)
 
 
 @login_required(login_url="/accounts/login/")
 def deleteattend(request, id):
-    attend = Attendance.objects.get(id=id)
-    try:
-        attend.delete()
-    except ObjectDoesNotExist:
-        return redirect("home")
+    return delete_database_operation(request, Attendance, id)
 
 
 @login_required(login_url="accounts/login/")
@@ -153,30 +152,14 @@ def schoolsetting(request):
     return render(request, "student/schoolsetting.html")
 
 
-@login_required(login_url="accounts/login/")
+@login_required(login_url="/accounts/login/")
 def addclasses(request):
-    if request.method == "POST":
-        form = KlassForm(request.POST)
-        if form.is_valid:
-            form.save()
-            return redirect("student:home")
-    else:
-        form = KlassForm()
-    context = {"title": "add classes", "form": form}
-    return render(request, "student/generalform.html", context)
+    return database_operation(request, KlassForm, id=None)
 
 
-@login_required(login_url="accounts/login")
+@login_required(login_url="/accounts/login/")
 def addstreams(request):
-    if request.method == "POST":
-        form = StreamForm(request.POST)
-        if form.is_valid:
-            form.save()
-            return redirect("student:home")
-    else:
-        form = StreamForm()
-    context = {"title": "add classes", "form": form}
-    return render(request, "student/generalform.html", context)
+    return database_operation(request, StreamForm, id=None)
 
 
 def not_found(request, exception):
@@ -189,3 +172,8 @@ def server_error(request, exception=None):
 
 def bad_request(request, exception):
     return render(request, "student/400.html")
+
+
+@login_required(login_url="/accounts/login/")
+def objectnotfound(request):
+    return render(request, "student/objectnotfound.html")

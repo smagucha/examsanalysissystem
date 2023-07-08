@@ -3,8 +3,11 @@ from .forms import TeacherForm, DesignationForm  # , TeachersubjectForm
 from .models import Teacher, Designation  # , Teachersubjects
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
+from student.views import database_operation, delete_database_operation
+from django.contrib.auth.decorators import login_required
 
 
+@login_required(login_url="/accounts/login/")
 def list_Teacher(request):
     listTeacher = Teacher.objects.all()
     context = {
@@ -14,63 +17,27 @@ def list_Teacher(request):
     return render(request, "teacher/allTeachers.html", context)
 
 
+@login_required(login_url="/accounts/login/")
 def updateTeacher(request, id):
-    idTeacher = get_object_or_404(Teacher, id=id)
-    if request.method == "POST":
-        form = TeacherForm(request.POST or None, request.FILES, instance=idTeacher)
-        if form.is_valid():
-            form.save()
-            return redirect("listTeacher")
-    else:
-        form = TeacherForm(request.POST or None, instance=idTeacher)
-    context = {
-        "title": "update Teacher",
-        "idTeacher": idTeacher,
-        "form": form,
-    }
-    return render(request, "student/generalform.html", context)
+    return database_operation(request, TeacherForm, id)
 
 
+@login_required(login_url="/accounts/login/")
 def deleteTeacher(request, id):
-    delTeacher = get_object_or_404(Teacher, id=id)
-    if request.method == "POST":
-        delTeacher.delete()
-        redirect("listTeacher")
-    context = {
-        "title": "remove Teacher",
-        "delTeacher": delTeacher,
-    }
-    return render(request, "teacher/deleteTeacher.html", context)
+    return delete_database_operation(request, Teacher, id)
 
 
+@login_required(login_url="/accounts/login/")
 def addTeacher(request):
-    if request.method == "POST":
-        form = TeacherForm(request.POST or None, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect("listTeacher")
-    else:
-        form = TeacherForm()
-    context = {
-        "title": "add Teacher",
-        "form": form,
-    }
-    return render(request, "student/generalform.html", context)
+    return database_operation(request, TeacherForm)
 
 
+@login_required(login_url="/accounts/login/")
 def adddesignation(request):
-    if request.method == "POST":
-        form = DesignationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            form = DesignationForm()
-            return redirect("home")
-    else:
-        form = DesignationForm()
-    context = {"title": "add designation", "form": form}
-    return render(request, "student/generalform.html", context)
+    return database_operation(request, DesignationForm)
 
 
+@login_required(login_url="/accounts/login/")
 def alldesignation(request):
     return render(
         request,
@@ -81,48 +48,22 @@ def alldesignation(request):
     )
 
 
+@login_required(login_url="/accounts/login/")
 def updatedesignation(request, id):
-    getdesign = get_object_or_404(Designation, id=id)
-    form = DesignationForm()
-    if request.method == "POST":
-        form = DesignationForm(request.POST or None, instance=getdesign)
-        if form.is_valid:
-            form.save()
-            return redirect("alldesignation")
-    else:
-        form = DesignationForm(instance=getdesign)
-    context = {
-        "form": form,
-    }
-    return render(request, "student/generalform.html", context)
+    return database_operation(request, DesignationForm, id)
 
 
+@login_required(login_url="/accounts/login/")
 def deletedesignation(request, id):
-    getdesign = get_object_or_404(Designation, id=id)
-    if request.method == "POST":
-        getdesign.delete()
-        return redirect("alldesignation")
-    context = {
-        "title": "delete designation",
-    }
-    return render(request, "teacher/deletedesignation.html", context)
+    return delete_database_operation(request, Designation, id)
 
 
+@login_required(login_url="/accounts/login/")
 def addTeachersubjects(request):
-    form = TeachersubjectForm()
-    if request.method == "POST":
-        form = TeachersubjectForm(request.POST)
-        if form.is_valid():
-            form.save()
-            form = TeachersubjectForm()
-    else:
-        form = TeachersubjectForm()
-    context = {
-        "form": form,
-    }
-    return render(request, "student/generalform.html", context)
+    return database_operation(request, TeachersubjectForm)
 
 
+@login_required(login_url="/accounts/login/")
 def list_Teacher_subjects(request):
     return render(
         request,
@@ -133,25 +74,11 @@ def list_Teacher_subjects(request):
     )
 
 
+@login_required(login_url="/accounts/login/")
 def updateteachersub(request, id):
-    updatesubject = get_object_or_404(Teachersubjects, id=id)
-    form = TeachersubjectForm()
-    if request.method == "POST":
-        form = TeachersubjectForm(request.POST or None, instance=updatesubject)
-        if form.is_valid():
-            form.save()
-            return redirect("list_Teacher_subjects")
-    else:
-        form = TeachersubjectForm(instance=updatesubject)
-
-    context = {"form": form, "updatesubject": updatesubject}
-
-    return render(request, "student/generalform.html", context)
+    return database_operation(request, TeachersubjectForm, id)
 
 
+@login_required(login_url="/accounts/login/")
 def deleteteachersub(request, id):
-    delsubject = get_object_or_404(Teachersubjects, id=id)
-    if request.method == "POST":
-        delsubject.delete()
-    context = {"delsubject": delsubject}
-    return render(request, "teacher/deleteteachersub.html", context)
+    return delete_database_operation(request, Teachersubjects, id)

@@ -7,6 +7,7 @@ urlpatterns = [
     path("allsubject/", views.allsubject, name="allsubject"),
     path("allGrade/", views.allGrade, name="allGrade"),
     path("allterm", views.allterm, name="allterm"),
+    path("deleteterm/<int:id>/", views.deleteterm, name="deleteterm"),
     path(
         "enrollStudenttosubectall/",
         views.enrollStudenttosubectall,
@@ -45,7 +46,7 @@ urlpatterns = [
         {"template_name": "result/classrankingsubjectterms.html"},
         name="classrankingsubjectterms",
     ),
-    path("updategrade/<int:id>/", views.updategrade, name="updategrade"),
+    # path("updategrade/<int:id>/", views.updategrade, name="updategrade"),
     path("deletegrade/<int:id>/", views.deletegrade, name="deletegrade"),
     path("updatesubject/<int:id>/", views.updatesubject, name="updatesubject"),
     path("subjectdelete/<int:id>/", views.subjectdelete, name="subjectdelete"),

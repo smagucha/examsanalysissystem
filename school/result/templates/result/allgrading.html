@@ -4,10 +4,26 @@
 {%endblock title%}
 {% block content%}
 {%if allgrade%}
-grades
-{% for i in allgrade %}
-	{{i.name}}
-{%endfor%}
+<p><a href="{% url 'result:addgrade' %}">add grade</a></p>
+<h1>grades</h1>
+<table class='table'>
+<thead>
+    <tr>
+    	<th>grade</th>
+        <th>point</th>
+        <th>delete</th>
+    </tr>
+</thead>
+<tbody>
+	{% for i in allgrade %}
+    <tr>
+        <td >{{i.name}}</td>
+		<td>{{i.points}}</td>
+		<td><a href="{% url 'result:deletegrade' i.id %}">delete</a></td>	
+    </tr> 
+    {%endfor%}          
+</tbody>
+</table>
 {%else%}
 <a href="{% url 'result:addgrade' %}">add grade</a>
 {%endif%}

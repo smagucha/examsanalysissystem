@@ -1,0 +1,9 @@
+{% extends 'student/base.html' %}
+{%block title%}{{title}}{%endblock title%}
+{%block content%}
+<form method='POST'>
+	{%csrf_token%}
+	are you sure you want to {{instance}}
+	<input type="submit" name="delete grade">
+</form>
+{%endblock content%}

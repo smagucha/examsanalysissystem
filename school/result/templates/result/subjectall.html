@@ -4,9 +4,24 @@
 {%if allsubjects%}
 please add more subjects
 <p><a href="{% url 'result:addsubject' %}">add subject</a></p>
-{%for subject in allsubjects%}
-{{subject}}
-{%endfor%}
+<table class='table'>
+<thead>
+    <tr>
+    	<th>subjects</th>
+        <th>update</th>
+        <th>delete</th>
+    </tr>
+</thead>
+<tbody>
+	{%for subject in allsubjects%}
+    <tr>
+        <td >{{subject}}</td>
+		<td><a href="{% url 'result:updatesubject' subject.id %}">update</a></td>
+		<td><a href="{% url 'result:subjectdelete' subject.id %}">delete</a></td>	
+    </tr> 
+    {%endfor%}          
+</tbody>
+</table>
 {%else%}
 please add a subject
 <p><a href="{% url 'result:addsubject' %}">add subject</a></p>
