@@ -1,7 +1,5 @@
 from .base import *
 
-# import psycopg2
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", cast=bool)
 ALLOWED_HOSTS = []
@@ -22,11 +20,3 @@ DATABASES = {
         "PORT": config("PORT"),
     }
 }
-
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
