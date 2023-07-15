@@ -373,22 +373,17 @@ def streamexamanalysis(
 
 @login_required(login_url="/accounts/login/")
 def addsubject(request):
-    return database_operation(subjectForm, request)
+    return database_operation(request, subjectForm)
 
 
 @login_required(login_url="/accounts/login/")
 def AddTerm(request):
-    return database_operation(TermForm, request)
+    return database_operation(request, TermForm)
 
 
 @login_required(login_url="/accounts/login/")
 def addGrade(request):
-    return database_operation(GradeForm, request)
-
-
-@login_required(login_url="/accounts/login/")
-def AddGrade(request):
-    return database_operation(GradeForm, request)
+    return database_operation(request, GradeForm)
 
 
 @login_required(login_url="/accounts/login/")
@@ -400,6 +395,7 @@ def allGrade(request):
     )
 
 
+# remove this is a duplicate
 @login_required(login_url="/accounts/login/")
 def allsubject(request):
     return render(

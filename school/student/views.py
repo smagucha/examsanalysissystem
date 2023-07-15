@@ -24,7 +24,6 @@ def database_operation(request, form_class, id=None):
         title = "Update Data"
     else:
         title = "Add Data"
-
     context = {"form": form, "title": title}
     return render(request, "student/generalform.html", context)
 

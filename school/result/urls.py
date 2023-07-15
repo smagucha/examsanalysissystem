@@ -4,6 +4,7 @@ from student.views import getclasses, getstreams
 
 app_name = "result"
 urlpatterns = [
+    # modify line 8 to fit new view
     path("allsubject/", views.allsubject, name="allsubject"),
     path("allGrade/", views.allGrade, name="allGrade"),
     path("allterm", views.allterm, name="allterm"),
@@ -15,7 +16,7 @@ urlpatterns = [
     ),
     path("addsubject/", views.addsubject, name="addsubject"),
     path("AddTerm/", views.AddTerm, name="addterm"),
-    path("addgrade/", views.AddGrade, name="addgrade"),
+    path("addgrade/", views.addGrade, name="addgrade"),
     path(
         "resultclass/",
         getclasses,
