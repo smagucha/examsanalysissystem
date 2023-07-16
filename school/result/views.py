@@ -72,9 +72,8 @@ def getsubjects(request, classname, term=None, streamname=None, template_name=No
 
 @login_required(login_url="/accounts/login/")
 def terms(request, classname, streamname=None, subject=None, template_name=None):
-    getterms = term.objects.all()
     context = {
-        "allterms": getterms,
+        "allterms": term.objects.all(),
         "classname": classname,
         "streamname": streamname,
         "subject": subject,
@@ -371,16 +370,19 @@ def streamexamanalysis(
     return render(request, template_name, context)
 
 
+# test done
 @login_required(login_url="/accounts/login/")
 def addsubject(request):
     return database_operation(request, subjectForm)
 
 
+# test done
 @login_required(login_url="/accounts/login/")
 def AddTerm(request):
     return database_operation(request, TermForm)
 
 
+# test done
 @login_required(login_url="/accounts/login/")
 def addGrade(request):
     return database_operation(request, GradeForm)
@@ -414,8 +416,8 @@ def allterm(request):
     )
 
 
-@login_required(login_url="accounts/login/")
-def deleteterm(request):
+@login_required(login_url="/accounts/login/")
+def deleteterm(request, id):
     return delete_database_operation(request, term, id)
 
 

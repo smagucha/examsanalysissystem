@@ -29,3 +29,6 @@ class SchoolEventsModelTest(TestCase):
             year=2023,
         )
         self.assertEqual(event.year, 2023)
+
+    def test_verbose_plural_name(self):
+        self.assertEqual(SchoolEvents._meta.verbose_name_plural, "school events")

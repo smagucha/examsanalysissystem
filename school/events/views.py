@@ -13,8 +13,10 @@ def addevent(request):
 
 @login_required(login_url="/accounts/login/")
 def listevents(request):
-    context = {"eventlist": SchoolEvents.objects.filter(year=str(date.today().year))}
-    return render(request, "events/listevents.html", context)
+    context_data = {
+        "eventlist": SchoolEvents.objects.filter(year=str(date.today().year))
+    }
+    return render(request, "events/listevents.html", context_data)
 
 
 @login_required(login_url="/accounts/login/")

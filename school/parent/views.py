@@ -9,10 +9,12 @@ from student.views import database_operation, delete_database_operation
 
 @login_required(login_url="/accounts/login/")
 def list_parent(request):
-    parents = Parent.objects.all()
+    parents_with_students = (
+        Parent.objects.all().prefetch_related("studentparent_set__student").distinct()
+    )
     context = {
         "title": "all parents",
-        "getParents": parents,
+        "getParents": parents_with_students,
     }
     return render(request, "parent/parent.html", context)
 

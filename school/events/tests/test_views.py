@@ -40,7 +40,21 @@ class AddEventTest(TestCase):
             dateevents="1999-01-01",
             year=date.today().year,
         )
+        event1 = SchoolEvents.objects.create(
+            name="Test Event",
+            description="fbvhdkhbdkvbdfkjnk",
+            dateevents="1999-01-01",
+            year=date.today().year,
+        )
+        event2 = SchoolEvents.objects.create(
+            name="Test Event",
+            description="fbvhdkhbdkvbdfkjnk",
+            dateevents="1999-01-01",
+            year=date.today().year,
+        )
+
         response = self.client.get(self.listevents_url)
+        print(response.context)
         self.assertEqual(response.status_code, 302)
 
     def test_listevents_unauthenticated_user(self):

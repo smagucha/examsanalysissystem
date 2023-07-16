@@ -8,7 +8,6 @@ please add more terms
 <thead>
     <tr>
     	<th>Term</th>
-        <th>Update</th>
         <th>Delete</th>
     </tr>
 </thead>
@@ -16,8 +15,7 @@ please add more terms
 	{%for term in allterm%}
     <tr>
         <td>{{term}}</td>
-		<td><a href="">update</a></td>
-		<td><a href="">delete</a></td>	
+		<td><a href="{% url 'result:deleteterm' term.id %}">delete</a></td>	
     </tr> 
     {%endfor%}          
 </tbody>

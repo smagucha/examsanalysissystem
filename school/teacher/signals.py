@@ -1,11 +1,11 @@
-from django.contrib.auth.models import User, Group
-from django.db.models.signals import post_save
 from django.dispatch import receiver
-from teacher.models import Teacher
-from django.db.models import signals
+from useraccounts.models import MyUser
+from django.dispatch import Signal
+from .models import Teacher
+
+teacher_signup_signal = Signal()
 
 
-@receiver(signals.post_save, sender=User)
-def create_parent(sender, instance, created, **kwargs):
-    if instance.groups.filter(name="Teacher"):
-        Teacher.objects.create(user=instance)
+@receiver(parent_signup_signal)
+def handle_teacher_signup(sender, user, **kwargs):
+    instance = Teacher.objects.create(user=user).save()
