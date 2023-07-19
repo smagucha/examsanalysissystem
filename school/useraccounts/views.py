@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from useraccounts.models import MyUser
 from student.views import database_operation, delete_database_operation
-from parent.signals import parent_signup_signal
+from teacher.signals import teacher_signup_signal
 
 
 def parentsignup(request):
@@ -18,7 +18,6 @@ def parentsignup(request):
             group = Group.objects.get(name="Parent")
             user.groups.add(group)
             user.save()
-            parent_signup_signal.send(sender=MyUser, user=user)
             return redirect("student:home")
     else:
         form = CustomUserCreationForm()
