@@ -119,7 +119,7 @@ urlpatterns = [
         name="subjectperftermstream",
     ),
     path(
-        "streamexamanalysis/<str:name>/<str:stream>/<str:term>/",
+        "streamexamanalysis/<str:name>/<str:term>/",
         views.streamexamanalysis,
         {"template_name": "result/performanceterm.html"},
         name="streamexamanalysis",

@@ -22,26 +22,45 @@ class subject(models.Model):
 
 
 class MarkManager(models.Manager):
-    def get_results(self, name, term, student):
+    def get_results_for_student(self, subject_name, term, student):
         return (
             self.prefetch_related("student", "Term", "name")
-            .filter(name__name=name, Term__name=term, student=student)
+            .filter(name__name=subject_name, Term__name=term, student=student)
             .values_list("marks", flat=True)
         )
 
-    def get_results_stream(self, name, term, student_class_name, stream):
+    def student_subject_ranking_per_class_or_stream(
+        self, name, term, subject, stream=None
+    ):
+        year = str(date.today().year)
+        query_params = {
+            "student__class_name__name": name,
+            "name__name": subject,
+            "Term__name": term,
+            "year": year,
+        }
+        if stream:
+            query_params["student__stream__name"] = stream
         return (
-            self.prefetch_related("student", "Term", "name")
-            .filter(
-                name__name=name,
-                Term__name=term,
-                student__class_name__name=student_class_name,
-                student__stream__name=stream,
+            self.filter(**query_params)
+            .order_by("-marks")
+            .values_list(
+                "student__first_name",
+                "student__middle_name",
+                "student__last_name",
+                "name__name",
+                "marks",
             )
-            .values_list("marks", flat=True)
         )
 
-    def student_result_per_term_class(self, term, student, classname):
+    def student_result_per_term_class(self, term, student, classname, stream=None):
+        query_params = {
+            "student__class_name__name": student_class_name,
+            "Term__name": Term,
+            "student": student,
+        }
+        if stream:
+            query_params["student__stream__name"] = stream
         return (
             self.select_related("student", "Term")
             .filter(
@@ -52,26 +71,20 @@ class MarkManager(models.Manager):
             .values_list("marks", flat=True)
         )
 
-    def get_subject_marks_stream(self, student_class_name, Term, subject_name, stream):
-        return (
-            self.select_related("student__class_name", "Term", "name")
-            .filter(
-                student__class_name__name=student_class_name,
-                Term__name=Term,
-                subject_name__name=name,
-                student__stream__name=stream,
-            )
-            .values_list("marks", flat=True)
-        )
+    def get_subject_marks_for_class_or_stream(
+        self, student_class_name, Term, subject_name, stream=None
+    ):
+        query_params = {
+            "student__class_name__name": student_class_name,
+            "Term__name": Term,
+            "name__name": subject_name,
+        }
+        if stream:
+            query_params["student__stream__name"] = stream
 
-    def get_subject_marks(self, student_class_name, Term, subject_name):
         return (
             self.select_related("student__class_name", "Term", "name")
-            .filter(
-                student__class_name__name=student_class_name,
-                Term__name=Term,
-                name__name=subject_name,
-            )
+            .filter(**query_params)
             .values_list("marks", flat=True)
         )
 
