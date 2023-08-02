@@ -117,13 +117,14 @@ def student_view(request, id, name, format=None, template_name=None):
         rankingsubject = {}
 
         for sub in subjectname:
+            # next five lines to replaced
             studentmarks = list(
                 Mark.objects.filter(
                     student=student, Term__name=getterms, name__name=sub
                 ).values_list("marks", flat=True)
             )
             termreuslts.extend(studentmarks)
-
+        # replace this line with a function
         getmark = Mark.objects.filter(
             student=student, Term__name=getterms, year=student.year
         )
@@ -585,9 +586,6 @@ def calculate_average_marks_and_grading(indexed_results):
                 result.append(grading.points)
                 break
     return avg_marks
-
-
-#################################end of getresultstreamterm #########################################
 
 
 def error_404(request, exception):
