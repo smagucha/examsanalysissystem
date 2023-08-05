@@ -40,31 +40,25 @@ class StudentManager(models.Manager):
             year=str(date.today().year)
         )
 
-    def get_student_list_class(self, name):
-        return self.prefetch_related("class_name", "stream").filter(
-            class_name__name=name, year=str(date.today().year)
-        )
+    def get_student_list_class_or_stream(self, name, stream=None):
+        query_params = {
+            "class_name__name": name,
+            "year": str(date.today().year),
+        }
+        if stream:
+            query_params["stream__name"] = stream
+        return self.prefetch_related("class_name", "stream").filter(**query_params)
 
-    def get_student_list_stream(self, name, stream):
-        return self.prefetch_related("class_name", "stream").filter(
-            class_name__name=name, stream__name=stream, year=str(date.today().year)
-        )
+    def all_student_count(self):
+        return self.get_student_list().count()
 
-    def class_count(self, name):
-        return (
-            self.prefetch_related("class_name", "stream")
-            .filter(class_name__name=name, year=str(date.today().year))
-            .count()
-        )
-
-    def stream_count(self, name, stream):
-        return (
-            self.prefetch_related("class_name", "stream")
-            .filter(
-                class_name__name=name, stream__name=stream, year=str(date.today().year)
-            )
-            .count()
-        )
+    def class_or_stream_count(self, name, stream=None):
+        query_params = {
+            "name": name,
+        }
+        if stream:
+            query_params["stream__name"] = stream
+        return self.get_student_list_class_or_stream(name, stream).count()
 
 
 class Student(models.Model):

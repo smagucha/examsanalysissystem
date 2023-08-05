@@ -10,7 +10,10 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.http import HttpResponse
 import xlwt
-from student.views import database_operation, delete_database_operation
+from student.views import (
+    database_operation,
+    delete_database_operation,
+)
 
 year = str(date.today().year)
 
@@ -84,15 +87,17 @@ def terms(request, classname, streamname=None, subject=None, template_name=None)
 @login_required(login_url="/accounts/login/")
 def student_view(request, id, name, format=None, template_name=None):
     student = get_object_or_404(Student, id=id)
-    totalclass = Student.student.class_count(name=name)
-    streamtotal = Student.student.stream_count(name=name, stream=student.stream)
+    totalclass = Student.student.class_or_stream_count(name)
+    streamtotal = Student.student.class_or_stream_count(name, student.stream)
     subjectname = subject.objects.all()
     terms = term.objects.all()
-    student_stream = Student.student.get_student_list_stream(
+    student_stream = Student.student.get_student_list_class_or_stream(
         name=student.class_name, stream=student.stream
     )
-    Getgrading = Grading.objects.all()
-    student_class = Student.student.get_student_list_class(name=student.class_name)
+    Getgrading = getgrade()
+    student_class = Student.student.get_student_list_class_or_stream(
+        name=student.class_name
+    )
     getterm = {}
     getclassrankid = []
     getstreamrankid = []
@@ -112,75 +117,26 @@ def student_view(request, id, name, format=None, template_name=None):
 
     for getterms in terms:
         termreuslts = []
-        getidnumber = {}
-        getstreamidnumber = {}
-        rankingsubject = {}
-
         for sub in subjectname:
-            # next five lines to replaced
             studentmarks = list(
-                Mark.objects.filter(
-                    student=student, Term__name=getterms, name__name=sub
-                ).values_list("marks", flat=True)
+                Mark.mark.get_results_for_student(sub, getterms, student)
             )
             termreuslts.extend(studentmarks)
-        # replace this line with a function
-        getmark = Mark.objects.filter(
-            student=student, Term__name=getterms, year=student.year
-        )
-        totalmarks = sum(
-            list(getmark.filter(Term__name=getterms).values_list("marks", flat=True))
-        )
+        getmark = get_student_marks(student, getterms, year)
+        if getmark:
+            totalmarks = sum(list(getmark.values_list("marks", flat=True)))
 
-        try:
-            getavg = totalmarks / getsubjectcount
-        except ZeroDivisionError:
-            getavg = 0
-
-        for j in Getgrading:
-            if getavg >= j.percent and getavg <= 100:
-                Gradeterm = j.name
-                break
-
+        getavg = calculate_average_and_get_grades(getmark, id, student, Getgrading)
         getdonesubects = [i for i in termreuslts if i != ""]
         if getdonesubects:
             termreuslts.append(sum(getdonesubects))
             getterm[getterms] = termreuslts
 
-        for idstudent in student_class:
-            marks = list(
-                Mark.objects.filter(student=idstudent, Term__name=getterms).values_list(
-                    "marks", flat=True
-                )
-            )
-            if sum(marks):
-                getidnumber[idstudent.id] = sum(marks)
-
-        for idstudent in student_stream:
-            marks = list(
-                Mark.objects.filter(student=idstudent, Term__name=getterms).values_list(
-                    "marks", flat=True
-                )
-            )
-            if sum(marks):
-                getstreamidnumber[idstudent.id] = sum(marks)
-
-        if getidnumber:
-            sortedid = dict(sorted(getidnumber.items(), key=lambda item: item[1])[::-1])
-            getclassrank = list(sortedid.keys())
-            classnumber = getclassrank.index(student.id) + 1
-            getnumbers = f"{classnumber}/{totalclass}"
-            getclassrankid.append(getnumbers)
-
-        if getstreamidnumber:
-            sortedid = dict(
-                sorted(getstreamidnumber.items(), key=lambda item: item[1])[::-1]
-            )
-            getstreamrank = list(sortedid.keys())
-            streamnumber = getstreamrank.index(student.id) + 1
-            getnumbers = f"{streamnumber}/{streamtotal}"
-            getstreamrankid.append(getnumbers)
-
+        getclassnumber, getstreamnumber = get_all_student_result_for_class_and_stream(
+            student_stream, student_class, getterms
+        )
+        calculate_class_rank(getclassnumber, student, totalclass, getclassrankid)
+        calculate_stream_rank(getstreamnumber, student, getstreamrankid)
         if getterm:
             try:
                 getterm[getterms] = (
@@ -195,30 +151,10 @@ def student_view(request, id, name, format=None, template_name=None):
                         break
             except:
                 pass
+            q = subject_ranking_per_class_and_stream(
+                getmark, student, Getgrading, totalclass, q
+            )
 
-            for i in getmark:
-                subjectrank = []
-                subjectrank.append(i.name.name)
-                Grade = None
-                subjectrank.append(i.marks)
-                for j in Getgrading:
-                    if i.marks >= j.percent and i.marks <= 100:
-                        Grade = j.name
-                        subjectrank.append(Grade)
-                        break
-                subjectrankclass = list(
-                    Mark.objects.filter(
-                        student__class_name__name=student.class_name,
-                        name__name=i.name,
-                        Term__name=i.Term,
-                        year=student.year,
-                    )
-                    .values_list("student", flat=True)
-                    .order_by("-marks")
-                )
-                getnu = f"{subjectrankclass.index(student.id)}/{totalclass}"
-                subjectrank.append(getnu)
-                q.append(subjectrank)
     context = {
         "Grade": Gradeterm,
         "outsubject": outsubject,
@@ -531,11 +467,11 @@ def getresultstreamterm(
     return render(request, template_name, context)
 
 
-# reuse this at line 458
 def get_students_by_class_and_stream(name, stream):
+    query_params = {"class_name__name": name}
     if stream:
-        return Student.objects.filter(class_name__name=name, stream__name=stream)
-    return Student.objects.filter(class_name__name=name)
+        query_params["stream__name"] = stream
+    return Student.objects.filter(**query_params)
 
 
 def collect_student_marks(students, subjects, term):
@@ -593,144 +529,141 @@ def error_404(request, exception):
 
 
 ######################################## new  student view ######################
-# def get_student_details(student):
-#     """
-#     Retrieves various details for a given student.
-#     """
-#     name = student.class_name.name
-#     stream = student.stream
-#     totalclass = Student.student.class_count(name=name)
-#     streamtotal = Student.student.stream_count(name=name, stream=stream)
-#     subjectname = subject.objects.all()
-#     terms = term.objects.all()
-#     student_stream = Student.student.get_student_list_stream(name=name, stream=stream)
-#     Getgrading = Grading.objects.all()
-#     student_class = Student.student.get_student_list_class(name=name)
-#     getsubjectcount = EnrollStudenttosubect.enroll.get_subjects_for_student_count(
-#         student=student
-#     )
-#     outsubject = getsubjectcount * 100
+def calculate_average_and_get_grades(getmark, id, student, Getgrading):
+    totalmarks = sum(list(getmark.values_list("marks", flat=True)))
+    getsubjectcount = EnrollStudenttosubect.enroll.get_subjects_for_student_count(
+        student=student
+    )
+    try:
+        getavg = totalmarks / getsubjectcount
+    except ZeroDivisionError:
+        getavg = 0
+    Gradeterm = None
+    for j in Getgrading:
+        if getavg >= j.percent and getavg <= 100:
+            Gradeterm = j.name
+            break
 
-#     return (
-#         name,
-#         totalclass,
-#         streamtotal,
-#         subjectname,
-#         terms,
-#         student_stream,
-#         Getgrading,
-#         student_class,
-#         getsubjectcount,
-#         outsubject,
-#     )
+    return totalmarks, Gradeterm
 
 
-# def calculate_grades(getmark, Getgrading, getsubjectcount):
-#     """
-#     Calculates the average marks and associated grade for a student.
-#     """
-#     totalmarks = sum(
-#         getmark.filter(Term__name=getterms).values_list("marks", flat=True)
-#     )
-#     try:
-#         getavg = totalmarks / getsubjectcount
-#     except ZeroDivisionError:
-#         getavg = 0
+def get_all_student_result_for_class_and_stream(
+    student_stream, student_class, getterms
+):
+    getclassnumber, getstreamnumber = {}, {}
+    for idstudent in student_class:
+        marks = list(
+            Mark.objects.filter(student=idstudent, Term__name=getterms).values_list(
+                "marks", flat=True
+            )
+        )
+        if sum(marks):
+            getclassnumber[idstudent.id] = sum(marks)
 
-#     Gradeterm = None
-#     for j in Getgrading:
-#         if getavg >= j.percent and getavg <= 100:
-#             Gradeterm = j.name
-#             break
+    for idstudent in student_stream:
+        marks = list(
+            Mark.objects.filter(student=idstudent, Term__name=getterms).values_list(
+                "marks", flat=True
+            )
+        )
+        if sum(marks):
+            getstreamnumber[idstudent.id] = sum(marks)
 
-#     return totalmarks, Gradeterm
+    return getclassnumber, getstreamnumber
 
 
-# def get_ranking_details(
-#     student, student_class, student_stream, terms, totalclass, streamtotal
+def get_student_marks(student, getterms, year):
+    getmark = Mark.objects.filter(
+        student=student, Term__name=getterms, year=student.year
+    )
+    return getmark
+
+
+def calculate_class_rank(getclassnumber, student, totalclass, getclassrankid):
+    if getclassnumber:
+        sortedid = dict(sorted(getclassnumber.items(), key=lambda item: item[1])[::-1])
+        getclassrank = list(sortedid.keys())
+        classnumber = getclassrank.index(student.id) + 1
+        getnumbers = f"{classnumber}/{totalclass}"
+        getclassrankid.append(getnumbers)
+    return getclassnumber
+
+
+def calculate_stream_rank(getstreamnumber, student, getstreamrankid):
+    if getstreamnumber:
+        sorted_id = dict(
+            sorted(getstreamnumber.items(), key=lambda item: item[1], reverse=True)
+        )
+        getstreamrank = list(sorted_id.keys())
+        streamnumber = getstreamrank.index(student.id) + 1
+        getnumbers = f"{streamnumber}/{len(getstreamrank)}"
+        getstreamrankid.append(getnumbers)
+    return getstreamnumber
+
+
+# def update_term_results(
+#     getterm,
+#     getterms,
+#     getclassrankid,
+#     getstreamrankid,
+#     totalmarks,
+#     getsubjectcount,
+#     Getgrading,
 # ):
-#     """
-#     Calculates the rankings for a given student in class and stream.
-#     """
-#     getterm = {}
-#     getclassrankid = []
-#     getstreamrankid = []
-#     streamnumber = None
-#     classnumber = None
 #     a = 0
-#     points = []
+#     if getterm:
+#         try:
+#             getterm[getterms] = (
+#                 [getstreamrankid[a]] + [getclassrankid[a]] + getterm[getterms]
+#             )
+#             a += 1
+#             calcavg = round(totalmarks / getsubjectcount)
+#             for j in Getgrading:
+#                 if calcavg >= j.percent and calcavg <= 100:
+#                     getterm[getterms].append(j.name)
+#                     getterm[getterms].append(j.points)
+#                     break
 
-#     for getterms in terms:
-#         termreuslts = []
-#         getidnumber = {}
-#         getstreamidnumber = {}
-
-#         # ... (remaining code for the loop)
-
-#     return getterm, getclassrankid, getstreamrankid
-
-
-# def get_subject_rankings(student, terms, totalclass):
-#     """
-#     Calculates subject-wise rankings for a given student.
-#     """
-#     q = []
-#     for getterms in terms:
-#         # ... (remaining code for the loop)
-#         pass
-
-#     return q
+#         except IndexError:
+#             pass
+#     return getterm
 
 
-# def student_view(request, id, format=None, template_name=None):
-#     student = get_object_or_404(Student, id=id)
+def subject_ranking_per_class_and_stream(getmark, student, Getgrading, totalclass, q):
+    for i in getmark:
+        subjectrank = []
+        subjectrank.append(i.name.name)
+        Grade = None
+        subjectrank.append(i.marks)
+        for j in Getgrading:
+            if i.marks >= j.percent and i.marks <= 100:
+                Grade = j.name
+                subjectrank.append(Grade)
+                break
+        subjectrankclass = list(
+            Mark.objects.filter(
+                student__class_name__name=student.class_name,
+                name__name=i.name,
+                Term__name=i.Term,
+                year=student.year,
+            )
+            .values_list("student", flat=True)
+            .order_by("-marks")
+        )
+        getnu = f"{subjectrankclass.index(student.id)+1}/{totalclass}"
+        subjectrank.append(getnu)
+        q.append(subjectrank)
+    return q
 
-#     # Get student details
-#     (
-#         name,
-#         totalclass,
-#         streamtotal,
-#         subjectname,
-#         terms,
-#         student_stream,
-#         Getgrading,
-#         student_class,
-#         getsubjectcount,
-#         outsubject,
-#     ) = get_student_details(student)
 
-#     # Calculate grades
-#     getmark = Mark.objects.filter(student=student, year=student.year)
-#     totalmarks, Gradeterm = calculate_grades(getmark, Getgrading, getsubjectcount)
+def getgrade():
+    return Grading.objects.all()
 
-#     # Get ranking details
-#     getterm, getclassrankid, getstreamrankid = get_ranking_details(
-#         student, student_class, student_stream, terms, totalclass, streamtotal
-#     )
 
-#     # Get subject-wise rankings
-#     q = get_subject_rankings(student, terms, totalclass)
-
-#     context = {
-#         "Grade": Gradeterm,
-#         "outsubject": outsubject,
-#         "totalmarks": totalmarks,
-#         "classnumber": classnumber,
-#         "streamtotal": streamtotal,
-#         "classname": name,
-#         "totalclass": totalclass,
-#         "streamnumber": streamnumber,
-#         "getterm": getterm,
-#         "title": "student details",
-#         "subject": subjectname,
-#         "terms": terms,
-#         "points": points,
-#         "student": student,
-#         "getmark": getmark,
-#         "q": q,
-#     }
-
-#     if format == "pdf":
-#         return generate_pdf(template_name, context)
-
-#     return render(request, "result/student.html", context)
+def get_grade(grades, percent_or_marks):
+    grade_name = None
+    for grade in grades:
+        if percent_or_marks >= grade.percent and percent_or_marks <= 100:
+            grade_name = grade.name
+            break
+    return grade_name

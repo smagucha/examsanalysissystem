@@ -61,10 +61,10 @@ def student_list(request):
 
 @login_required(login_url="/accounts/login/")
 def student_class(request, name, stream=None, template_name=None):
-    if stream:
-        students = Student.student.get_student_list_stream(name=name, stream=stream)
-    else:
-        students = Student.student.get_student_list_class(name=name)
+    students = Student.student.get_student_list_class_or_stream(
+        name=name, stream=stream
+    )
+
     if stream:
         context = {
             "title": "class students",
