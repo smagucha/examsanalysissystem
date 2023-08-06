@@ -107,8 +107,6 @@ def student_view(request, id, name, format=None, template_name=None):
     Gradeterm = None
     points = []
     totalmarks = 0
-    finalsub = []
-    a = 0
     getsubjectcount = EnrollStudenttosubect.enroll.get_subjects_for_student_count(
         student=student
     )
@@ -116,45 +114,44 @@ def student_view(request, id, name, format=None, template_name=None):
     q = []
 
     for getterms in terms:
-        termreuslts = []
+        termresults = []
         for sub in subjectname:
             studentmarks = list(
-                Mark.mark.get_results_for_student(sub, getterms, student)
+                Mark.objects.filter(
+                    Term__name=getterms, name__name=sub, student=student, year=year
+                ).values_list("marks", flat=True)
             )
-            termreuslts.extend(studentmarks)
+            if not studentmarks:
+                studentmarks = [""]
+            termresults.extend(studentmarks)
         getmark = get_student_marks(student, getterms, year)
-        if getmark:
-            totalmarks = sum(list(getmark.values_list("marks", flat=True)))
-
-        getavg = calculate_average_and_get_grades(getmark, id, student, Getgrading)
-        getdonesubects = [i for i in termreuslts if i != ""]
-        if getdonesubects:
-            termreuslts.append(sum(getdonesubects))
-            getterm[getterms] = termreuslts
-
+        totalmarks = sum([i for i in termresults if i != ""])
+        getavg, Gradeterm = calculate_average_and_get_grades(
+            getmark, id, student, Getgrading, totalmarks, getsubjectcount
+        )
+        termresults.append(totalmarks)
+        getterm[getterms] = termresults
         getclassnumber, getstreamnumber = get_all_student_result_for_class_and_stream(
             student_stream, student_class, getterms
         )
-        calculate_class_rank(getclassnumber, student, totalclass, getclassrankid)
-        calculate_stream_rank(getstreamnumber, student, getstreamrankid)
-        if getterm:
-            try:
-                getterm[getterms] = (
-                    [getstreamrankid[a]] + [getclassrankid[a]] + getterm[getterms]
-                )
-                a += 1
-                calcavg = round(totalmarks / getsubjectcount)
-                for j in Getgrading:
-                    if calcavg >= j.percent and calcavg <= 100:
-                        getterm[getterms].append(j.name)
-                        getterm[getterms].append(j.points)
-                        break
-            except:
-                pass
-            q = subject_ranking_per_class_and_stream(
-                getmark, student, Getgrading, totalclass, q
-            )
 
+        classnumber = calculate_class_rank(
+            getclassnumber, student, totalclass, getclassrankid
+        )
+        streamnumber = calculate_stream_rank(getstreamnumber, student, getstreamrankid)
+        getterm, q = update_term_results(
+            getterm,
+            getterms,
+            getclassrankid,
+            getstreamrankid,
+            totalmarks,
+            getsubjectcount,
+            Getgrading,
+            getmark,
+            student,
+            totalclass,
+            q,
+        )
     context = {
         "Grade": Gradeterm,
         "outsubject": outsubject,
@@ -170,7 +167,6 @@ def student_view(request, id, name, format=None, template_name=None):
         "terms": terms,
         "points": points,
         "student": student,
-        "getmark": getmark,
         "q": q,
     }
 
@@ -254,11 +250,9 @@ def get_average_subject_marks(name, term, stream, subjects):
         )
         subject_marks = list(marks)
         if subject_marks:
-            try:
-                avg_subject[subject.name] = sum(subject_marks) / student_count
-            except ZeroDivisionError:
-                avg_subject[subject.name] = 0
-
+            avg_subject[subject.name] = calculate_average(
+                sum(subject_marks), student_count
+            )
     return avg_subject
 
 
@@ -290,19 +284,14 @@ def get_grades_count(name, term, stream):
     students = get_students_by_class_and_stream(name, stream)
     grades = []
     for student in students:
-        # make function for this line below
         marks = Mark.objects.filter(Term__name=term, student=student).values_list(
             "marks", flat=True
         )
         marks = [int(m) for m in marks if m != ""]
         if not marks:
             continue
-        avg_mark = round(sum(marks) / len(marks), 1)
-        for grading in Getgrading:
-            if avg_mark >= grading.percent and avg_mark <= 100:
-                grades.append(grading.name)
-                break
-
+        avg_mark = round(calculate_average(sum(marks), len(marks)), 1)
+        grades.append(get_grade(Getgrading, avg_mark).name)
     grades_count = {}
     for grading in Getgrading:
         grades_count[grading.name] = grades.count(grading.name)
@@ -510,17 +499,10 @@ def calculate_average_marks_and_grading(indexed_results):
         subject_marks_with_value = [int(mark) for mark in subject_marks if mark != ""]
         total_marks = sum(subject_marks_with_value)
         num_subjects = len(subject_marks_with_value)
-        try:
-            avg_mark = round(total_marks / num_subjects)
-        except ZeroDivisionError:
-            avg_mark = 0
+        avg_mark = calculate_average(total_marks, num_subjects)
         avg_marks.append(avg_mark)
-        # make function for this for loop
-        for grading in grading_system:
-            if avg_mark >= grading.percent and avg_mark <= 100:
-                result.append(grading.name)
-                result.append(grading.points)
-                break
+        result.append(get_grade(grading_system, avg_mark).name)
+        result.append(get_grade(grading_system, avg_mark).points)
     return avg_marks
 
 
@@ -528,23 +510,13 @@ def error_404(request, exception):
     return render(request, "student/404.html")
 
 
-######################################## new  student view ######################
-def calculate_average_and_get_grades(getmark, id, student, Getgrading):
-    totalmarks = sum(list(getmark.values_list("marks", flat=True)))
-    getsubjectcount = EnrollStudenttosubect.enroll.get_subjects_for_student_count(
-        student=student
-    )
-    try:
-        getavg = totalmarks / getsubjectcount
-    except ZeroDivisionError:
-        getavg = 0
+def calculate_average_and_get_grades(
+    getmark, id, student, Getgrading, totalmarks, getsubjectcount
+):
+    getavg = calculate_average(totalmarks, getsubjectcount)
     Gradeterm = None
-    for j in Getgrading:
-        if getavg >= j.percent and getavg <= 100:
-            Gradeterm = j.name
-            break
-
-    return totalmarks, Gradeterm
+    Gradeterm = get_grade(Getgrading, getavg)
+    return getavg, Gradeterm
 
 
 def get_all_student_result_for_class_and_stream(
@@ -586,7 +558,7 @@ def calculate_class_rank(getclassnumber, student, totalclass, getclassrankid):
         classnumber = getclassrank.index(student.id) + 1
         getnumbers = f"{classnumber}/{totalclass}"
         getclassrankid.append(getnumbers)
-    return getclassnumber
+        return classnumber
 
 
 def calculate_stream_rank(getstreamnumber, student, getstreamrankid):
@@ -598,48 +570,47 @@ def calculate_stream_rank(getstreamnumber, student, getstreamrankid):
         streamnumber = getstreamrank.index(student.id) + 1
         getnumbers = f"{streamnumber}/{len(getstreamrank)}"
         getstreamrankid.append(getnumbers)
-    return getstreamnumber
+        return streamnumber
 
 
-# def update_term_results(
-#     getterm,
-#     getterms,
-#     getclassrankid,
-#     getstreamrankid,
-#     totalmarks,
-#     getsubjectcount,
-#     Getgrading,
-# ):
-#     a = 0
-#     if getterm:
-#         try:
-#             getterm[getterms] = (
-#                 [getstreamrankid[a]] + [getclassrankid[a]] + getterm[getterms]
-#             )
-#             a += 1
-#             calcavg = round(totalmarks / getsubjectcount)
-#             for j in Getgrading:
-#                 if calcavg >= j.percent and calcavg <= 100:
-#                     getterm[getterms].append(j.name)
-#                     getterm[getterms].append(j.points)
-#                     break
+def update_term_results(
+    getterm,
+    getterms,
+    getclassrankid,
+    getstreamrankid,
+    totalmarks,
+    getsubjectcount,
+    Getgrading,
+    getmark,
+    student,
+    totalclass,
+    q,
+):
+    a = 0
+    if getterm:
+        try:
+            getterm[getterms] = (
+                [getstreamrankid[a]] + [getclassrankid[a]] + getterm[getterms]
+            )
+            a += 1
+            calcavg = round(calculate_average(totalmarks, getsubjectcount))
+            getterm[getterms].append(get_grade(Getgrading, calcavg).name)
+            getterm[getterms].append(get_grade(Getgrading, calcavg).points)
 
-#         except IndexError:
-#             pass
-#     return getterm
+        except IndexError:
+            pass
+        q = subject_ranking_per_class_and_stream(
+            getmark, student, Getgrading, totalclass, q
+        )
+    return getterm, q
 
 
 def subject_ranking_per_class_and_stream(getmark, student, Getgrading, totalclass, q):
     for i in getmark:
         subjectrank = []
         subjectrank.append(i.name.name)
-        Grade = None
         subjectrank.append(i.marks)
-        for j in Getgrading:
-            if i.marks >= j.percent and i.marks <= 100:
-                Grade = j.name
-                subjectrank.append(Grade)
-                break
+        subjectrank.append(get_grade(Getgrading, i.marks).name)
         subjectrankclass = list(
             Mark.objects.filter(
                 student__class_name__name=student.class_name,
@@ -664,6 +635,14 @@ def get_grade(grades, percent_or_marks):
     grade_name = None
     for grade in grades:
         if percent_or_marks >= grade.percent and percent_or_marks <= 100:
-            grade_name = grade.name
+            grade_name = grade
             break
     return grade_name
+
+
+def calculate_average(totalmarks, divider):
+    try:
+        getaverage = totalmarks / divider
+    except ZeroDivisionError:
+        getaverage = 0
+    return getaverage

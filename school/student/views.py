@@ -64,19 +64,13 @@ def student_class(request, name, stream=None, template_name=None):
     students = Student.student.get_student_list_class_or_stream(
         name=name, stream=stream
     )
-
-    if stream:
-        context = {
-            "title": "class students",
-            "student": students,
-        }
-    else:
-        context = {
-            "title": "class students",
-            "student": students,
-            "name": name,
-            "allstream": Stream.objects.all(),
-        }
+    context = {
+        "title": "class students",
+        "student": students,
+    }
+    if name:
+        context["name"] = name
+        context["allstream"] = Stream.objects.all()
     return render(request, template_name, context)
 
 
@@ -97,7 +91,7 @@ def delete_student(request, id):
 
 @login_required(login_url="/accounts/login/")
 def Take_Attandance(request, name, stream):
-    takeattendance = Student.student.get_student_list_stream(name=name, stream=stream)
+    takeattendance = Student.student.get_student_list_class_or_stream(name, stream)
     result = []
     if request.method == "POST":
         getreason = request.POST.getlist(

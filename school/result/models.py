@@ -55,8 +55,8 @@ class MarkManager(models.Manager):
 
     def student_result_per_term_class(self, term, student, classname, stream=None):
         query_params = {
-            "student__class_name__name": student_class_name,
-            "Term__name": Term,
+            "student__class_name__name": classname,
+            "Term__name": term,
             "student": student,
         }
         if stream:
@@ -86,7 +86,7 @@ class MarkManager(models.Manager):
             self.select_related("student__class_name", "Term", "name")
             .filter(**query_params)
             .values_list("marks", flat=True)
-        )
+        )()
 
 
 class Mark(models.Model):

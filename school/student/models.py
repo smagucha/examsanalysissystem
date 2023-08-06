@@ -11,8 +11,6 @@ class CommonInfo(models.Model):
 
 
 class Klass(CommonInfo):
-    pass
-
     def __str__(self):
         return self.name
 
@@ -21,8 +19,6 @@ class Klass(CommonInfo):
 
 
 class Stream(CommonInfo):
-    pass
-
     def __str__(self):
         return "%s" % (self.name)
 
@@ -48,9 +44,6 @@ class StudentManager(models.Manager):
         if stream:
             query_params["stream__name"] = stream
         return self.prefetch_related("class_name", "stream").filter(**query_params)
-
-    def all_student_count(self):
-        return self.get_student_list().count()
 
     def class_or_stream_count(self, name, stream=None):
         query_params = {
