@@ -3,20 +3,31 @@
 {%block content%}
 {%if subjects%}
 {%for subject in subjects%}
-<div class="col-xxl-4 col-md-6">
-    <div class="card info-card sales-card">
-        <div class="card-body">
-            <div class="d-flex align-items-center">
-            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                <i class="bi bi-house"></i>
+{%if forloop.counter|divisibleby:2%}
+   <div class="row">
+          <div class="col-lg-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title"><a href="{% url 'result:subjectperrankstreamterm' classname streamname term subject %}">{{subject}}</a></h5>
+                <div>
+                  <p>next choice a stream</p>
+                </div>
+              </div>
             </div>
-            <div class="ps-3">
-                <h6><a href="{% url 'result:subjectperrankstreamterm' classname streamname term subject %}">{{subject}}</a></h6>
+      </div>
+  {%else%}
+        <div class="col-lg-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title"><a href="{% url 'result:subjectperrankstreamterm' classname streamname term subject %}">{{subject}}</a></h5>
+                <div>
+                  <p>next choice a stream</p>
+                </div>       
+              </div>
             </div>
-            </div>
-        </div>
-    </div>
-</div>
+          </div>
+  </div>
+  {%endif%}
 {%endfor%}
 {%else%}
 <a href="{% url 'result:addsubject' %}">add subjects to the system</a>

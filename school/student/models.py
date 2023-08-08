@@ -116,7 +116,7 @@ class Attendance(models.Model):
     )
 
     def __str__(self):
-        return "%s %s %s" % (self.student, self.class_name, self.present_status)
+        return f"{self.student} {self.class_name} {self.stream}{self.present_status}"
 
     class Meta:
         ordering = ["id"]

@@ -4,7 +4,32 @@
 {%if subjects%}
 <p>choose a subject to enter results</p>
 {%for subject in subjects%}
-<a href="{% url 'result:terms' classname streamname subject %}">{{subject}}</a>
+{%if forloop.counter|divisibleby:2%}
+   <div class="row">
+          <div class="col-lg-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title"><a href="{% url 'result:terms' classname streamname subject %}">{{subject}}</a></h5>
+                <div>
+                  <p>click to key results</p>
+                </div>
+              </div>
+            </div>
+      </div>
+  {%else%}
+        <div class="col-lg-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title"><a href="{% url 'result:terms' classname streamname subject %}">{{subject}}</a></h5>
+                <div>
+                  <p>click to key results</p>
+                </div>       
+              </div>
+            </div>
+          </div>
+  </div>
+  {%endif%}
+
 {%endfor%}
 {%else%}
 <a href="{% url 'result:addsubject' %}"add subjects to the system></a>

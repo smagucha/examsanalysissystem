@@ -6,13 +6,23 @@
 <table class="table">
 <thead>
     <tr>
-        <th>Parents</th>
+        <th>
+            Parents
+        </th>
+        <th>
+            update parent
+        </th>
+        <th>
+            delete parent
+        </th>
     </tr>
 </thead>
 <tbody>
 	{% for parent in getParents%}
     <tr>
         <td>{{parent}}</td>
+        <td><a href="{% url 'parent:updateparent' parent.id %}">update</a></td>
+        <td><a href="{% url 'parent:delparent' parent.id %}">delete</a></td>
     </tr>
        {%endfor%} 
 </tbody>

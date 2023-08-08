@@ -27,8 +27,8 @@
         <td>{{parent.phonenumber}}</td>
         <td>{{parent.user.email}}</td>
         <td>{{parent.physical_add}}</td>
-        <td><a href="{% url 'parent:updateparent' parent.id %}">update</a></td>
-        <td><a href="{% url 'parent:delparent' parent.id %}">delete</a></td>
+        <td><a href="{% url 'parent:updateparent' updateparent.id %}">update</a></td>
+        <td><a href="{% url 'parent:delparent' delparent.id %}">delete</a></td>
     </tr>
        {%endfor%} 
 
