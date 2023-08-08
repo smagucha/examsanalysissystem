@@ -1,31 +1,26 @@
-{% extends 'student/base.html'%}
-{%block title%}{{title}}{%endblock%}
-{%block content%}
-{%if allstream%}
-    <h1>choose a stream to take attendance</h1>
-    {%for stream in allstream%}
-    {%if forloop.counter|divisibleby:2%}
-   <div class="row">
-          <div class="col-lg-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title"><a href="{% url 'student:takeattandance' name stream %}">{{stream}}</a></h5>
-              </div>
+
+{% extends 'student/base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+{% if allstream %}
+    <h1>Choose a Stream to Take Attendance</h1>
+    <div class="row">
+        {% for stream in allstream %}
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{% url 'student:takeattandance' name stream %}">
+                                {{ stream }}
+                            </a>
+                        </h5>
+                    </div>
+                </div>
             </div>
-      </div>
-  {%else%}
-        <div class="col-lg-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title"><a href="{% url 'student:takeattandance' name stream %}">{{stream}}</a></h5>  
-              </div>
-            </div>
-          </div>
-  </div>
-    {%endif%}
-    {%endfor%}
-{%else%}
-<a href="{% url 'student:addstreams' %}">add streams</a>
-<p>to take attendance</p>
-{%endif%}
-{%endblock%}
+        {% endfor %}
+    </div>
+{% else %}
+    <a href="{% url 'student:addstreams' %}">Add Streams</a>
+    <p>To take attendance, streams need to be added.</p>
+{% endif %}
+{% endblock %}

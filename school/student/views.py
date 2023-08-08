@@ -89,6 +89,7 @@ def delete_student(request, id):
     return delete_database_operation(request, Student, id)
 
 
+# modify this function to fit if there is no stream (for class only)
 @login_required(login_url="/accounts/login/")
 def Take_Attandance(request, name, stream):
     takeattendance = Student.student.get_student_list_class_or_stream(name, stream)
@@ -123,6 +124,7 @@ def Take_Attandance(request, name, stream):
     return render(request, "student/attend.html", context)
 
 
+# modify this function to fit if there is no stream (for class only)
 @login_required(login_url="/accounts/login/")
 def viewattendanceperstream(request, name, stream):
     attend = Attendance.attend.get_student_list_stream(name=name, stream=stream)

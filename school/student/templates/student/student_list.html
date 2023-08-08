@@ -2,62 +2,32 @@
 {%block title%}{{title}}{%endblock title%}
 {%block content%}
 {%if student%}
-{%for class in allclasses%}
-	{%if forloop.counter|divisibleby:2%}
-	 <div class="row">
-	        <div class="col-lg-6">
-	        	<div class="card">
-	            <div class="card-body">
-	              <h5 class="card-title"><a href="{% url 'student:classstudent' class %}">{{class}}</a></h5>
-	              <div>
-	              	<p>there are 100 student in {{class}}</p>
-	              </div>
-	            </div>
-	          </div>
-	    </div>
-	{%else%}
-	      <div class="col-lg-6">
-	          <div class="card">
-	            <div class="card-body">
-	              <h5 class="card-title"><a href="{% url 'student:classstudent' class %}">{{class}}</a></h5>
-	              <div>
-	              	<p>there are 100 student in {{class}}</p>
-	              </div>       
-	            </div>
-	          </div>
-	        </div>
-	</div>
-	{%endif%}
-{%endfor%}
-{%for stream in allstream%}
-	{%if forloop.counter|divisibleby:2%}
-	 <div class="row">
-	        <div class="col-lg-6">
-	        	<div class="card">
-	            <div class="card-body">
-	              <h5 class="card-title"><a href="{% url 'student:streamstudent' name stream %}">{{stream}}</a></h5>
-	              <div>
-	              	<p>there are 100 student in {{stream}}</p>
-	              	<p>teacher in charge is  </p>
-	              </div>
-	            </div>
-	          </div>
-	    </div>
-	{%else%}
-	      <div class="col-lg-6">
-	          <div class="card">
-	            <div class="card-body">
-	              <h5 class="card-title"><a href="{% url 'student:streamstudent' name stream %}">{{stream}}</a></h5>
-	              <div>
-	              	<p>there are 100 student in {{stream}}</p>
-	              	<p>teacher in charge is  </p>
-	              </div>       
-	            </div>
-	          </div>
-	        </div>
-	</div>
-	{%endif%}
-{%endfor%}
+    <div class="row">
+        {%for class in allclasses%}
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{% url 'student:classstudent' class %}">{{class}}</a>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+ <div class="row">
+        {%for stream in allstream%}
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{% url 'student:streamstudent' name stream %}">{{stream}}</a>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 <button type="button" class="btn btn-outline-primary"><a style="color:black; width:100;"  href="{% url 'student:addstudent' %}">add student to the system</a></button>
 <table class="table">
 	<tr>
@@ -143,3 +113,5 @@
 <a href="{% url 'student:addstudent' %}">add student to the system</a>
 {%endif%}
 {%endblock%}
+
+   

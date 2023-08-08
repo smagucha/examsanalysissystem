@@ -3,12 +3,77 @@
 {{title}}
 {%endblock title%}
 {% block content%}
-<p><a href="{% url 'result:allGrade' %}">allGrade</a></p>
-<p><a href="{% url 'result:allsubject' %}">all subject</a></p>
-<p><a href="{% url 'result:allterm' %}">all term</a></p>
-<p><a href="{% url 'result:enrollclasses' %}">enroll student to subjects</a></p>
-<p><a href="">all users</a></p>
-<p><a href="{% url 'student:stream' %}">all stream</a></p>
-<p><a href="{% url 'student:allclasses' %}">all classes</a></p>
+<div class="row">
+<div class="col-lg-6">
+	<div class="card">
+    <div class="card-body">
+      <h5 class="card-title"><a href="{% url 'result:allGrade' %}">allGrade</a></h5>
+      <div>
+      	<p>check out all grades</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-lg-6">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title"><a href="{% url 'result:allsubject' %}">all subject</a></h5>
+      <div>
+      	<p>subjects offered by the school</p>
+      </div>       
+    </div>
+  </div>
+</div>
+<div class="col-lg-6">
+	<div class="card">
+    <div class="card-body">
+      <h5 class="card-title"><a href="{% url 'result:allterm' %}">all term</a></h5>
+      <div>
+      	<p>all school terms</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-lg-6">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title"><a href="{% url 'result:enrollclasses' %}">enroll student to subjects</a></h5>
+      <div>
+      	<p>enroll students to students</p>
+      </div>       
+    </div>
+  </div>
+</div>
+<div class="col-lg-6">
+	<div class="card">
+    <div class="card-body">
+      <h5 class="card-title"><a href="">all users</a></h5>
+      <div>
+      	<p>all users in the system</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-lg-6">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title"><a href="{% url 'student:stream' %}">all stream</a></h5>
+      <div>
+      	<p>streams in the school</p>
+      </div>       
+    </div>
+  </div>
+</div>
+<div class="col-lg-6">
+	<div class="card">
+    <div class="card-body">
+      <h5 class="card-title"><a href="{% url 'student:allclasses' %}">all classes</a></h5>
+      <div>
+      	<p>classes in the school</p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
 {%endblock content%}
 

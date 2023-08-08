@@ -86,7 +86,7 @@ class MarkManager(models.Manager):
             self.select_related("student__class_name", "Term", "name")
             .filter(**query_params)
             .values_list("marks", flat=True)
-        )()
+        )
 
 
 class Mark(models.Model):

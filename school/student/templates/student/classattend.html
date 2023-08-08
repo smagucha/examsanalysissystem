@@ -2,33 +2,20 @@
 {%block title%}{{title}}{%endblock%}
 {%block content%}
 {% if allclasses%}
-    {%for class in allclasses%}
-      {%if forloop.counter|divisibleby:2%}
-   <div class="row">
-          <div class="col-lg-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title"><a href="{% url 'student:takeattendancestream' class %}">{{class}}</a></h5>
-                <div>
-                  <p>next choice a stream</p>
+    <h1>Choose a Stream to Take Attendance</h1>
+    <div class="row">
+        {%for class in allclasses%}
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{% url 'student:takeattendancestream' class %}">{{class}}</a>
+                        </h5>
+                    </div>
                 </div>
-              </div>
             </div>
-      </div>
-  {%else%}
-        <div class="col-lg-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title"><a href="{% url 'student:takeattendancestream' class %}">{{class}}</a></h5>
-                <div>
-                  <p>next choice a stream</p>
-                </div>       
-              </div>
-            </div>
-          </div>
-  </div>
-  {%endif%}
-    {%endfor%}
+        {% endfor %}
+    </div>
 {%else%}
 <a href="{% url 'student:addclasses' %}">add class</a>
 <p>so that you can take attendance</p>
