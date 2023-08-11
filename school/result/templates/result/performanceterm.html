@@ -4,9 +4,13 @@
 <h1>{{name|capfirst}}</h1>
    <h1>Class Subject Average </h1>
 {% if stream %}
-    <a class='link' href="{% url 'result:streamanalysispdf' name stream term%}">download pdf</a>
+    <button type="button" class="btn btn-outline-primary mt-3">
+        <a href="{% url 'result:streamanalysispdf' name stream term%}" class="text-dark"> download pdf</a>
+    </button>
 {%else%}
-    <a class='link' href="{% url 'result:streamanalysispdf' name  term%}">download pdf</a>
+    <button type="button" class="btn btn-outline-primary mt-3">
+        <a href="{% url 'result:streamanalysispdf' name  term%}" class="text-dark">download pdf</a>
+    </button>
 {%endif%}
 <table class='table'>
 <thead>

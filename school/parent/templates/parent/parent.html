@@ -2,8 +2,11 @@
 {%block title%}{{title}}{%endblock%}
 {%block content%}
 {%if getParents%}
-<a class="link" href="{% url 'parent:addparent' %}">add parent</a>
-<table class="table">
+<button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'parent:addparent' %}" class="text-dark">add parent</a>
+</button><table class="table">
+<div class="table-responsive">
+    <table class="table table-striped table-hover mt-4">
 <thead>
     <tr>
         <th>
@@ -21,14 +24,17 @@
 	{% for parent in getParents%}
     <tr>
         <td>{{parent}}</td>
-        <td><a href="{% url 'parent:updateparent' parent.id %}">update</a></td>
-        <td><a href="{% url 'parent:delparent' parent.id %}">delete</a></td>
+        <td><a href="{% url 'parent:updateparent' parent.id %}" class="btn btn-primary btn-sm">update</a></td>
+        <td><a href="{% url 'parent:delparent' parent.id %}" class="btn btn-danger btn-sm">delete</a></td>
     </tr>
        {%endfor%} 
 </tbody>
 </table>
+</div>
 {%else%}
-<a class="link" href="{% url 'parent:addparent' %}">add parent</a>
+<button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'parent:addparent' %}" class="text-dark">add parent</a>
+</button>
 {%endif%}
 {%endblock%}
 

@@ -50,7 +50,7 @@
                     {%for mark in marks%}
                     <td>{{mark}}</td>
                     {%endfor%}
-                    <td><a class="link" href="{% url 'result:reportcard' classname student.id %}">Report Card {{student.id}}</a></td>
+                    <td><a  href="{% url 'result:reportcard' classname student.id %}" class="btn btn-primary btn-sm">Report Card {{student.id}}</a></td>
                 </tr>
         {%endfor%}            
     </tbody>

@@ -36,6 +36,11 @@
 <input type="submit" name="submit">
 {%else%}
 <p>no students are in the system</p>
-<p><a href="{% url 'student:addstudent'%}">add students to the students</a></p>
+<p>
+    <button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'student:addstudent'%}" class="text-dark">add students to the students</a>
+</button>
+
+</p>
 {%endif%}
 {%endblock%}

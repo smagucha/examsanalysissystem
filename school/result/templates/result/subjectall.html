@@ -3,7 +3,11 @@
 {%block content%}
 {%if allsubjects%}
 please add more subjects
-<p><a href="{% url 'result:addsubject' %}">add subject</a></p>
+<p>
+    <button type="button" class="btn btn-outline-primary mt-3">
+        <a href="{% url 'result:addsubject' %}" class="text-dark">add subject</a>
+    </button>
+</p>
 <table class='table'>
 <thead>
     <tr>
@@ -24,7 +28,11 @@ please add more subjects
 </table>
 {%else%}
 please add a subject
-<p><a href="{% url 'result:addsubject' %}">add subject</a></p>
+<p>
+    <button type="button" class="btn btn-outline-primary mt-3">
+        <a href="{% url 'result:addsubject' %}" class="text-dark">add subject</a>
+    </button>
+</p>
 {%endif%}
 {%endblock%}
 

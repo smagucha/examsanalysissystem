@@ -5,6 +5,10 @@
 		<a href="">stream</a>
 	{%endfor%}
 {%else%}
-<a href="{% url 'student:addstream' %}">add stream to the system</a>
+<p>
+    <button type="button" class="btn btn-outline-primary mt-3">
+        <a href="{% url 'student:addstream' %}" class="text-dark">add stream to the system</a>
+    </button>
+</p>
 {%endif%}
 {%endblock%}

@@ -2,8 +2,15 @@
 {%block title%}{{title}}{%endblock%}
 {%block content%}
 <h1>results for {{name}} {{stream}} {{term}}</h1>
-link for {{name}} {{stream}}  for {{term}} result analysis  <a href="{% url 'result:streamexamanalysis' name stream term %}">link</a>
-<p><a href="{% url 'result:resultpertermexcelstream' name stream term %}">download excel</a></p>
+link for {{name}} {{stream}}  for {{term}}
+<button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'result:streamexamanalysis' name stream term %}" class="text-dark">result analysis link</a>
+</button>
+<p>
+    <button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'result:resultpertermexcelstream' name stream term %}" class="text-dark">download excel</a>
+</button>
+</p>
 <table class= 'table'>
     <thead>
         <tr>

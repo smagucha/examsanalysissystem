@@ -2,8 +2,11 @@
 {%block title%}{{title}}{%endblock%}
 {%block content%}
 {%if eventlist%}
-<a href="{% url 'event:event' %}">add event</a>
-<table class="table">
+<button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'event:event' %}" class="text-dark">add event</a>
+</button>
+<div class="table-responsive">
+    <table class="table table-striped table-hover mt-4">
 <thead>
     <tr>
         <th>Name</th>
@@ -19,14 +22,17 @@
         <td>{{events.name|capfirst}}</td>
         <td>{{events.description|capfirst}}</td>
         <td>{{events.dateevents}}</td>
-        <td><a class="link" href="{% url 'event:updateevent' events.id%}">Update</a></td>
-        <td><a class="link" href="{% url 'event:deleteevent' events.id%}">Delete</a></td>
+        <td><a  href="{% url 'event:updateevent' events.id%}" class="btn btn-primary btn-sm">Update</a></td>
+        <td><a href="{% url 'event:deleteevent' events.id%}" class="btn btn-danger btn-sm">Delete</a></td>
     </tr>
        {%endfor%}              
 </tbody>
 </table>
+</div>
 {%else%}
 <h1>there are no events</h1>
-<a href="{% url 'event:event' %}">please add event</a>
+<button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'event:event' %}" class="text-dark">add event</a>
+</button>
 {%endif%}
 {%endblock%}

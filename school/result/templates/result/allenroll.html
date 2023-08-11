@@ -17,13 +17,15 @@
         <tr>
             <td>{{enroll.student }}</a></td>
             <td>{{enroll.subject}}</td>
-            <td><a class='link' href="{% url 'Enrollupdate' enroll.id %}">Update</a></td>
-            <td><a class='link' href="{% url 'enrolldelete' enroll.id %}">delete</a></td>            
+            <td><a  href="{% url 'Enrollupdate' enroll.id %}" class="btn btn-primary btn-sm">Update</a></td>
+            <td><a  href="{% url 'enrolldelete' enroll.id %}" class="btn btn-danger btn-sm">delete</a></td>            
         </tr>
            {%endfor%}              
     </tbody>
 </table>
 {%else%}
-<a href="">enroll students to the system</a>
+<button type="button" class="btn btn-outline-primary mt-3">
+    <a href="" class="text-dark">enroll students to the system</a>
+</button>
 {%endif%}
 {%endblock%}

@@ -18,7 +18,9 @@ class {{classname}} stream {{streamname}}
         {% endfor %}
     </div>
 {%else%}
-<a href="{% url 'result:addterm' %}">add terms to the system</a>
+<button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'result:addterm' %}" class="text-dark">add terms to the system</a>
+</button>
 {%endif%}
 {%endblock%}
 

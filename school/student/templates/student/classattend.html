@@ -17,7 +17,7 @@
         {% endfor %}
     </div>
 {%else%}
-<a href="{% url 'student:addclasses' %}">add class</a>
+<a href="{% url 'student:addclasses' %}" class="btn btn-primary mt-3">add class</a>
 <p>so that you can take attendance</p>
 {%endif%}
 {%endblock%}

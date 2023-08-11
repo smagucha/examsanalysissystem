@@ -14,8 +14,8 @@
     	{% for alldesign in alldesignation%}
         <tr>
             <td>{{alldesign.title|capfirst }}</a></td>
-            <td><a class='link' href="{% url 'updatedesignation' alldesign.id%}">update</a></td>
-            <td><a class= 'link' href="{% url 'deletedesignation' alldesign.id %}">delete</a></td>            
+            <td><a class='link' href="{% url 'updatedesignation' alldesign.id%}" class="btn btn-primary btn-sm">update</a></td>
+            <td><a class= 'link' href="{% url 'deletedesignation' alldesign.id %}" class="btn btn-danger btn-sm">delete</a></td>            
         </tr>
            {%endfor%}              
     </tbody>

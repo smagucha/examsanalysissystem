@@ -1,117 +1,95 @@
-{% extends 'student/base.html'%}
-{%block title%}{{title}}{%endblock title%}
-{%block content%}
-{%if student%}
-    <div class="row">
-        {%for class in allclasses%}
-            <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <a href="{% url 'student:classstudent' class %}">{{class}}</a>
-                        </h5>
-                    </div>
-                </div>
+{% extends 'student/base.html' %}
+{% block title %}{{ title }}{% endblock title %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <p class="mb-0">Total students in school: {{ student_count }}</p>
+                    <p class="mb-0">Total teachers in school: 96</p>
+                </h5>
             </div>
-        {% endfor %}
+        </div>
     </div>
- <div class="row">
-        {%for stream in allstream%}
-            <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <a href="{% url 'student:streamstudent' name stream %}">{{stream}}</a>
-                        </h5>
-                    </div>
-                </div>
+</div>
+{% if student %}
+<div class="row">
+    {% for class in allclasses %}
+    <div class="col-lg-6 col-md-6 col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <a href="{% url 'student:classstudent' class %}" class="btn btn-primary">{{ class }}</a>
+                </h5>
             </div>
-        {% endfor %}
+        </div>
     </div>
-<button type="button" class="btn btn-outline-primary"><a style="color:black; width:100;"  href="{% url 'student:addstudent' %}">add student to the system</a></button>
-<table class="table">
-	<tr>
-		<th>
-			first name
-		</th>
-		<th>
-			middle name
-		</th>
-		<th>
-			admission no
-		</th>
-		<th>
-			date of birth
-		</th>
-		<th>
-			date of admission
-		</th>
-		<th>
-			class
-		</th>
-		<th>
-			stream
-		</th>
-		<th>
-			gender
-		</th>
-		<th>
-			year
-		</th>
-		<th>
-			update
-		</th>
-		<th>
-			delete
-		</th>
-	</tr>
-	
-	{% for detail in student%}
-	<tr>
+    {% endfor %}
+</div>
+<div class="row">
+    {% for stream in allstream %}
+    <div class="col-lg-6 col-md-6 col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <a href="{% url 'student:streamstudent' name stream %}" class="btn btn-primary">{{ stream }}</a>
+                </h5>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'student:addstudent' %}" class="text-dark">Add Student to the System</a>
+</button>
+<div class="table-responsive">
+    <table class="table table-striped table-hover mt-4">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Middle Name</th>
+                <th>Admission No</th>
+                <th>Date of Birth</th>
+                <th>Date of Admission</th>
+                <th>Class</th>
+                <th>Stream</th>
+                <th>Gender</th>
+                <th>Year</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for detail in student %}
+            <tr>
+                <td>
+                    {% if name %}
+                    <a href="{% url 'result:student-detail' name detail.id %}">{{ detail.first_name }}</a>
+                    {% else %}
+                    {{ detail.first_name }}
+                    {% endif %}
+                </td>
+                <td>{{ detail.middle_name }}</td>
+                <td>{{ detail.Admin_no }}</td>
+                <td>{{ detail.date_of_birth }}</td>
+                <td>{{ detail.date_of_admission }}</td>
+                <td>{{ detail.class_name }}</td>
+                <td>{{ detail.stream }}</td>
+                <td>{{ detail.gender }}</td>
+                <td>{{ detail.year }}</td>
+                <td><a href="{% url 'student:updatestudent' detail.id %}" class="btn btn-primary btn-sm">Update</a></td>
+                <td><a href="{% url 'student:delete_student' detail.id %}" class="btn btn-danger btn-sm">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
-		<td>
-			{%if name %}
-			<a href="{% url 'result:student-detail' name detail.id %}">{{detail.first_name}}</a>
-			{%else%}
-			{{detail.first_name}}
-			{%endif%}
-		</td>
-		<td>
-			{{detail.middle_name}}
-		</td>
-		<td>
-			{{detail.Admin_no}}
-		</td>
-		<td>
-			{{detail.date_of_birth}}
-		</td>
-		<td>
-			{{detail.date_of_admission}}
-		</td>
-		<td>
-			{{detail.class_name}}
-		</td>
-		<td>
-			{{detail.stream}}
-		</td>
-		<td>
-			{{detail.gender}}
-		</td>
-		<td>
-			{{detail.year}}
-		</td>
-		<td>
-			<a href="{% url 'student:updatestudent' detail.id%}">update</a>
-		</td>
-		<td>
-			<a href="{% url 'student:delete_student' detail.id%}">delete</a>
-		</td>
-	</tr>
-	{%endfor%}
-</table>
-{%else%}
-<a href="{% url 'student:addstudent' %}">add student to the system</a>
-{%endif%}
-{%endblock%}
-
-   
+{% else %}
+<button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'student:addstudent' %}" class="text-dark">Add Student to the System</a>
+</button>
+<p>To take attendance, streams need to be added.</p>
+{% endif %}
+{% endblock %}

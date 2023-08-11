@@ -3,7 +3,9 @@
 {%block content%}
 {% for class in allclasses %}
 <li>
-  <a href="{% url 'result:enrollstream' class %}">{{class}}</a>
+  <button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'result:enrollstream' class %}" class="text-dark">{{class}}</a>
+</button>
 </li>
 {%endfor%}
 {%endblock%}

@@ -2,7 +2,9 @@
 {%block title%}{{title}}{%endblock%}
 {%block content%}
 {%if getParents%}
-<a class="link" href="{% url 'parent:addparent' %}">add parent</a>
+<button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'parent:addparent' %}" class="text-dark">add parent</a>
+</button>
 <table class="table">
 <thead>
     <tr>
@@ -27,15 +29,17 @@
         <td>{{parent.phonenumber}}</td>
         <td>{{parent.user.email}}</td>
         <td>{{parent.physical_add}}</td>
-        <td><a href="{% url 'parent:updateparent' updateparent.id %}">update</a></td>
-        <td><a href="{% url 'parent:delparent' delparent.id %}">delete</a></td>
+        <td><a href="{% url 'parent:updateparent' updateparent.id %}" class="btn btn-primary btn-sm">update</a></td>
+        <td><a href="{% url 'parent:delparent' delparent.id %}" class="btn btn-danger btn-sm">delete</a></td>
     </tr>
        {%endfor%} 
 
 </tbody>
 </table>
 {%else%}
-<a class="link" href="{% url 'parent:addparent' %}">add parent</a>
+<button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'parent:addparent' %}" class="text-dark">add parent</a>
+</button>
 {%endif%}
 {%endblock%}
 

@@ -2,7 +2,8 @@
 {%block title%}{{title}}{%endblock%}
 {%block content%}
 {% if attend%}
- <table class="table ">
+<div class="table-responsive">
+<table class="table table-striped table-hover mt-4">
 <thead>
     <tr>
         <th>Student </th>
@@ -22,12 +23,13 @@
         <td>{{student.dateattend }}</td>
         <td>{{student.present_status|capfirst }}</td>
         <td>{{student.absentwhy|capfirst }}</td>
-        <td><a href="{% url 'student:updateattend' student.id %}">update</a></td>
-        <td><a href="{% url 'student:deleteattend' student.id %}">delete</a></td>
+        <td><a href="{% url 'student:updateattend' student.id %}" class="btn btn-primary btn-sm">update</a></td>
+        <td><a href="{% url 'student:deleteattend' student.id %}" class="btn btn-danger btn-sm">delete</a></td>
     </tr>
        {%endfor%}              
 </tbody>
 </table>
+</div>
 {%else%}
 <h1>no attendances have been taken</h1>
 {%endif%}

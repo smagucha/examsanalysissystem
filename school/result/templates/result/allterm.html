@@ -3,7 +3,11 @@
 {%block content%}
 {%if allterm%}
 please add more terms
-<p><a href="{% url 'result:addterm' %}">add term</a></p>
+<p>
+    <button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'result:addterm' %}" class="text-dark">Add term</a>
+    </button>
+</p>
 <table class='table'>
 <thead>
     <tr>
@@ -15,14 +19,18 @@ please add more terms
 	{%for term in allterm%}
     <tr>
         <td>{{term}}</td>
-		<td><a href="{% url 'result:deleteterm' term.id %}">delete</a></td>	
+		<td><a href="{% url 'result:deleteterm' term.id %}" class="btn btn-danger btn-sm">delete</a></td>	
     </tr> 
     {%endfor%}          
 </tbody>
 </table>
 {%else%}
 please add a term
-<p><a href="{% url 'result:addterm' %}">add term</a></p>
+<p>
+    <button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'result:addterm' %}" class="text-dark">Add term</a>
+    </button>
+</p>
 {%endif%}
 {%endblock%}
 

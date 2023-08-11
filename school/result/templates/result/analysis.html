@@ -5,11 +5,16 @@
 {%if rankings_data%}
 <h1>{{name}}</h1>
 {%if stream%}
-<a class='link' href="{% url 'result:subjectperrankstreamtermpdf' name stream term subject %}">download pdf</a>
+<button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'result:subjectperrankstreamtermpdf' name stream term subject %}" class="text-dark">download pdf</a>
+</button>
 {%else%}
-<a class='link' href="{% url 'result:subjectperrankclasspdf' name  term subject %}">download pdf</a>
+<button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'result:subjectperrankclasspdf' name  term subject %}" class="text-dark">download pdf</a>
+</button>
 {%endif%}
-<table class='table'>
+<div  class="table-responsive">
+<table class="table table-striped table-hover mt-4">
     <thead>
         <tr>
             <th>Ranking</th>
@@ -33,6 +38,7 @@
         {%endfor%}          
     </tbody>
 </table>
+</div>
 {%else%}
 <h1>add results to the systems</h1>
 {%endif%}

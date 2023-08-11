@@ -2,7 +2,9 @@
 {%block title%}{{title}}{%endblock%}
 {%block content%}
 {%if listTeacher%}
-<a href="{% url 'addTeacher' %}"> add teacher</a>
+<button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'addTeacher' %}" class="text-dark">add teacher</a>
+</button>
 <table class="table ">
 <thead>
     <tr>
@@ -31,14 +33,18 @@
         <td>{{Teacher.date_of_appointment}}</td>
         <td>{{Teacher.gender|capfirst}}</td>
         <td>{{Teacher.designation|capfirst}}</td>
-        <td><a href="{% url 'updateTeacher' Teacher.id%}">Update</a></td>
-        <td><a href="{% url 'deleteTeacher' Teacher.id%}">Delete</a></td>
+        <td><a href="{% url 'updateTeacher' Teacher.id%}" class="btn btn-primary btn-sm">Update</a></td>
+        <td><a href="{% url 'deleteTeacher' Teacher.id%}" class="btn btn-danger btn-sm">Delete</a></td>
     </tr>
        {%endfor%}              
 </tbody>
 </table>
 {%else%}
 <h1>There are no teachers in the system</h1>
-<p><a href="{% url 'addTeacher' %}"> please add teachers</a></p>
+<p>
+<button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'addTeacher' %}" class="text-dark">add teacher</a>
+</button>
+</p>
 {%endif%}
 {%endblock%}

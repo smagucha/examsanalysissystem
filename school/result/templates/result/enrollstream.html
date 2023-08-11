@@ -2,6 +2,6 @@
 {%block title%}{{title}}{%endblock%}
 {%block content%}
 {%for stream in allstream%}
-<a href="{% url 'result:enrollstudentstosubject' name stream%}"><li>{{stream}}</li></a>  
+<a href="{% url 'result:enrollstudentstosubject' name stream%}">{{stream}}</a>  
 {%endfor%}
 {%endblock%}

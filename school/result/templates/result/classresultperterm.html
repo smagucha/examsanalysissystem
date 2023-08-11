@@ -3,16 +3,33 @@
 {%block content%}
 <h1>results for {{name}} {{term}}</h1>
 {% if stream %}
-<p>link for class result analysis <a href="{% url 'result:subjectperftermstream' class_name stream term %}"> {{class_name}}</a></p>
+    <p>
+        <button type="button" class="btn btn-outline-primary mt-3">
+            <a href="{% url 'result:subjectperftermstream' class_name stream term %}" class="text-dark">analysis for {{class_name}} {{stream}}</a>
+        </button>
+    </p>
 {%else%} 
-<p>link for class result analysis <a href="{% url 'result:subjectperfterm' class_name term %}"> {{class_name}}</a></p>
+    <p>
+        <button type="button" class="btn btn-outline-primary mt-3">
+            <a href="{% url 'result:subjectperfterm' class_name term %}" class="text-dark">analysis for {{class_name}}</a>
+        </button>
+    </p>
 {%endif%}
 {% if stream %}
-    <p><a href="{% url 'result:resultpertermexcelstream' class_name stream term %}">download excel</a></p>
+    <p>
+        <button type="button" class="btn btn-outline-primary mt-3">
+            <a href="{% url 'result:resultpertermexcelstream' class_name stream term %}" class="text-dark">download excel</a>
+        </button>
+    </p>
 {%else%}
-    <p><a href="{% url 'result:resultpertermexcel' class_name term %}">download excel</a></p>
+    <p>
+        <button type="button" class="btn btn-outline-primary mt-3">
+            <a href="{% url 'result:resultpertermexcel' class_name term %}" class="text-dark">download excel</a>
+        </button>
+    </p>
 {%endif%}
-<table class='table' >
+<div class="table-responsive">
+    <table class="table table-striped table-hover mt-4">
     <thead>
         <tr>
             <th>Rank</th>
@@ -36,6 +53,7 @@
         {%endfor%}     
     </tbody>
 </table>
+</div>
 
 {%endblock%}
 
