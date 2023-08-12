@@ -5,15 +5,9 @@
     <h1>please choice a class to enter result</h1>
   <div class="row">
         {%for class in allclasses%}
-            <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <a href="{% url 'student:enterstreamresult' class%}">{{class}}</a>
-                        </h5>
-                    </div>
-                </div>
-            </div>
+            {% include 'student/divup.html' %}
+            <a href="{% url 'student:enterstreamresult' class%}">{{class}}</a>
+            {% include 'student/divdown.html' %}
         {% endfor %}
     </div>
 {%else%}

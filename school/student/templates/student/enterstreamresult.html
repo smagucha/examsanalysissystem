@@ -3,17 +3,11 @@
 {%block content%}
 {%if allstream%}
 <div class="row">
-        {% for stream in allstream %}
-            <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <a href="{% url 'result:getsubjects' name stream %}">{{stream}}</a>
-                        </h5>
-                    </div>
-                </div>
-            </div>
-         {% endfor %}
+    {% for stream in allstream %}
+        {% include 'student/divup.html' %}
+        <a href="{% url 'result:getsubjects' name stream %}">{{stream}}</a>
+        {% include 'student/divdown.html' %}
+     {% endfor %}
     </div>
 {%else%}
 <a href="{% url 'student:addstreams' %}">add stream</a>

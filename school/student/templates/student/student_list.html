@@ -1,48 +1,22 @@
 {% extends 'student/base.html' %}
 {% block title %}{{ title }}{% endblock title %}
 {% block content %}
-<div class="row">
-    <div class="col-lg-6 col-md-6 col-sm-12">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">
-                    <p class="mb-0">Total students in school: {{ student_count }}</p>
-                    <p class="mb-0">Total teachers in school: 96</p>
-                </h5>
-            </div>
-        </div>
-    </div>
-</div>
 {% if student %}
 <div class="row">
     {% for class in allclasses %}
-    <div class="col-lg-6 col-md-6 col-sm-12">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">
-                    <a href="{% url 'student:classstudent' class %}" class="btn btn-primary">{{ class }}</a>
-                </h5>
-            </div>
-        </div>
-    </div>
+    {% include 'student/divup.html' %}
+        <a href="{% url 'student:classstudent' class %}" class="btn btn-primary">{{ class }}</a>
+    {% include 'student/divdown.html' %}
     {% endfor %}
 </div>
 <div class="row">
     {% for stream in allstream %}
-    <div class="col-lg-6 col-md-6 col-sm-12">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">
-                    <a href="{% url 'student:streamstudent' name stream %}" class="btn btn-primary">{{ stream }}</a>
-                </h5>
-            </div>
-        </div>
-    </div>
+    {% include 'student/divup.html' %}
+        <a href="{% url 'student:streamstudent' name stream %}" class="btn btn-primary">{{ stream }}</a>
+    {% include 'student/divdown.html' %}
     {% endfor %}
 </div>
-<button type="button" class="btn btn-outline-primary mt-3">
-    <a href="{% url 'student:addstudent' %}" class="text-dark">Add Student to the System</a>
-</button>
+{% include 'student/buttonaddstudent.html' %}
 <div class="table-responsive">
     <table class="table table-striped table-hover mt-4">
         <thead>
@@ -87,9 +61,7 @@
 </div>
 
 {% else %}
-<button type="button" class="btn btn-outline-primary mt-3">
-    <a href="{% url 'student:addstudent' %}" class="text-dark">Add Student to the System</a>
-</button>
+{% include 'student/buttonaddstudent.html' %}
 <p>To take attendance, streams need to be added.</p>
 {% endif %}
 {% endblock %}

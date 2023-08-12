@@ -1,79 +1,26 @@
-{% extends 'student/base.html'%}
-{%block title%}
-{{title}}
-{%endblock title%}
+{% extends 'student/base.html' %}
 {% block content%}
 <div class="row">
-<div class="col-lg-6">
-	<div class="card">
-    <div class="card-body">
-      <h5 class="card-title"><a href="{% url 'result:allGrade' %}">allGrade</a></h5>
-      <div>
-      	<p>check out all grades</p>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="col-lg-6">
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title"><a href="{% url 'result:allsubject' %}">all subject</a></h5>
-      <div>
-      	<p>subjects offered by the school</p>
-      </div>       
-    </div>
-  </div>
-</div>
-<div class="col-lg-6">
-	<div class="card">
-    <div class="card-body">
-      <h5 class="card-title"><a href="{% url 'result:allterm' %}">all term</a></h5>
-      <div>
-      	<p>all school terms</p>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="col-lg-6">
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title"><a href="{% url 'result:enrollclasses' %}">enroll student to subjects</a></h5>
-      <div>
-      	<p>enroll students to students</p>
-      </div>       
-    </div>
-  </div>
-</div>
-<div class="col-lg-6">
-	<div class="card">
-    <div class="card-body">
-      <h5 class="card-title"><a href="">all users</a></h5>
-      <div>
-      	<p>all users in the system</p>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="col-lg-6">
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title"><a href="{% url 'student:stream' %}">all stream</a></h5>
-      <div>
-      	<p>streams in the school</p>
-      </div>       
-    </div>
-  </div>
-</div>
-<div class="col-lg-6">
-	<div class="card">
-    <div class="card-body">
-      <h5 class="card-title"><a href="{% url 'student:allclasses' %}">all classes</a></h5>
-      <div>
-      	<p>classes in the school</p>
-      </div>
-    </div>
-  </div>
-</div>
+{% include 'student/divup.html' %}
+  <a href="{% url 'result:allGrade' %}">allGrade</a>
+{% include 'student/divdown.html' %}
+{% include 'student/divup.html' %}
+  <a href="{% url 'result:allsubject' %}">all subject</a>
+{% include 'student/divdown.html' %}
+{% include 'student/divup.html' %}
+  <a href="{% url 'result:allterm' %}">all term</a>
+{% include 'student/divdown.html' %}
+{% include 'student/divup.html' %}
+  <a href="{% url 'result:enrollclasses' %}">enroll student to subjects</a>
+{% include 'student/divdown.html' %}
+{% include 'student/divup.html' %}
+  <a href="">all users</a>
+{% include 'student/divdown.html' %}
+{% include 'student/divup.html' %}
+  <a href="{% url 'student:stream' %}">all stream</a>
+{% include 'student/divdown.html' %}
+{% include 'student/divup.html' %}
+<a href="{% url 'student:allclasses' %}">all classes</a>
+{% include 'student/divdown.html' %}
 </div>
 {%endblock content%}
-

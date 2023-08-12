@@ -53,16 +53,14 @@ def getstreams(request, template_name, name=None):
 
 @login_required(login_url="/accounts/login/")
 def student_list(request):
-    students = Student.student.get_student_list()
     student_count = Student.student.get_total_students()
     allclasses = Klass.objects.all()
     context = {
         "title": "all students",
-        "student": students,
         "allclasses": allclasses,
         "student_count": student_count,
     }
-    return render(request, "student/student_list.html", context)
+    return render(request, "student/studenthome.html", context)
 
 
 @login_required(login_url="/accounts/login/")

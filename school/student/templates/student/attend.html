@@ -37,10 +37,7 @@
 {%else%}
 <p>no students are in the system</p>
 <p>
-    <button type="button" class="btn btn-outline-primary mt-3">
-    <a href="{% url 'student:addstudent'%}" class="text-dark">add students to the students</a>
-</button>
-
+    {% include 'student/buttonaddstudent.html' %}
 </p>
 {%endif%}
 {%endblock%}

@@ -1,0 +1,30 @@
+{% extends 'student/base.html' %}
+{% block title %}{{ title }}{% endblock title %}
+{% block content %}
+{% include 'student/divup.html' %}
+    <p class="mb-0">Total students in school: {{ student_count }}</p>
+    <p class="mb-0">Total teachers in school: 96</p>
+{% include 'student/divdown.html' %}              
+{% if allclasses %}
+<div class="row">
+    {% for class in allclasses %}
+    {% include 'student/divup.html' %}
+        <a href="{% url 'student:classstudent' class %}" class="btn btn-primary">{{ class }}</a>
+    {% include 'student/divdown.html' %}
+    {% endfor %}
+</div>
+<div class="row">
+    {% for stream in allstream %}
+    {% include 'student/divup.html' %}
+        <a href="{% url 'student:streamstudent' name stream %}" class="btn btn-primary">{{ stream }}</a>
+    {% include 'student/divdown.html' %}
+    {% endfor %}
+</div>
+<button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'student:addstudent' %}" class="text-dark">Add Student to the System</a>
+</button>
+{% else %}
+{% include 'student/buttonaddstudent.html' %}
+<p>To take attendance, streams need to be added.</p>
+{% endif %}
+{% endblock %}
