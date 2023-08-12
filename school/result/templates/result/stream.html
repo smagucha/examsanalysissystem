@@ -6,9 +6,7 @@ class {{name}}
 <a href="">{{stream.name}}</a>
 {%endfor%}
 {%else%}
-<button type="button" class="btn btn-outline-primary mt-3">
-    <a href="{% url 'student:addstream' %}" class="text-dark">add streams to the system</a>
-</button>
+ {% include 'student/addstream.html' %}
 {%endif%}
 {%endblock%}
 

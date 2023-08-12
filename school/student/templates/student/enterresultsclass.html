@@ -11,6 +11,6 @@
         {% endfor %}
     </div>
 {%else%}
-<a href="{% url 'student:addclasses' %}">add classes </a>
+{% include 'student/buttonaddclass.html' %}
 {%endif%}
 {%endblock%}

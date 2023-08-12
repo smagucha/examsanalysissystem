@@ -12,10 +12,7 @@
         {% endfor %}
     </div>
 {% else %}
-
-<button type="button" class="btn btn-outline-primary mt-3">
-    <a href="{% url 'student:addstreams' %}" class="text-dark">Add Streams</a>
-</button>
-    <p>To take attendance, streams need to be added.</p>
+{% include 'student/addstream.html' %}
+<p>To take attendance, streams need to be added.</p>
 {% endif %}
 {% endblock %}

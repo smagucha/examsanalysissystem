@@ -2,16 +2,11 @@
 {%block title%}{{title}}{%endblock%}
 {%block content%}
 {%if allstream%}
-    <button type="button" class="btn btn-outline-primary mt-3">
-    <a href="{% url 'student:addstreams' %}" class="text-dark">add streams</a>
-</button>
-    {%for stream in allstream%}
+{% include 'student/addstream.html' %}
+{%for stream in allstream%}
     <li>{{stream}}</li>
-    {%endfor%}
+{%endfor%}
 {%else%}
-
-<button type="button" class="btn btn-outline-primary mt-3">
-    <a href="{% url 'student:addstreams' %}" class="text-dark">add streams</a>
-</button>
+{% include 'student/addstream.html' %}
 {%endif%}
 {%endblock%}

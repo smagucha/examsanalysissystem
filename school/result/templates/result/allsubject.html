@@ -5,15 +5,9 @@
 <p>choose a subject to enter results</p>
 <div class="row">
         {%for subject in subjects%}
-            <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <a href="{% url 'result:terms' classname streamname subject %}">{{subject}}</a>
-                        </h5>
-                    </div>
-                </div>
-            </div>
+            {% include 'student/divup.html' %}
+            <a href="{% url 'result:terms' classname streamname subject %}">{{subject}}</a>
+                        {% include 'student/divdown.html' %}
         {% endfor %}
     </div>
 {%else%}

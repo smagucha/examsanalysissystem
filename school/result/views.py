@@ -501,8 +501,9 @@ def calculate_average_marks_and_grading(indexed_results):
         num_subjects = len(subject_marks_with_value)
         avg_mark = calculate_average(total_marks, num_subjects)
         avg_marks.append(avg_mark)
-        result.append(get_grade(grading_system, avg_mark).name)
-        result.append(get_grade(grading_system, avg_mark).points)
+        if avg_mark:
+            result.append(get_grade(grading_system, avg_mark).name)
+            result.append(get_grade(grading_system, avg_mark).points)
     return avg_marks
 
 

@@ -2,9 +2,7 @@
 {%block title%}{{title}}{%endblock%}
 {%block content%}
 {%if allclasses%}
-<button type="button" class="btn btn-outline-primary mt-3">
-    <a href="{% url 'student:addclasses' %}" class="text-dark">Add class</a>
-</button>
+{% include 'student/buttonaddclass.html' %}
 {% for class in allclasses %}
 <li>
   {{class}}
@@ -13,7 +11,5 @@
 {%else%}
 add class
 {%endif%}
-<button type="button" class="btn btn-outline-primary mt-3">
-    <a href="{% url 'student:addclasses' %}" class="text-dark">Add classs</a>
-</button>
+{% include 'student/buttonaddclass.html' %}
 {%endblock%}
