@@ -93,36 +93,41 @@ def delete_student(request, id):
     return delete_database_operation(request, Student, id)
 
 
-# modify this function to fit if there is no stream (for class only)
 @login_required(login_url="/accounts/login/")
-def Take_Attandance(request, name, stream):
+def Take_Attandance(request, name, stream=None):
     takeattendance = Student.student.get_student_list_class_or_stream(name, stream)
     result = []
+
     if request.method == "POST":
-        getreason = request.POST.getlist(
-            "reason",
-        )
+        getreason = request.POST.getlist("reason")
         getpresent = request.POST.getlist("present_status")
         getclass = Klass.objects.get(name=name)
-        getstream = Stream.objects.get(name=stream)
-        x = []
-        for i in takeattendance:
-            x.append(i.id)
+        x = [student.id for student in takeattendance]
         result.append(x)
         result.append(getclass.id)
         result.append(getreason)
         result.append(getpresent)
-        result.append(getstream.id)
+        if stream:
+            getstream = Stream.objects.get(name=stream)
+            result.append(getstream.id)
+
         for j in range(len(result[0])):
-            attend = Attendance.objects.create(
-                class_name_id=result[1],
-                student_id=result[0][j],
-                present_status=result[3][j],
-                absentwhy=result[2][j],
-                stream_id=result[4],
-            )
+            attendance_data = {
+                "class_name_id": result[1],
+                "student_id": result[0][j],
+                "present_status": result[3][j],
+                "absentwhy": result[2][j],
+            }
+            if stream:
+                attendance_data["stream_id"] = result[4]
+
+            attend = Attendance.objects.create(**attendance_data)
             attend.save()
-        return redirect("student:viewattendanceperstream", name=name, stream=stream)
+
+        if stream:
+            return redirect("student:viewattendanceperstream", name=name, stream=stream)
+        else:
+            return redirect("student:viewattendance", name=name)
 
     context = {"exam": takeattendance}
     return render(request, "student/attend.html", context)
