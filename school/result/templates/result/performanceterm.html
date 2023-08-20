@@ -12,7 +12,8 @@
         <a href="{% url 'result:streamanalysispdf' name  term%}" class="text-dark">download pdf</a>
     </button>
 {%endif%}
-<table class='table'>
+<div class="table-responsive">
+    <table class="table table-striped table-hover mt-4">
 <thead>
     <tr>
     {%for subject in subject%}
@@ -30,7 +31,8 @@
 </table>
 
 <h1>Best Student Per Subject</h1>
-<table class= 'table'>
+<div class="table-responsive">
+    <table class="table table-striped table-hover mt-4">
 <thead>
     <tr>
         <td>Subject</td>
@@ -54,9 +56,11 @@
        {%endfor%}
 </tbody>
 </table>
+</div>
 
 <h1>Grades</h1>
-<table class= 'table'>
+<div class="table-responsive">
+    <table class="table table-striped table-hover mt-4">
     <thead>
         <tr>
             {%for i in Count.keys%}
@@ -72,5 +76,6 @@
         </tr>           
     </tbody>
 </table>
+</div>
 
 {%endblock%}

@@ -121,14 +121,16 @@ class Grading(models.Model):
 
 
 class EnrollStudenttosubectManager(models.Manager):
-    def get_students_subject(self, name, stream, Subject):
-        return self.prefetch_related(
-            "class_name", "stream", "student", "subject"
-        ).filter(
-            class_name__name=name,
-            stream__name=stream,
-            subject__name=Subject,
-            year=str(date.today().year),
+    def get_students_subject(self, name, Subject, stream=None):
+        query_params = {
+            "class_name__name": name,
+            "subject__name": Subject,
+            "year": str(date.today().year),
+        }
+        if stream:
+            query_params["stream__name"] = stream
+        return self.prefetch_related("class_name", "student", "subject").filter(
+            **query_params
         )
 
     def get_all_students_subject(self):

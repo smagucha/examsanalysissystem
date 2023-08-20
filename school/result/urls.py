@@ -198,9 +198,8 @@ urlpatterns = [
         name="subjectperrankclasspdf",
     ),
     path(
-        "reportcard/<str:name>/<int:id>/",
-        views.student_view,
-        {"template_name": "result/reportcard.html", "format": "pdf"},
+        "reportcard/<str:name>/<int:id>/<str:termname>/",
+        views.reportbook,
         name="reportcard",
     ),
     # links for excels

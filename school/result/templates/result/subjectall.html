@@ -8,7 +8,8 @@ please add more subjects
         <a href="{% url 'result:addsubject' %}" class="text-dark">add subject</a>
     </button>
 </p>
-<table class='table'>
+<div class="table-responsive">
+    <table class="table table-striped table-hover mt-4">
 <thead>
     <tr>
     	<th>subjects</th>
@@ -26,6 +27,7 @@ please add more subjects
     {%endfor%}          
 </tbody>
 </table>
+</div>
 {%else%}
 please add a subject
 <p>

@@ -1,10 +1,16 @@
 {% extends 'student/base.html' %}
 {% block title %}{{ title }}{% endblock title %}
 {% block content %}
-{% include 'student/divup.html' %}
-    <p class="mb-0">Total students in school: {{ student_count }}</p>
-    <p class="mb-0">Total teachers in school: 96</p>
-{% include 'student/divdown.html' %}              
+<div class="col-lg-6 col-md-6 col-sm-12 w-100">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">
+                <p class="mb-0">Total students in school: {{ student_count }}</p>
+            <p class="mb-0">Total teachers in school: 96</p>
+            </h5>
+        </div>
+    </div>
+</div>             
 {% if allclasses %}
 <div class="row">
     {% for class in allclasses %}

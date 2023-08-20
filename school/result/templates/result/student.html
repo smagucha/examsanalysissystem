@@ -7,7 +7,8 @@
 {{idstudent.last_name|capfirst}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script> 
 <h1>Parent Details</h1>
-<table class='table'>
+<div class="table-responsive">
+    <table class="table table-striped table-hover mt-4">
     <thead>
         <tr>
             <th>First Name</th>
@@ -28,7 +29,8 @@
     </tbody>
 </table>
 <h1> student results </h1>
-<table  class="table " >
+<div class="table-responsive">
+    <table class="table table-striped table-hover mt-4">
     <thead>
         <tr>
             <th>Term</th>
@@ -50,11 +52,12 @@
                     {%for mark in marks%}
                     <td>{{mark}}</td>
                     {%endfor%}
-                    <td><a  href="{% url 'result:reportcard' classname student.id %}" class="btn btn-primary btn-sm">Report Card {{student.id}}</a></td>
+                    <td><a  href="{% url 'result:reportcard' classname student.id pupil %}" class="btn btn-primary btn-sm">Report Card {{student.id}}</a></td>
                 </tr>
         {%endfor%}            
     </tbody>
 </table>
+</div>
 <h1>Performance Trend</h1>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <canvas id="myChart" style="width:100%;max-width:600px"></canvas>

@@ -45,6 +45,7 @@ p {
 </head>
 <body>
 <h1>kisumu boys high school</h1>
+
 <table class='table'>
   <tr><td>Name: {{student.first_name}} {{student.middle_name}} {{student.last_name}}</td><td>{{Term}} {{student.year.year}}</td></tr>
   <tr><td>Admin_no: {{student.Admin_no}} </td><td>stream rank {{streamnumber}} out of {{streamtotal}}</td></tr>
@@ -53,15 +54,16 @@ p {
 </table>
 <table id="customers">
   <tr>
-  <th colspan="4">{{Term}} {{myvar.year.year}}</th>
+  <th colspan="5">{{Termname}}  {{myvar.year.year}}</th>
   </tr>
   <tr>
     <th>Subject</th>
     <th>Marks</th>
     <th>Grade</th>
+    <th>stream rank</th>
     <th>class rank</th>
   </tr>
-  {%for i in q%}
+  {%for i in q.items%}
     <tr>
       {%for j in i%}
       <td>{{j}}</td>
