@@ -84,4 +84,5 @@ urlpatterns = [
     ),
     path("objectnotfound/", views.objectnotfound, name="objectnotfound"),
     path("deletestudent/<int:id>/", views.delete_student, name="delete_student"),
+    path("takeviewattendance/", views.takeviewattendance, name="takeviewattendance"),
 ]

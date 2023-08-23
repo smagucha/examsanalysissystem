@@ -1,174 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My Twitter-like Web Template</title>
-  <style>
-    /* CSS styles */
-    * {
-      box-sizing: border-box;
-    }
-    
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f8fa;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    
-    .container {
-      max-width: 600px;
-      width: 100%;
-      background-color: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    
-    .sidebar {
-      flex: 0 0 25%;
-      padding: 20px;
-      background-color: #1da1f2;
-      border-top-left-radius: 8px;
-      border-bottom-left-radius: 8px;
-      color: #ffffff;
-    }
-    
-    .sidebar h1 {
-      font-size: 24px;
-      color: #ffffff;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    
-    .sidebar ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-    }
-    
-    .sidebar li {
-      margin-bottom: 10px;
-      padding: 8px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    
-    .sidebar li:hover,
-    .sidebar li.active {
-      background-color: rgba(255, 255, 255, 0.2);
-    }
-    
-    .content {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-    }
-    
-    h1 {
-      font-size: 24px;
-      color: #1da1f2;
-      margin-bottom: 20px;
-    }
-    
-    .tweet {
-      margin-bottom: 20px;
-      padding: 10px;
-      background-color: #f5f8fa;
-      border-radius: 8px;
-    }
-    
-    .tweet .username {
-      font-weight: bold;
-      color: #1da1f2;
-    }
-    
-    .tweet .content {
-      margin-top: 10px;
-    }
-    
-    .tweet .timestamp {
-      font-size: 12px;
-      color: #657786;
-    }
-    
-    /* Responsive styles */
-    @media screen and (max-width: 600px) {
-      .container {
-        border-radius: 0;
-      }
-      
-      .sidebar {
-        flex: 0 0 100%;
-        border-top-left-radius: 0;
-        border-top-right-radius: 8px;
-      }
-      
-      .content {
-        flex: 1;
-        padding: 20px;
-      }
-    }
-  </style>
-  <script>
-    // JavaScript code
-    document.addEventListener('DOMContentLoaded', function() {
-      // Get all menu items
-      var menuItems = document.querySelectorAll('.sidebar li');
-      
-      // Add click event listener to each menu item
-      menuItems.forEach(function(item) {
-        item.addEventListener('click', function() {
-          // Remove active class from all menu items
-          menuItems.forEach(function(item) {
-            item.classList.remove('active');
-          });
-          
-          // Add active class to the clicked menu item
-          item.classList.add('active');
-          
-          // Perform additional actions based on the selected menu item
-          var menuItemText = item.textContent;
-          console.log('Clicked menu item:', menuItemText);
-          
-          // Add your custom logic here for each menu item
-        });
-      });
-    });
-  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
 </head>
 <body>
-  <div class="container">
-    <div class="sidebar">
-      <h1>Menu</h1>
-      <ul>
-        <li class="active">Home</li>
-        <li>Explore</li>
-        <li>Notifications</li>
-        <li>Messages</li>
-        <!-- Add more menu items here -->
-      </ul>
-    </div>
-    <div class="content">
-      <h1>My Twitter-like Web Template</h1>
-      <div class="tweet">
-        <div class="username">John Doe</div>
-        <div class="content">This is a sample tweet. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget sapien sem.</div>
-        <div class="timestamp">12 minutes ago</div>
-      </div>
-      <div class="tweet">
-        <div class="username">Jane Smith</div>
-        <div class="content">Another tweet example. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</div>
-        <div class="timestamp">1 hour ago</div>
-      </div>
-      <!-- Add more tweets here -->
-    </div>
-  </div>
+<form method='get'>
+  <select>
+    <option value=''></option>
+     <option value='msfn'>dsbvhj</option>
+  </select>
+  <select>
+    <option value=''></option>
+    <option value='dhbs'>fhbvkd</option>
+  </select>
+  <input type="submit" name="submit">
+</form>
 </body>
 </html>

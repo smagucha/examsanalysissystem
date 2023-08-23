@@ -3,6 +3,7 @@ from .models import Student, Klass, Attendance, Stream
 from .forms import StudentForm, AttendForm, KlassForm, StreamForm
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from result.models import term
 
 
 @login_required(login_url="/accounts/login/")
@@ -181,3 +182,19 @@ def bad_request(request, exception):
 @login_required(login_url="/accounts/login/")
 def objectnotfound(request):
     return render(request, "student/objectnotfound.html")
+
+
+# this changes everything for code
+# works as expects
+@login_required(login_url="/accounts/login/")
+def takeviewattendance(request):
+    if request.method == "POST":
+        selected_class = request.POST.get("selected_class")
+        selected_stream = request.POST.get("selected_stream")
+        return redirect(
+            "student:viewattendanceperstream",
+            name=selected_class,
+            stream=selected_stream,
+        )
+    context = {"getclasses": Klass.objects.all(), "getstream": Stream.objects.all()}
+    return render(request, "student/takeviewattendance.html", context)
