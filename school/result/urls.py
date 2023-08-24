@@ -16,71 +16,81 @@ urlpatterns = [
     path("addsubject/", views.addsubject, name="addsubject"),
     path("AddTerm/", views.AddTerm, name="addterm"),
     path("addgrade/", views.addGrade, name="addgrade"),
-    path(
-        "resultclass/",
-        getclasses,
-        {"template_name": "result/resultclass.html"},
-        name="resultclass",
-    ),
+    # dlete this url and resultclass.html
+    # path(
+    #     "resultclass/",
+    #     getclasses,
+    #     {"template_name": "result/resultclass.html"},
+    #     name="resultclass",
+    # ),
+    # # delete classsubjectranking.html
     path(
         "classubjectranking/",
-        getclasses,
-        {"template_name": "result/classsubjectranking.html"},
+        views.class_subject_ranking,
+        # {"template_name": "result/classsubjectranking.html"},
         name="classubjectranking",
     ),
+    # modify this url and delete resultstream
     path(
         "matokeo/",
-        getclasses,
-        {"template_name": "result/resultstream.html"},
+        views.result_stream_or_term,
+        # {"template_name": "result/resultstream.html"},
         name="matokeo",
     ),
-    path(
-        "subjectrankingclassstream/",
-        getclasses,
-        {"template_name": "result/subjectrankingclassstream.html"},
-        name="subjectrankingclassstream",
-    ),
-    path(
-        "classrankingsubjectterms/<str:classname>/",
-        views.terms,
-        {"template_name": "result/classrankingsubjectterms.html"},
-        name="classrankingsubjectterms",
-    ),
+    # # delete this url and subjectrankingclassstream.html
+    # path(
+    #     "subjectrankingclassstream/",
+    #     getclasses,
+    #     {"template_name": "result/subjectrankingclassstream.html"},
+    #     name="subjectrankingclassstream",
+    # ),
+    # delete this url and classrankingsubjectterms.html
+    # path(
+    #     "classrankingsubjectterms/<str:classname>/",
+    #     views.terms,
+    #     {"template_name": "result/classrankingsubjectterms.html"},
+    #     name="classrankingsubjectterms",
+    # ),
     path("deletegrade/<int:id>/", views.deletegrade, name="deletegrade"),
     path("updatesubject/<int:id>/", views.updatesubject, name="updatesubject"),
     path("subjectdelete/<int:id>/", views.subjectdelete, name="subjectdelete"),
     path("Enrollupdate/<int:id>/", views.Enrollupdate, name="Enrollupdate"),
     path("enrolldelete/<int:id>/", views.enrolldelete, name="enrolldelete"),
-    path(
-        "getstreamsforsubjectranking/<str:name>/",
-        getstreams,
-        {"template_name": "result/getstreamsforsubjectranking.html"},
-        name="getstreamsforsubjectranking",
-    ),
-    path(
-        "k/<str:name>/",
-        getstreams,
-        {"template_name": "result/streams.html"},
-        name="viewstreamresult",
-    ),
-    path(
-        "classterms/<str:classname>/",
-        views.terms,
-        {"template_name": "result/classresultterm.html"},
-        name="classresultterms",
-    ),
-    path(
-        "subjects/<str:classname>/<str:term>/",
-        views.getsubjects,
-        {"template_name": "result/getsubject.html"},
-        name="getallsubjects",
-    ),
-    path(
-        "enterresultclassorstream/<str:classname>/<str:streamname>/",
-        views.getsubjects,
-        {"template_name": "result/allsubject.html"},
-        name="getsubjects",
-    ),
+    # # delete this url and  getstreamsforsubjectranking.html
+    # path(
+    #     "getstreamsforsubjectranking/<str:name>/",
+    #     getstreams,
+    #     {"template_name": "result/getstreamsforsubjectranking.html"},
+    #     name="getstreamsforsubjectranking",
+    # ),
+    # delete this url and streams.html
+    # path(
+    #     "k/<str:name>/",
+    #     getstreams,
+    #     {"template_name": "result/streams.html"},
+    #     name="viewstreamresult",
+    # ),
+    # delete this url and classresultterm.html
+    # path(
+    #     "classterms/<str:classname>/",
+    #     views.terms,
+    #     {"template_name": "result/classresultterm.html"},
+    #     name="classresultterms",
+    # ),
+    # delete this url and getsubject.html
+    # path(
+    #     "subjects/<str:classname>/<str:term>/",
+    #     views.getsubjects,
+    #     {"template_name": "result/getsubject.html"},
+    #     name="getallsubjects",
+    # ),
+    # delete this url and allsubject.html
+    # path(
+    #     "enterresultclassorstream/<str:classname>/<str:streamname>/",
+    #     views.getsubjects,
+    #     {"template_name": "result/allsubject.html"},
+    #     name="getsubjects",
+    # ),
     path(
         "enrollclasses/",
         getclasses,
@@ -116,36 +126,46 @@ urlpatterns = [
         {"template_name": "result/performanceterm.html"},
         name="subjectperftermstream",
     ),
+    # delete enterresultsclass.html
+    path(
+        "enterresults/",
+        views.enter_result_for_stream_or_class,
+        # {"template_name": "student/enterresultsclass.html"},
+        name="enterresults",
+    ),
     path(
         "streamexamanalysis/<str:name>/<str:term>/",
         views.streamexamanalysis,
         {"template_name": "result/performanceterm.html"},
         name="streamexamanalysis",
     ),
-    path(
-        "enterresults/<str:classname>/<str:streamname>/<str:subject>/",
-        views.terms,
-        {"template_name": "result/terms.html"},
-        name="terms",
-    ),
-    path(
-        "streamresult/<str:classname>/<str:streamname>/",
-        views.terms,
-        {"template_name": "result/termstreamresult.html"},
-        name="termstream",
-    ),
+    # delete this url and terms.html
+    # path(
+    #     "enterresults/<str:classname>/<str:streamname>/<str:subject>/",
+    #     views.terms,
+    #     {"template_name": "result/terms.html"},
+    #     name="terms",
+    # ),
+    # delete this url and termstreamresult.html
+    # path(
+    #     "streamresult/<str:classname>/<str:streamname>/",
+    #     views.terms,
+    #     {"template_name": "result/termstreamresult.html"},
+    #     name="termstream",
+    # ),
     path(
         "subjectperrankclass/<str:name>/<str:term>/<str:subject>/",
         views.subjectperrank,
         {"template_name": "result/analysis.html"},
         name="subjectperrankclass",
     ),
-    path(
-        "gettermsforsubjectrankstream/<str:classname>/<str:streamname>/",
-        views.terms,
-        {"template_name": "result/gettermsforsubjectrankstream.html"},
-        name="gettermsforsubjectrankstream",
-    ),
+    # # delete this url and gettermsforsubjectrankstream.html
+    # path(
+    #     "gettermsforsubjectrankstream/<str:classname>/<str:streamname>/",
+    #     views.terms,
+    #     {"template_name": "result/gettermsforsubjectrankstream.html"},
+    #     name="gettermsforsubjectrankstream",
+    # ),
     path(
         "resultstreamterm/<str:name>/<str:stream>/<str:term>/",
         views.getresultstreamterm,
@@ -157,12 +177,13 @@ urlpatterns = [
         views.enteresult,
         name="enterexam",
     ),
-    path(
-        "subjectsrankstream/<str:classname>/<str:streamname>/<str:term>/",
-        views.getsubjects,
-        {"template_name": "result/getsubjectrankingstream.html"},
-        name="getallsubjects",
-    ),
+    # # delete this url and getsubjectrankingstream.html
+    # path(
+    #     "subjectsrankstream/<str:classname>/<str:streamname>/<str:term>/",
+    #     views.getsubjects,
+    #     {"template_name": "result/getsubjectrankingstream.html"},
+    #     name="getallsubjects",
+    # ),
     path(
         "subjectperrankstreamterm/<str:name>/<str:stream>/<str:term>/<str:subject>/",
         views.subjectperrank,

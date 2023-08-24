@@ -38,6 +38,7 @@ def delete_database_operation(request, mymodel, id):
     return render(request, "student/delete.html")
 
 
+# delete this function after through testing
 @login_required(login_url="/accounts/login/")
 def getclasses(request, template_name):
     getallclasses = Klass.objects.all()
@@ -45,6 +46,7 @@ def getclasses(request, template_name):
     return render(request, template_name, context)
 
 
+# delete this function after through testing
 @login_required(login_url="/accounts/login/")
 def getstreams(request, template_name, name=None):
     getstream = Stream.objects.all()
@@ -187,7 +189,7 @@ def objectnotfound(request):
 # this changes everything for code
 # works as expects
 @login_required(login_url="/accounts/login/")
-def takeviewattendance(request):
+def viewattendance(request):
     if request.method == "POST":
         selected_class = request.POST.get("selected_class")
         selected_stream = request.POST.get("selected_stream")
@@ -197,4 +199,40 @@ def takeviewattendance(request):
             stream=selected_stream,
         )
     context = {"getclasses": Klass.objects.all(), "getstream": Stream.objects.all()}
+    return render(request, "student/takeviewattendance.html", context)
+
+
+@login_required(login_url="/accounts/login/")
+def take_attendance(request):
+    if request.method == "POST":
+        selected_class = request.POST.get("selected_class")
+        selected_stream = request.POST.get("selected_stream")
+        return redirect(
+            "student:takeattandance",
+            name=selected_class,
+            stream=selected_stream,
+        )
+    context = {"getclasses": get_class(), "getstream": get_stream()}
+    return render(request, "student/takeviewattendance.html", context)
+
+
+def get_class():
+    return Klass.objects.all()
+
+
+def get_stream():
+    return Stream.objects.all()
+
+
+@login_required(login_url="/accounts/login/")
+def take_attendance(request):
+    if request.method == "POST":
+        selected_class = request.POST.get("selected_class")
+        selected_stream = request.POST.get("selected_stream")
+        return redirect(
+            "student:takeattandance",
+            name=selected_class,
+            stream=selected_stream,
+        )
+    context = {"getclasses": get_class(), "getstream": get_stream()}
     return render(request, "student/takeviewattendance.html", context)

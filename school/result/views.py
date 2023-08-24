@@ -14,6 +14,7 @@ from student.views import (
     database_operation,
     delete_database_operation,
 )
+from student.views import get_class, get_stream
 
 year = str(date.today().year)
 
@@ -741,3 +742,90 @@ def reportbook(request, name, id, termname):
         "termname": termname,
     }
     return render(request, "result/reportcard.html", context)
+
+
+@login_required(login_url="/accounts/login/")
+def class_subject_ranking(request):
+    if request.method == "POST":
+        selected_class = request.POST.get("selected_class")
+        selected_term = request.POST.get("selected_term")
+        selected_subject = request.POST.get("selected_subject")
+        if get_stream:
+            selected_stream = request.POST.get("selected_stream")
+        if selected_stream:
+            return redirect(
+                "result:subjectperrankstreamterm",
+                name=selected_class,
+                stream=selected_stream,
+                term=selected_term,
+                subject=selected_subject,
+            )
+
+        return redirect(
+            "result:subjectperrankclass",
+            name=selected_class,
+            term=selected_term,
+            subject=selected_subject,
+        )
+    context = {
+        "getclasses": get_class(),
+        "getsubjects": all_subjects(),
+        "getterms": all_terms(),
+    }
+    if get_stream():
+        context["getstream"] = get_stream()
+    return render(request, "student/takeviewattendance.html", context)
+
+
+@login_required(login_url="/accounts/login/")
+def result_stream_or_term(request):
+    if request.method == "POST":
+        selected_class = request.POST.get("selected_class")
+        selected_term = request.POST.get("selected_term")
+        if get_stream:
+            selected_stream = request.POST.get("selected_stream")
+
+        if selected_stream:
+            return redirect(
+                "result:resultstreamterm",
+                name=selected_class,
+                stream=selected_stream,
+                term=selected_term,
+            )
+        return redirect(
+            "result:resultperterm",
+            name=selected_class,
+            term=selected_term,
+        )
+
+    context = {
+        "getclasses": get_class(),
+        "getterms": all_terms(),
+    }
+    if get_stream():
+        context["getstream"] = get_stream()
+    return render(request, "student/takeviewattendance.html", context)
+    # line 34 for view
+
+
+@login_required(login_url="/accounts/login/")
+def enter_result_for_stream_or_class(request):
+    if request.method == "POST":
+        selected_class = request.POST.get("selected_class")
+        selected_term = request.POST.get("selected_term")
+        selected_subject = request.POST.get("selected_subject")
+        selected_stream = request.POST.get("selected_stream")
+        return redirect(
+            "result:enterexam",
+            name=selected_class,
+            stream=selected_stream,
+            Term=selected_term,
+            Subject=selected_subject,
+        )
+    context = {
+        "getclasses": get_class(),
+        "getterms": all_terms(),
+        "getsubjects": all_subjects(),
+        "getstream": get_stream(),
+    }
+    return render(request, "student/takeviewattendance.html", context)

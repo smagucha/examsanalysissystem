@@ -30,24 +30,27 @@ urlpatterns = [
     ),
     path("attendupdate/<int:id>/", views.attendupdate, name="updateattend"),
     path("getclasses/", views.getclasses, name="enterresulturl"),
+    # modify this function to take takeviewattendance and delete classattend.html
     path(
         "takeattendance/",
-        views.getclasses,
-        {"template_name": "student/classattend.html"},
+        views.take_attendance,
         name="takeattendance",
     ),
+    # modify this function to take takeviewattendance and delete attendancestreams.html
     path(
         "<str:name>/takeattendancestream/",
         views.getstreams,
         {"template_name": "student/attendancestreams.html"},
         name="takeattendancestream",
     ),
-    path(
-        "viewattendance/",
-        views.getclasses,
-        {"template_name": "student/viewattendclasses.html"},
-        name="viewattendance",
-    ),
+    # modify this function to take takeviewattendance and delete viewattendclasses.html
+    # path(
+    #     "viewattendance/",
+    #     views.getclasses,
+    #     {"template_name": "student/viewattendclasses.html"},
+    #     name="viewattendance",
+    # ),
+    # delete this url and viewattendancestream.html
     path(
         "<str:name>/viewattendancestream/",
         views.getstreams,
@@ -55,12 +58,8 @@ urlpatterns = [
         name="viewattendancestream",
     ),
     path("deleteattend/<int:id>/", views.deleteattend, name="deleteattend"),
-    path(
-        "enterresults/",
-        views.getclasses,
-        {"template_name": "student/enterresultsclass.html"},
-        name="enterresults",
-    ),
+    # modify this function and delete enterresultsclass.html
+    # delete this url and enterstreamresult.html
     path(
         "<str:name>/choicetoenterstreamresult/",
         views.getstreams,
@@ -84,5 +83,5 @@ urlpatterns = [
     ),
     path("objectnotfound/", views.objectnotfound, name="objectnotfound"),
     path("deletestudent/<int:id>/", views.delete_student, name="delete_student"),
-    path("takeviewattendance/", views.takeviewattendance, name="takeviewattendance"),
+    path("viewattendance/", views.viewattendance, name="viewattendance"),
 ]

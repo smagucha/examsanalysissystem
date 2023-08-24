@@ -12,6 +12,7 @@
             {% endfor %}
         </select>
     </div>
+    {%if getstream %}
     <p>choice a stream</p>
     <div class="form-group">
         <select class="form-control" name="selected_stream">
@@ -21,6 +22,29 @@
             {% endfor %}
         </select>
     </div>
+    {%endif%}
+    {%if getsubjects %}
+    <p>choice a subject</p>
+    <div class="form-group">
+        <select class="form-control" name="selected_subject">
+            <option value=""></option>
+            {% for subject in getsubjects %}
+                <option value="{{ subject.name }}">{{ subject.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    {%endif%}
+    {%if getterms %}
+    <p>choice a term</p>
+    <div class="form-group">
+        <select class="form-control" name="selected_term">
+            <option value=""></option>
+            {% for term in getterms %}
+                <option value="{{ term.name }}">{{ term.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    {%endif%}
     <button type="submit" class="btn btn-primary" name="submit">Submit</button>
 </form>
 
