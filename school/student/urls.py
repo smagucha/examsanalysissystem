@@ -30,42 +30,12 @@ urlpatterns = [
     ),
     path("attendupdate/<int:id>/", views.attendupdate, name="updateattend"),
     path("getclasses/", views.getclasses, name="enterresulturl"),
-    # modify this function to take takeviewattendance and delete classattend.html
     path(
         "takeattendance/",
         views.take_attendance,
         name="takeattendance",
     ),
-    # modify this function to take takeviewattendance and delete attendancestreams.html
-    path(
-        "<str:name>/takeattendancestream/",
-        views.getstreams,
-        {"template_name": "student/attendancestreams.html"},
-        name="takeattendancestream",
-    ),
-    # modify this function to take takeviewattendance and delete viewattendclasses.html
-    # path(
-    #     "viewattendance/",
-    #     views.getclasses,
-    #     {"template_name": "student/viewattendclasses.html"},
-    #     name="viewattendance",
-    # ),
-    # delete this url and viewattendancestream.html
-    path(
-        "<str:name>/viewattendancestream/",
-        views.getstreams,
-        {"template_name": "student/viewattendancestream.html"},
-        name="viewattendancestream",
-    ),
     path("deleteattend/<int:id>/", views.deleteattend, name="deleteattend"),
-    # modify this function and delete enterresultsclass.html
-    # delete this url and enterstreamresult.html
-    path(
-        "<str:name>/choicetoenterstreamresult/",
-        views.getstreams,
-        {"template_name": "student/enterstreamresult.html"},
-        name="enterstreamresult",
-    ),
     path("schoolsetting/", views.schoolsetting, name="schoolsetting"),
     path("addclasses/", views.addclasses, name="addclasses"),
     path("addstreams/", views.addstreams, name="addstreams"),
