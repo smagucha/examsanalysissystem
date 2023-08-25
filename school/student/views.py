@@ -38,7 +38,7 @@ def delete_database_operation(request, mymodel, id):
     return render(request, "student/delete.html")
 
 
-# delete this function after through testing
+# # # delete this function after through testing
 @login_required(login_url="/accounts/login/")
 def getclasses(request, template_name):
     getallclasses = Klass.objects.all()

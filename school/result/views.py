@@ -76,28 +76,6 @@ def generate_pdf(template_name, context):
 
 
 @login_required(login_url="/accounts/login/")
-def getsubjects(request, classname, term=None, streamname=None, template_name=None):
-    context = {
-        "subjects": subject.objects.all(),
-        "classname": classname,
-        "streamname": streamname,
-        "term": term,
-    }
-    return render(request, template_name, context)
-
-
-@login_required(login_url="/accounts/login/")
-def terms(request, classname, streamname=None, subject=None, template_name=None):
-    context = {
-        "allterms": term.objects.all(),
-        "classname": classname,
-        "streamname": streamname,
-        "subject": subject,
-    }
-    return render(request, template_name, context)
-
-
-@login_required(login_url="/accounts/login/")
 def student_view(request, id, name, format=None, template_name=None):
     student = get_object_or_404(Student, id=id)
     totalclass = Student.student.class_or_stream_count(name)
@@ -209,7 +187,6 @@ def enteresult(request, name, stream, Term, Subject):
     return render(request, "result/enterresult.html", context)
 
 
-# fix this method to work properly
 @login_required(login_url="/accounts/login/")
 def streamexamanalysis(
     request, name, term, stream=None, template_name=None, format=None
@@ -260,7 +237,6 @@ def get_average_subject_marks(name, term, stream, subjects, getterms):
     return avg_subject
 
 
-# reuse function  from line 304
 def get_best_students_data(name, term, stream, subjects):
     best_students_data = []
     for subject in subjects:
@@ -305,19 +281,16 @@ def get_grades_count(name, term, stream):
     return grades_count
 
 
-# test done
 @login_required(login_url="/accounts/login/")
 def addsubject(request):
     return database_operation(request, subjectForm)
 
 
-# test done
 @login_required(login_url="/accounts/login/")
 def AddTerm(request):
     return database_operation(request, TermForm)
 
 
-# test done
 @login_required(login_url="/accounts/login/")
 def addGrade(request):
     return database_operation(request, GradeForm)
@@ -826,6 +799,23 @@ def enter_result_for_stream_or_class(request):
         "getclasses": get_class(),
         "getterms": all_terms(),
         "getsubjects": all_subjects(),
+        "getstream": get_stream(),
+    }
+    return render(request, "student/takeviewattendance.html", context)
+
+
+@login_required(login_url="/accounts/login/")
+def enroll_students_to_student(request):
+    if request.method == "POST":
+        selected_class = request.POST.get("selected_class")
+        selected_stream = request.POST.get("selected_stream")
+        return redirect(
+            "result:enrollstudentstosubject",
+            name=selected_class,
+            stream=selected_stream,
+        )
+    context = {
+        "getclasses": get_class(),
         "getstream": get_stream(),
     }
     return render(request, "student/takeviewattendance.html", context)

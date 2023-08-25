@@ -29,7 +29,7 @@ urlpatterns = [
         name="viewattendanceperstream",
     ),
     path("attendupdate/<int:id>/", views.attendupdate, name="updateattend"),
-    path("getclasses/", views.getclasses, name="enterresulturl"),
+    # path("getclasses/", views.getclasses, name="enterresulturl"),
     path(
         "takeattendance/",
         views.take_attendance,

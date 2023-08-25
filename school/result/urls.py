@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+
 from student.views import getclasses, getstreams
 
 app_name = "result"
@@ -33,15 +34,8 @@ urlpatterns = [
     path("enrolldelete/<int:id>/", views.enrolldelete, name="enrolldelete"),
     path(
         "enrollclasses/",
-        getclasses,
-        {"template_name": "result/enrollclasses.html"},
+        views.enroll_students_to_student,
         name="enrollclasses",
-    ),
-    path(
-        "enrollstream/<str:name>/",
-        getstreams,
-        {"template_name": "result/enrollstream.html"},
-        name="enrollstream",
     ),
     path(
         "enrollstudentstosubject/<str:name>/<str:stream>/",
