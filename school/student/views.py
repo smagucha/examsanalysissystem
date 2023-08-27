@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Student, Klass, Attendance, Stream
-from .forms import StudentForm, AttendForm, KlassForm, StreamForm
+from .forms import StudentForm, AttendForm, KlassForm, StreamForm, StudentParentForm
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from result.models import term
@@ -236,3 +236,8 @@ def take_attendance(request):
         )
     context = {"getclasses": get_class(), "getstream": get_stream()}
     return render(request, "student/takeviewattendance.html", context)
+
+
+@login_required(login_url="/accounts/login/")
+def add_student_to_parent(request):
+    return database_operation(request, StudentParentForm)

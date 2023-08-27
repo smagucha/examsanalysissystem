@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Student, Attendance, Klass, Stream
+from .models import Student, Attendance, Klass, Stream, StudentParent
 
 
 class StudentForm(ModelForm):
@@ -23,4 +23,10 @@ class KlassForm(ModelForm):
 class StreamForm(ModelForm):
     class Meta:
         model = Stream
+        fields = "__all__"
+
+
+class StudentParentForm(ModelForm):
+    class Meta:
+        model = StudentParent
         fields = "__all__"

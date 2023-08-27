@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import ParentForm
+from student.forms import StudentParentForm
 from .models import Parent
-from student.models import Student
+from student.models import Student, StudentParent
 from datetime import date
 from django.contrib.auth.decorators import login_required
 from student.views import database_operation, delete_database_operation
@@ -9,8 +9,8 @@ from student.views import database_operation, delete_database_operation
 
 @login_required(login_url="/accounts/login/")
 def list_parent(request):
-    parents_with_students = (
-        Parent.objects.all().prefetch_related("studentparent_set__student").distinct()
+    parents_with_students = StudentParent.objects.filter(
+        student__year=date.today().year
     )
     context = {
         "title": "all parents",
@@ -21,14 +21,9 @@ def list_parent(request):
 
 @login_required(login_url="/accounts/login/")
 def updateparent(request, id):
-    return database_operation(request, ParentForm, id)
+    return database_operation(request, StudentParentForm, id)
 
 
 @login_required(login_url="/accounts/login/")
 def deleteparent(request, id):
-    return delete_database_operation(request, Parent, id)
-
-
-@login_required(login_url="/accounts/login/")
-def addparent(request):
-    return database_operation(request, ParentForm)
+    return delete_database_operation(request, StudentParentForm, id)

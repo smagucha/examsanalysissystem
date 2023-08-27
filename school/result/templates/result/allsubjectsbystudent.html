@@ -1,0 +1,33 @@
+{% extends 'student/base.html' %}
+{% block title %}{{ title }}{% endblock title %}
+{% block content %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover mt-4">
+        <thead>
+            <tr>
+                <th>student</th>
+                <th>subject</th>
+                <th>stream</th>
+                <th>class</th>
+                <th>update</th>
+                <th>delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for enroll in allsubjectsbystudent %}
+            <tr>
+                <td>{{enroll.student}}</td>
+                <td>{{enroll.subject}}</td>
+                <td>{{enroll.stream}}</td>
+                <td>{{enroll.class_name}}</td>
+                <td><a href="{% url 'result:update_subjects_enrolled_y_student' enroll.id %}" class="btn btn-primary btn-sm">Update</a></td>
+                <td><a href="{% url 'result:delete_subjects_enrolled_y_student' enroll.id %}" class="btn btn-danger btn-sm">Delete</a></td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+

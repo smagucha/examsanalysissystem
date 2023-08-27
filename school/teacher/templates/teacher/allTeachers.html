@@ -5,15 +5,14 @@
 <button type="button" class="btn btn-outline-primary mt-3">
     <a href="{% url 'addTeacher' %}" class="text-dark">add teacher</a>
 </button>
-<table class="table ">
+<div class="table-responsive">
+    <table class="table table-striped table-hover mt-4">
 <thead>
     <tr>
         <th>First Name</th>
         <th>Last Name</th>
-        <th>Id No</th>
         <th>Phone Number</th>
         <th>Email</th>
-        <th>Physical Adddress</th>
         <th>Date Of Appointment</th>
         <th>Gender</th>
         <th>Designation</th>
@@ -26,10 +25,8 @@
     <tr>
         <td>{{Teacher.user.first_name|capfirst}}</td>
         <td>{{Teacher.user.last_name|capfirst}}</td>
-        <td>{{Teacher.Idno}}</td>
-        <td>{{Teacher.phonenumber}}</td>
-        <td>{{Teacher.email}}</td>
-        <td>{{Teacher.physical_add|capfirst}}</td>
+        <td>{{Teacher.user.phone}}</td>
+        <td>{{Teacher.user.email}}</td>
         <td>{{Teacher.date_of_appointment}}</td>
         <td>{{Teacher.gender|capfirst}}</td>
         <td>{{Teacher.designation|capfirst}}</td>
@@ -39,6 +36,7 @@
        {%endfor%}              
 </tbody>
 </table>
+</div>
 {%else%}
 <h1>There are no teachers in the system</h1>
 <p>

@@ -31,7 +31,7 @@ class Teacher(models.Model):
 
 
 class Teachersubjects(models.Model):
-    user = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     Subject = models.ForeignKey(subject, on_delete=models.CASCADE)
     Class = models.ForeignKey(Klass, on_delete=models.CASCADE)
     stream = models.ForeignKey(Stream, on_delete=models.CASCADE)

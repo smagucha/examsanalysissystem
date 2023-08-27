@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import TeacherForm, DesignationForm  # , TeachersubjectForm
-from .models import Teacher, Designation  # , Teachersubjects
+from .forms import TeacherForm, DesignationForm, TeachersubjectForm
+from .models import Teacher, Designation, Teachersubjects
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
 from student.views import database_operation, delete_database_operation
@@ -82,3 +82,8 @@ def updateteachersub(request, id):
 @login_required(login_url="/accounts/login/")
 def deleteteachersub(request, id):
     return delete_database_operation(request, Teachersubjects, id)
+
+
+@login_required(login_url="/accounts/login/")
+def teacher_view(request):
+    return render(request, "teacher/teacherview.html")

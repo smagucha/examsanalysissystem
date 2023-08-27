@@ -22,5 +22,8 @@
 {% include 'student/divup.html' %}
 <a href="{% url 'student:allclasses' %}">all classes</a>
 {% include 'student/divdown.html' %}
+{% include 'student/divup.html' %}
+<a href="{% url 'result:studentenrolledsubjects' %}">subjects enrolled by student</a>
+{% include 'student/divdown.html' %}
 </div>
 {%endblock content%}

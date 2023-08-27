@@ -54,4 +54,5 @@ urlpatterns = [
     path("objectnotfound/", views.objectnotfound, name="objectnotfound"),
     path("deletestudent/<int:id>/", views.delete_student, name="delete_student"),
     path("viewattendance/", views.viewattendance, name="viewattendance"),
+    path("addparent", views.add_student_to_parent, name="addparent"),
 ]

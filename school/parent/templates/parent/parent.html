@@ -3,27 +3,23 @@
 {%block content%}
 {%if getParents%}
 <button type="button" class="btn btn-outline-primary mt-3">
-    <a href="{% url 'parent:addparent' %}" class="text-dark">add parent</a>
+    <a href="{% url 'student:addparent' %}" class="text-dark">add parent</a>
 </button><table class="table">
 <div class="table-responsive">
     <table class="table table-striped table-hover mt-4">
 <thead>
     <tr>
-        <th>
-            Parents
-        </th>
-        <th>
-            update parent
-        </th>
-        <th>
-            delete parent
-        </th>
+        <th>Parents</th>
+        <th>student</th>
+        <th>update parent</th>
+        <th>delete parent</th>
     </tr>
 </thead>
 <tbody>
 	{% for parent in getParents%}
     <tr>
-        <td>{{parent}}</td>
+        <td>{{parent.parent}}</td>
+        <td>{{parent.student}}</td>
         <td><a href="{% url 'parent:updateparent' parent.id %}" class="btn btn-primary btn-sm">update</a></td>
         <td><a href="{% url 'parent:delparent' parent.id %}" class="btn btn-danger btn-sm">delete</a></td>
     </tr>

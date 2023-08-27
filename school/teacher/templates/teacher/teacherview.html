@@ -1,0 +1,15 @@
+{% extends 'student/base.html'%}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+<div class="row">
+{% include 'student/divup.html' %}
+  <a href="{% url 'listTeacher' %}">list of all teachers</a>
+{% include 'student/divdown.html' %}
+{% include 'student/divup.html' %}
+  <a href="{% url 'alldesignation' %}">teacher designation</a>
+{% include 'student/divdown.html' %}
+{% include 'student/divup.html' %}
+  <a href="{% url 'listTeachersubjects' %}">teacher subjects</a>
+{% include 'student/divdown.html' %}
+</div>
+{%endblock%}

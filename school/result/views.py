@@ -819,3 +819,20 @@ def enroll_students_to_student(request):
         "getstream": get_stream(),
     }
     return render(request, "student/takeviewattendance.html", context)
+
+
+@login_required(login_url="/accounts/login/")
+def subjects_enrolled_y_student(request):
+    allsubjectsbystudent = EnrollStudenttosubect.objects.filter(year=year)
+    context = {"allsubjectsbystudent": allsubjectsbystudent}
+    return render(request, "result/allsubjectsbystudent.html", context)
+
+
+@login_required(login_url="/accounts/login/")
+def update_subjects_enrolled_y_student(request, id):
+    return database_operation(request, EnrollForm, id)
+
+
+@login_required(login_url="/accounts/login/")
+def delete_subjects_enrolled_y_student(request, id):
+    return delete_database_operation(request, EnrollStudenttosubect, id)

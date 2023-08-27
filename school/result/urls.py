@@ -140,4 +140,19 @@ urlpatterns = [
         {"format": "ms-excel"},
         name="resultpertermexcelstream",
     ),
+    path(
+        "studentenrolledsubjects/",
+        views.subjects_enrolled_y_student,
+        name="studentenrolledsubjects",
+    ),
+    path(
+        "update_subjects_enrolled_y_student/<int:id>/",
+        views.update_subjects_enrolled_y_student,
+        name="update_subjects_enrolled_y_student",
+    ),
+    path(
+        "delete_subjects_enrolled_y_student/<int:id>/",
+        views.update_subjects_enrolled_y_student,
+        name="delete_subjects_enrolled_y_student",
+    ),
 ]

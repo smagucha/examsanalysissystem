@@ -18,8 +18,9 @@ urlpatterns = [
     path(
         "list_Teacher_subjects/",
         views.list_Teacher_subjects,
-        name="list_Teacher_subjects",
+        name="listTeachersubjects",
     ),
     path("updateteachersub/<int:id>/", views.updateteachersub, name="updateteachersub"),
     path("deleteteachersub/<int:id>/", views.deleteteachersub, name="deleteteachersub"),
+    path("teacher_view/", views.teacher_view, name="teacherview"),
 ]
