@@ -1,0 +1,9 @@
+<p>choice a stream</p>
+<div class="form-group">
+    <select class="form-control" name="selected_stream" required>
+        <option value="" disabled selected style="display:none;">Please select an option</option>
+        {% for stream in getstream %}
+            <option value="{{ stream.name }}">{{ stream.name }}</option>
+        {% endfor %}
+    </select>
+</div>

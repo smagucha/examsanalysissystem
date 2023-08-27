@@ -1,0 +1,9 @@
+ <p>choice a subject</p>
+<div class="form-group">
+    <select class="form-control" name="selected_subject" required>
+         <option value="" disabled selected style="display:none;">Please select an option</option>
+        {% for subject in getsubjects %}
+            <option value="{{ subject.name }}">{{ subject.name }}</option>
+        {% endfor %}
+    </select>
+</div>

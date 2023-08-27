@@ -202,20 +202,6 @@ def viewattendance(request):
     return render(request, "student/takeviewattendance.html", context)
 
 
-@login_required(login_url="/accounts/login/")
-def take_attendance(request):
-    if request.method == "POST":
-        selected_class = request.POST.get("selected_class")
-        selected_stream = request.POST.get("selected_stream")
-        return redirect(
-            "student:takeattandance",
-            name=selected_class,
-            stream=selected_stream,
-        )
-    context = {"getclasses": get_class(), "getstream": get_stream()}
-    return render(request, "student/takeviewattendance.html", context)
-
-
 def get_class():
     return Klass.objects.all()
 
@@ -234,6 +220,7 @@ def take_attendance(request):
             name=selected_class,
             stream=selected_stream,
         )
+
     context = {"getclasses": get_class(), "getstream": get_stream()}
     return render(request, "student/takeviewattendance.html", context)
 

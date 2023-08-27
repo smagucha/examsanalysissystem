@@ -1,0 +1,9 @@
+<p>choice a class</p>
+<div class="form-group">
+    <select class="form-control" name="selected_class" required>
+        <option value="" disabled selected style="display:none;">Please select an option</option>
+        {% for class in getclasses %}
+            <option value="{{ class.name }}">{{ class.name }}</option>
+        {% endfor %}
+    </select>
+</div>

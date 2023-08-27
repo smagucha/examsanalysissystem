@@ -747,7 +747,7 @@ def class_subject_ranking(request):
     }
     if get_stream():
         context["getstream"] = get_stream()
-    return render(request, "student/takeviewattendance.html", context)
+    return render(request, "result/class_subject_ranking.html", context)
 
 
 @login_required(login_url="/accounts/login/")
@@ -777,8 +777,7 @@ def result_stream_or_term(request):
     }
     if get_stream():
         context["getstream"] = get_stream()
-    return render(request, "student/takeviewattendance.html", context)
-    # line 34 for view
+    return render(request, "result/result_stream_or_term.html", context)
 
 
 @login_required(login_url="/accounts/login/")
@@ -801,7 +800,7 @@ def enter_result_for_stream_or_class(request):
         "getsubjects": all_subjects(),
         "getstream": get_stream(),
     }
-    return render(request, "student/takeviewattendance.html", context)
+    return render(request, "result/enter_result.html", context)
 
 
 @login_required(login_url="/accounts/login/")

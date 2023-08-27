@@ -5,6 +5,8 @@
     {% csrf_token %}
     {% include 'student/selected_class.html'%}
     {% include 'student/selected_stream.html'%}
+    {% include 'result/selected_subject.html'%}
+    {% include 'result/selected_term.html'%}
     <button type="submit" class="btn btn-primary" name="submit">Submit</button>
 </form>
 {% endblock %}
