@@ -141,8 +141,15 @@ class EnrollStudenttosubectManager(models.Manager):
     def get_subjects_for_student_count(self, student):
         return self.get_all_students_subject().filter(student=student).count()
 
-    def student_per_subject_count(self, subject, class_name):
-        return self.filter(subject__name=subject, class_name__name=class_name).count()
+    def student_per_subject_count(self, subject, class_name, stream):
+        query_params = {
+            "class_name__name": class_name,
+            "subject__name": subject,
+            "year": str(date.today().year),
+        }
+        if stream:
+            query_params["stream__name"] = stream
+        return self.filter(**query_params).count()
 
 
 class EnrollStudenttosubect(models.Model):

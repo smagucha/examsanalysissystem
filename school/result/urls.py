@@ -155,4 +155,5 @@ urlpatterns = [
         views.update_subjects_enrolled_y_student,
         name="delete_subjects_enrolled_y_student",
     ),
+    path("classstreamraking", views.class_and_stream_ranking, name="classstreamraking"),
 ]

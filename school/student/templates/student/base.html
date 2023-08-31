@@ -11,6 +11,7 @@
   <meta content="" name="keywords">
   <meta http-equiv="refresh" content="30">
   <!-- Vendor CSS Files -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
   <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
   <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
@@ -56,13 +57,6 @@
             </li>
             <li>
               <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
-                <i class="bi bi-question-circle"></i>
-                <span>Need Help?</span>
-              </a>
             </li>
             <li>
               <hr class="dropdown-divider">
@@ -142,6 +136,12 @@
         <a class="nav-link " href="{% url 'result:matokeo' %}">
           <i class="bi bi-file-earmark-medical"></i>
           <span>result per stream or class</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'result:classstreamraking' %}">
+          <i class="bi bi-file-earmark-medical"></i>
+          <span>class and stream ranking</span>
         </a>
       </li>
        <li class="nav-item">

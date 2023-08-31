@@ -226,14 +226,16 @@ def get_average_subject_marks(name, term, stream, subjects, getterms):
     for subject in subjects:
         marks = get_marks_for_class_or_stream(name, term, stream, subject)
         student_count = EnrollStudenttosubect.enroll.student_per_subject_count(
-            subject=subject, class_name=name
+            subject=subject, class_name=name, stream=stream
         )
         subject_marks = list(marks)
         if subject_marks:
+            print(student_count, subject)
             avg_subject[subject.name] = calculate_average(
                 sum(subject_marks),
                 student_count,
             )
+
     return avg_subject
 
 
@@ -835,3 +837,8 @@ def update_subjects_enrolled_y_student(request, id):
 @login_required(login_url="/accounts/login/")
 def delete_subjects_enrolled_y_student(request, id):
     return delete_database_operation(request, EnrollStudenttosubect, id)
+
+
+@login_required(login_url="/accounts/login/")
+def class_and_stream_ranking(request):
+    return render(request, "result/class_and_stream_ranking.html")

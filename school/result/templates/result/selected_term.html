@@ -1,9 +1,15 @@
-<p>choice a term</p>
 <div class="form-group">
-    <select class="form-control" name="selected_term" required>
-        <option value="" disabled selected style="display:none;">Please select an option</option>
-        {% for term in getterms %}
-            <option value="{{ term.name }}">{{ term.name }}</option>
-        {% endfor %}
-    </select>
+    <label for="selected_term">Term:</label>
+    <div class="d-flex align-items-center">
+        <select class="form-control mr-2" id="selected_term" name="selected_term" required>
+            <option value="" disabled selected style="display:none;">Select term</option>
+            {% if getterms %}
+                {% for term in getterms %}
+                    <option value="{{ term.name }}">{{ term.name }}</option>
+                {% endfor %}
+            {% else %}
+                <option value="" disabled>No terms available</option>
+            {% endif %}
+        </select>
+    </div>
 </div>

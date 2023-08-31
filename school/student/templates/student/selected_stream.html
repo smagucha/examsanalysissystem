@@ -1,9 +1,15 @@
-<p>choice a stream</p>
 <div class="form-group">
-    <select class="form-control" name="selected_stream" required>
-        <option value="" disabled selected style="display:none;">Please select an option</option>
-        {% for stream in getstream %}
-            <option value="{{ stream.name }}">{{ stream.name }}</option>
-        {% endfor %}
-    </select>
+    <label for="selected_stream">Stream:</label>
+    <div class="d-flex align-items-center">
+        <select class="form-control mr-2" id="selected_stream" name="selected_stream" required>
+            <option value="" disabled selected style="display:none;">Select stream</option>
+            {% if getstream %}
+                {% for stream in getstream %}
+                    <option value="{{ stream.name }}">{{ stream.name }}</option>
+                {% endfor %}
+            {% else %}
+                <option value="" disabled>No stream available</option>
+            {% endif %}
+        </select>
+    </div>
 </div>
