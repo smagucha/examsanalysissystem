@@ -24,6 +24,11 @@ urlpatterns = [
         name="takeattandance",
     ),
     path(
+        "Take_Attandance/<str:name>/",
+        views.Take_Attandance,
+        name="takeattandanceclass",
+    ),
+    path(
         "viewattendanceperstream/<str:name>/<str:stream>/",
         views.viewattendanceperstream,
         name="viewattendanceperstream",

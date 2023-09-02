@@ -1,5 +1,12 @@
 {% extends 'student/base.html'%}
 {%block title%}{{title}}{%endblock%}
 {%block content%}
-<p>thinking of design and implemation</p>
+<div class="row">
+{% include 'student/divup.html' %}
+  <a href="">class ranking</a>
+{% include 'student/divdown.html' %}
+{% include 'student/divup.html' %}
+  <a href="">stream ranking</a>
+{% include 'student/divdown.html' %}
+</div>
 {%endblock%}

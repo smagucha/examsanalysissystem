@@ -4,7 +4,8 @@
 {%if exam%}
 <form method= 'POST'>
 	{% csrf_token %}
-	<table >
+<div class="table-responsive">
+    <table class="table table-striped table-hover mt-4">
             <thead>
                 <tr>
                     <th>First Name</th>
@@ -33,6 +34,7 @@
                            {%endfor%}              
              </tbody>
     </table>
+</div>
 <input type="submit" name="submit">
 {%else%}
 <p>no students are in the system</p>

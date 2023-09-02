@@ -16,6 +16,8 @@ from student.views import (
 )
 from student.views import get_class, get_stream
 
+from django.db.models import Q
+
 year = str(date.today().year)
 
 
@@ -157,7 +159,7 @@ def student_view(request, id, name, format=None, template_name=None):
 
 
 @login_required(login_url="/accounts/login/")
-def enteresult(request, name, stream, Term, Subject):
+def enteresult(request, name, Term, Subject, stream=None):
     exam = EnrollStudenttosubect.enroll.get_students_subject(
         name=name, stream=stream, Subject=Subject
     )
@@ -451,6 +453,7 @@ def get_students_by_class_and_stream(name, stream):
 
 
 def collect_student_marks(students, subjects, term):
+    # reduce this function to reduce database querying
     results = []
     for student in students:
         marks = []
@@ -789,13 +792,21 @@ def enter_result_for_stream_or_class(request):
         selected_term = request.POST.get("selected_term")
         selected_subject = request.POST.get("selected_subject")
         selected_stream = request.POST.get("selected_stream")
-        return redirect(
-            "result:enterexam",
-            name=selected_class,
-            stream=selected_stream,
-            Term=selected_term,
-            Subject=selected_subject,
-        )
+        if selected_stream:
+            return redirect(
+                "result:enterexam",
+                name=selected_class,
+                stream=selected_stream,
+                Term=selected_term,
+                Subject=selected_subject,
+            )
+        else:
+            return redirect(
+                "result:enterexamforclass",
+                name=selected_class,
+                Term=selected_term,
+                Subject=selected_subject,
+            )
     context = {
         "getclasses": get_class(),
         "getterms": all_terms(),
@@ -819,7 +830,7 @@ def enroll_students_to_student(request):
         "getclasses": get_class(),
         "getstream": get_stream(),
     }
-    return render(request, "student/takeviewattendance.html", context)
+    return render(request, "result/enrollstudentstosubject.html", context)
 
 
 @login_required(login_url="/accounts/login/")
@@ -839,6 +850,117 @@ def delete_subjects_enrolled_y_student(request, id):
     return delete_database_operation(request, EnrollStudenttosubect, id)
 
 
-@login_required(login_url="/accounts/login/")
-def class_and_stream_ranking(request):
+# @login_required(login_url="/accounts/login/")
+# def class_and_stream_ranking(request, name="class one"):
+#     streams = Stream.objects.all()
+#     class_ranks = {}
+#     stream_ranks = {}
+#     for streamname in streams:
+#         students = Student.student.get_student_list_class_or_stream(
+#             name=name, stream=streamname
+#         )
+#         get_avg = []
+#         for i in students:
+#             query_params = {
+#                 "student": i.id,
+#                 "Term__name": "first term",
+#                 "year": 2023,
+#             }
+#             get_marks = list(
+#                 Mark.objects.filter(**query_params).values_list("marks", flat=True)
+#             )
+#             get_avg.append(sum(get_marks) / len(get_marks))
+
+#         if streamname:
+#             stream_ranks[streamname.name] = sum(get_avg) / len(get_avg)
+#         else:
+#             class_ranks[name] = sum(get_avg) / len(get_avg)
+#     print(stream_ranks)
+#     return render(request, "result/class_and_stream_ranking.html")
+
+from django.db.models import Q
+
+# ...
+
+
+def class_and_stream_ranking(request, name="class one"):
+    streams = Stream.objects.all()
+    class_ranks = {}
+    stream_ranks = {}
+
+    for streamname in streams:
+        students = students = Student.student.get_student_list_class_or_stream(
+            name=name, stream=streamname
+        )
+        get_avg = []
+
+        for student in students:
+            query_params = {
+                "student": student.id,
+                "Term__name": "first term",
+                "year": 2023,
+            }
+            get_marks = list(
+                Mark.objects.filter(**query_params).values_list("marks", flat=True)
+            )
+            get_avg.append(sum(get_marks) / len(get_marks))
+
+        if streamname:
+            stream_ranks[streamname.name] = sum(get_avg) / len(get_avg)
+        else:
+            class_ranks[name] = sum(get_avg) / len(get_avg)
+
+    print(stream_ranks)
     return render(request, "result/class_and_stream_ranking.html")
+
+
+def class_and_stream_ranking(request, name="class one"):
+    streams = Stream.objects.all()
+    class_ranks = {}
+    stream_ranks = {}
+
+    for streamname in streams:
+        students = Student.student.get_student_list_class_or_stream(
+            name=name, stream=streamname
+        )
+        get_avg = []
+
+        for student in students:
+            query_params = {
+                "student": student.id,
+                "Term__name": "first term",
+                "year": 2023,
+            }
+            get_marks = list(
+                Mark.objects.filter(**query_params).values_list("marks", flat=True)
+            )
+            get_avg.append(sum(get_marks) / len(get_marks))
+
+        if streamname:
+            stream_ranks[streamname.name] = sum(get_avg) / len(get_avg)
+        else:
+            class_ranks[name] = sum(get_avg) / len(get_avg)
+
+    return stream_ranks, class_ranks
+
+
+def calculate_class_ranks(request):
+    classes = [
+        "class one",
+        "class two",
+        "class three",
+    ]  # Define the classes you want to calculate ranks for
+
+    class_ranks = {}  # Dictionary to store class ranks
+
+    for class_name in classes:
+        # Call the class_and_stream_ranking function with the class_name
+        _, class_rank = class_and_stream_ranking(request, name=class_name)
+
+        # Calculate the average rank for the class
+        class_avg_rank = sum(class_rank.values()) / len(class_rank)
+
+        # Store the class rank in the class_ranks dictionary
+        class_ranks[class_name] = class_avg_rank
+
+    return render(request, "result/class_ranks.html", {"class_ranks": class_ranks})

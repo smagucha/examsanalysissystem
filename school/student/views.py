@@ -215,11 +215,14 @@ def take_attendance(request):
     if request.method == "POST":
         selected_class = request.POST.get("selected_class")
         selected_stream = request.POST.get("selected_stream")
-        return redirect(
-            "student:takeattandance",
-            name=selected_class,
-            stream=selected_stream,
-        )
+        if selected_stream:
+            return redirect(
+                "student:takeattandance",
+                name=selected_class,
+                stream=selected_stream,
+            )
+        else:
+            return redirect("student:takeattandanceclass", name=selected_class)
 
     context = {"getclasses": get_class(), "getstream": get_stream()}
     return render(request, "student/takeviewattendance.html", context)

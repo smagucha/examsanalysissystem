@@ -70,10 +70,7 @@ class Student(models.Model):
         Klass,
         on_delete=models.CASCADE,
     )
-    stream = models.ForeignKey(
-        Stream,
-        on_delete=models.CASCADE,
-    )
+    stream = models.ForeignKey(Stream, on_delete=models.CASCADE, blank=True, null=True)
     gender = models.CharField(max_length=6, choices=GENDER)
     year = models.CharField(
         max_length=4, default=str(date.today().year), blank=True, null=True

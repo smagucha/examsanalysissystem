@@ -4,7 +4,17 @@
 <form method="post" class="form-inline">
     {% csrf_token %}
     {% include 'student/selected_class.html'%}
-    {% include 'student/selected_stream.html'%}
+    <div class="form-group">
+    <label for="selected_stream">Stream:</label>
+    <div class="d-flex align-items-center">
+        <select class="form-control mr-2" id="selected_stream" name="selected_stream">
+            <option value=""></option>
+                {% for stream in getstream %}
+                    <option value="{{ stream.name }}">{{ stream.name }}</option>
+                {% endfor %}
+        </select>
+    </div>
+</div>
     {% include 'result/selected_subject.html'%}
     {% include 'result/selected_term.html'%}
     <button type="submit" class="btn btn-primary" name="submit">Submit</button>

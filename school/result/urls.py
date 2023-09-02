@@ -89,6 +89,11 @@ urlpatterns = [
         name="enterexam",
     ),
     path(
+        "enterexamforclass/<str:name>/<str:Term>/<str:Subject>/",
+        views.enteresult,
+        name="enterexamforclass",
+    ),
+    path(
         "subjectperrankstreamterm/<str:name>/<str:stream>/<str:term>/<str:subject>/",
         views.subjectperrank,
         {"template_name": "result/analysis.html"},
