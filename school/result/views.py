@@ -16,7 +16,6 @@ from student.views import (
 )
 from student.views import get_class, get_stream
 
-from django.db.models import Q
 
 year = str(date.today().year)
 
@@ -850,117 +849,70 @@ def delete_subjects_enrolled_y_student(request, id):
     return delete_database_operation(request, EnrollStudenttosubect, id)
 
 
-# @login_required(login_url="/accounts/login/")
-# def class_and_stream_ranking(request, name="class one"):
-#     streams = Stream.objects.all()
-#     class_ranks = {}
-#     stream_ranks = {}
-#     for streamname in streams:
-#         students = Student.student.get_student_list_class_or_stream(
-#             name=name, stream=streamname
-#         )
-#         get_avg = []
-#         for i in students:
-#             query_params = {
-#                 "student": i.id,
-#                 "Term__name": "first term",
-#                 "year": 2023,
-#             }
-#             get_marks = list(
-#                 Mark.objects.filter(**query_params).values_list("marks", flat=True)
-#             )
-#             get_avg.append(sum(get_marks) / len(get_marks))
-
-#         if streamname:
-#             stream_ranks[streamname.name] = sum(get_avg) / len(get_avg)
-#         else:
-#             class_ranks[name] = sum(get_avg) / len(get_avg)
-#     print(stream_ranks)
-#     return render(request, "result/class_and_stream_ranking.html")
-
-from django.db.models import Q
-
-# ...
-
-
-def class_and_stream_ranking(request, name="class one"):
-    streams = Stream.objects.all()
-    class_ranks = {}
-    stream_ranks = {}
-
-    for streamname in streams:
-        students = students = Student.student.get_student_list_class_or_stream(
-            name=name, stream=streamname
-        )
-        get_avg = []
-
-        for student in students:
-            query_params = {
-                "student": student.id,
-                "Term__name": "first term",
-                "year": 2023,
-            }
-            get_marks = list(
-                Mark.objects.filter(**query_params).values_list("marks", flat=True)
-            )
-            get_avg.append(sum(get_marks) / len(get_marks))
-
-        if streamname:
-            stream_ranks[streamname.name] = sum(get_avg) / len(get_avg)
-        else:
-            class_ranks[name] = sum(get_avg) / len(get_avg)
-
-    print(stream_ranks)
+@login_required(login_url="/accounts/login/")
+def class_and_stream_ranking(request):
     return render(request, "result/class_and_stream_ranking.html")
 
 
-def class_and_stream_ranking(request, name="class one"):
-    streams = Stream.objects.all()
-    class_ranks = {}
+# this is working fine
+@login_required(login_url="/accounts/login/")
+def stream_ranking(request, name):
+    streams = get_stream()
     stream_ranks = {}
-
     for streamname in streams:
         students = Student.student.get_student_list_class_or_stream(
             name=name, stream=streamname
         )
-        get_avg = []
-
-        for student in students:
-            query_params = {
-                "student": student.id,
-                "Term__name": "first term",
-                "year": 2023,
-            }
-            get_marks = list(
-                Mark.objects.filter(**query_params).values_list("marks", flat=True)
-            )
-            get_avg.append(sum(get_marks) / len(get_marks))
-
-        if streamname:
-            stream_ranks[streamname.name] = sum(get_avg) / len(get_avg)
-        else:
-            class_ranks[name] = sum(get_avg) / len(get_avg)
-
-    return stream_ranks, class_ranks
+        get_avg = get_student_avg_and_class_average(students)
+        stream_ranks[streamname.name] = calculate_average(sum(get_avg), len(get_avg))
+    context = {"stream_ranks": stream_ranks, "name": name}
+    return render(request, "result/stream_ranking.html", context)
 
 
+@login_required(login_url="/accounts/login/")
 def calculate_class_ranks(request):
-    classes = [
-        "class one",
-        "class two",
-        "class three",
-    ]  # Define the classes you want to calculate ranks for
-
-    class_ranks = {}  # Dictionary to store class ranks
-
+    classes = get_class()
+    class_ranks = {}
+    stream = None
     for class_name in classes:
-        # Call the class_and_stream_ranking function with the class_name
-        _, class_rank = class_and_stream_ranking(request, name=class_name)
+        students = Student.student.get_student_list_class_or_stream(
+            name=class_name, stream=stream
+        )
+        get_avg = get_student_avg_and_class_average(students)
+        class_ranks[class_name.name] = calculate_average(sum(get_avg), len(get_avg))
+    context = {"class_ranks": class_ranks}
+    return render(request, "result/class_ranks.html", context)
 
-        # Calculate the average rank for the class
-        class_avg_rank = sum(class_rank.values()) / len(class_rank)
 
-        # Store the class rank in the class_ranks dictionary
-        class_ranks[class_name] = class_avg_rank
+# this is working fine
+def get_student_avg_and_class_average(students):
+    get_avg = []
+    for student in students:
+        query_params = {
+            "student": student.id,
+            "Term__name": "first term",
+            "year": 2023,
+        }
+        get_marks = list(
+            Mark.objects.filter(**query_params).values_list("marks", flat=True)
+        )
+        if get_marks:
+            get_avg.append(calculate_average(sum(get_marks), len(get_marks)))
+        else:
+            get_avg = [0]
+    return get_avg
 
-    return render(request, "result/class_ranks.html", {"class_ranks": class_ranks})
+
+@login_required(login_url="/accounts/login/")
+def select_class_for_stream_ranking(request):
+    if request.method == "POST":
+        selected_class = request.POST.get("selected_class")
+
+        return redirect(
+            "result:streamranking",
+            name=selected_class,
+        )
+    context = {
+        "getclasses": get_class(),
+    }
+    return render(request, "result/select_class_for_stream_ranking.html", context)

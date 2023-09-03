@@ -161,4 +161,7 @@ urlpatterns = [
         name="delete_subjects_enrolled_y_student",
     ),
     path("classstreamraking", views.class_and_stream_ranking, name="classstreamraking"),
+    path("select_class", views.select_class_for_stream_ranking, name="selectclass"),
+    path("stream ranking/<str:name>", views.stream_ranking, name="streamranking"),
+    path("classranking/", views.calculate_class_ranks, name="classranking"),
 ]

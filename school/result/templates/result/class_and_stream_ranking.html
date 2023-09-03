@@ -3,10 +3,10 @@
 {%block content%}
 <div class="row">
 {% include 'student/divup.html' %}
-  <a href="">class ranking</a>
+  <a href="{% url 'result:classranking' %}">class ranking</a>
 {% include 'student/divdown.html' %}
 {% include 'student/divup.html' %}
-  <a href="">stream ranking</a>
+  <a href="{% url 'result:selectclass' %}">stream ranking</a>
 {% include 'student/divdown.html' %}
 </div>
 {%endblock%}
