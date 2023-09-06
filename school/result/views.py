@@ -865,7 +865,10 @@ def stream_ranking(request, name):
         )
         get_avg = get_student_avg_and_class_average(students)
         stream_ranks[streamname.name] = calculate_average(sum(get_avg), len(get_avg))
-    context = {"stream_ranks": stream_ranks, "name": name}
+    sorted_dict = dict(
+        sorted(stream_ranks.items(), key=lambda item: item[1], reverse=True)
+    )
+    context = {"stream_ranks": sorted_dict, "name": name}
     return render(request, "result/stream_ranking.html", context)
 
 
@@ -880,7 +883,10 @@ def calculate_class_ranks(request):
         )
         get_avg = get_student_avg_and_class_average(students)
         class_ranks[class_name.name] = calculate_average(sum(get_avg), len(get_avg))
-    context = {"class_ranks": class_ranks}
+    sorted_dict = dict(
+        sorted(class_ranks.items(), key=lambda item: item[1], reverse=True)
+    )
+    context = {"class_ranks": sorted_dict}
     return render(request, "result/class_ranks.html", context)
 
 
