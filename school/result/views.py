@@ -671,12 +671,16 @@ def reportbook(request, name, id, termname):
     getavg = {}
     getclassrankid = []
     getstreamrankid = []
-
+    getsubjectcount = EnrollStudenttosubect.enroll.get_subjects_for_student_count(
+        student=student
+    )
+    outsubject = getsubjectcount * 100
     q = {}
     for getterm in terms:
         getclassnumber, getstreamnumber = get_all_student_result_for_class_and_stream(
             student_stream, student_class, getterm
         )
+        # work classnumber and stream number
         classnumber[getterm.name] = calculate_class_rank(
             getclassnumber, student, totalclass, getclassrankid
         )
@@ -694,7 +698,7 @@ def reportbook(request, name, id, termname):
 
         if getmarks:
             studenttotalmarks = sum(getmarks)
-        totalmarks[getterm] = studenttotalmarks
+        totalmarks[getterm.name] = studenttotalmarks
 
         (
             getavg[getterm.name],
@@ -717,6 +721,7 @@ def reportbook(request, name, id, termname):
         "student": student,
         "q": q,
         "termname": termname,
+        "outsubject": outsubject,
     }
     return render(request, "result/reportcard.html", context)
 

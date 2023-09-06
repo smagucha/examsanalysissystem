@@ -1,3 +1,4 @@
+{% load custom_filters %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -49,8 +50,8 @@ p {
 <table class='table'>
   <tr><td>Name: {{student.first_name}} {{student.middle_name}} {{student.last_name}}</td><td>{{Term}} {{student.year.year}}</td></tr>
   <tr><td>Admin_no: {{student.Admin_no}} </td><td>stream rank {{streamnumber}} out of {{streamtotal}}</td></tr>
-  <tr><td>Class: {{student.class_name}} {{student.stream}}</td> <td>Class rank {{classnumber}} out of {{totalclass}}</td></tr>
-  <tr><td>Grade: {{Grade}}</td></tr>
+  <tr><td>Class: {{student.class_name}} {{student.stream}}</td> <td>Class rank {{classnumber|get_item:termname}} out of {{totalclass}}</td></tr>
+  <tr><td>Grade: {{ Grade|get_item:termname }}</td></tr>
 </table>
 <table id="customers">
   <tr>
@@ -60,10 +61,9 @@ p {
     <th>Subject</th>
     <th>Marks</th>
     <th>Grade</th>
-    <th>stream rank</th>
     <th>class rank</th>
   </tr>
-  {%for i in q.items%}
+  {%for i in q|get_item:termname%}
     <tr>
       {%for j in i%}
       <td>{{j}}</td>
@@ -72,7 +72,6 @@ p {
   {%endfor%}
 </table>
 <p></p>
-<p>Total marks: {{totalmarks}} out of {{outsubject}}</p>
-<p>class teacher comments</p>
+<p>Total marks: {{totalmarks|get_item:termname}} out of {{outsubject}}</p>
 </body>
 </html>
