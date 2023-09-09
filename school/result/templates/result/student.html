@@ -1,5 +1,4 @@
 {% extends 'student/base.html'%}
-{%load custom_tags%}
 {%block title%}{{title}}{%endblock%}
 {%block content%}
 {{idstudent.first_name|capfirst}}
@@ -58,30 +57,11 @@
     </tbody>
 </table>
 </div>
-<h1>Performance Trend</h1>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-<canvas id="myChart" style="width:100%;max-width:600px"></canvas>
-<script>
-new Chart("myChart", {
-  type: "line",
-  data: {
-    labels:  {{terms|safe}},
-    datasets: [{
-      fill: false,
-      backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgb(255, 99, 132)',
-      data: {{points|safe}},
-    }]
-  },
-  options: {
-    legend: {display: false},
-    scales: {
-      yAxes: [{ticks: {min: 0, max:12}}],
-    }
-  }
-});
-</script>
-{{ data|safe }}
 {%endblock%}
+
+
+
+
+ 
 
 
