@@ -151,8 +151,8 @@ def student_view(request, id, name, format=None, template_name=None):
         "student": student,
     }
 
-    if format == "pdf":
-        return generate_pdf(template_name, context)
+    # if format == "pdf":
+    #     return generate_pdf(template_name, context)
 
     return render(request, "result/student.html", context)
 
@@ -608,7 +608,8 @@ def subject_ranking_per_class_and_stream(
             ).values_list("marks", flat=True)
         )
         eachsubjectrank += getmark
-        eachsubjectrank.append(get_grade(Getgrading, getmark[0]).name)
+        if len(eachsubjectrank) >= 2:
+            eachsubjectrank.append(get_grade(Getgrading, eachsubjectrank[1]).name)
         subjectrankclass = list(
             Mark.objects.filter(
                 student__class_name__name=student.class_name,
@@ -619,10 +620,12 @@ def subject_ranking_per_class_and_stream(
             .values_list("student", flat=True)
             .order_by("-marks")
         )
-        getnu = f"{subjectrankclass.index(student.id)+1}/{totalclass}"
-        eachsubjectrank.append(getnu)
-        subjectrankdetail.append(eachsubjectrank)
-        q[getterms.name] = subjectrankdetail
+
+        if student.id in subjectrankclass:
+            getnu = f"{subjectrankclass.index(student.id)+1}/{totalclass}"
+            eachsubjectrank.append(getnu)
+            subjectrankdetail.append(eachsubjectrank)
+            q[getterms.name] = subjectrankdetail
     return q
 
 
@@ -680,13 +683,14 @@ def reportbook(request, name, id, termname):
         getclassnumber, getstreamnumber = get_all_student_result_for_class_and_stream(
             student_stream, student_class, getterm
         )
-        # work classnumber and stream number
-        classnumber[getterm.name] = calculate_class_rank(
+
+        classnumber[getterm.name], _ = calculate_class_rank(
             getclassnumber, student, totalclass, getclassrankid
         )
-        streamnumber[getterm.name] = calculate_stream_rank(
+        streamnumber[getterm.name], _ = calculate_stream_rank(
             getstreamnumber, student, getstreamrankid
         )
+
         q = subject_ranking_per_class_and_stream(
             student, subjectname, Getgrading, totalclass, q, getterm
         )
@@ -698,7 +702,7 @@ def reportbook(request, name, id, termname):
 
         if getmarks:
             studenttotalmarks = sum(getmarks)
-        totalmarks[getterm.name] = studenttotalmarks
+            totalmarks[getterm.name] = studenttotalmarks
 
         (
             getavg[getterm.name],
@@ -723,7 +727,8 @@ def reportbook(request, name, id, termname):
         "termname": termname,
         "outsubject": outsubject,
     }
-    return render(request, "result/reportcard.html", context)
+    # return render(request, "result/reportcard.html", context)
+    return generate_pdf("result/reportcard.html", context)
 
 
 @login_required(login_url="/accounts/login/")

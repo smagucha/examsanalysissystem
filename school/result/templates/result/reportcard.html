@@ -49,13 +49,13 @@ p {
 
 <table class='table'>
   <tr><td>Name: {{student.first_name}} {{student.middle_name}} {{student.last_name}}</td><td>{{Term}} {{student.year.year}}</td></tr>
-  <tr><td>Admin_no: {{student.Admin_no}} </td><td>stream rank {{streamnumber}} out of {{streamtotal}}</td></tr>
+  <tr><td>Admin_no: {{student.Admin_no}} </td><td>stream rank {{streamnumber|get_item:termname}} out of {{streamtotal}}</td></tr>
   <tr><td>Class: {{student.class_name}} {{student.stream}}</td> <td>Class rank {{classnumber|get_item:termname}} out of {{totalclass}}</td></tr>
-  <tr><td>Grade: {{ Grade|get_item:termname }}</td></tr>
+  <tr><td>{{ Grade|get_item:termname }}</td></tr>
 </table>
 <table id="customers">
   <tr>
-  <th colspan="5">{{Termname}}  {{myvar.year.year}}</th>
+  <th colspan="4">{{Termname}}  {{myvar.year.year}}</th>
   </tr>
   <tr>
     <th>Subject</th>

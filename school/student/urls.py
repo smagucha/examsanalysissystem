@@ -33,6 +33,11 @@ urlpatterns = [
         views.viewattendanceperstream,
         name="viewattendanceperstream",
     ),
+    path(
+        "viewattendanceperclass/<str:name>/",
+        views.viewattendanceperstream,
+        name="viewattendanceperclass",
+    ),
     path("attendupdate/<int:id>/", views.attendupdate, name="updateattend"),
     # path("getclasses/", views.getclasses, name="enterresulturl"),
     path(

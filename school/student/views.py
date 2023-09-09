@@ -130,7 +130,7 @@ def Take_Attandance(request, name, stream=None):
         if stream:
             return redirect("student:viewattendanceperstream", name=name, stream=stream)
         else:
-            return redirect("student:viewattendance", name=name)
+            return redirect("student:viewattendanceperclass", name=name)
 
     context = {"exam": takeattendance}
     return render(request, "student/attend.html", context)
@@ -138,8 +138,10 @@ def Take_Attandance(request, name, stream=None):
 
 # modify this function to fit if there is no stream (for class only)
 @login_required(login_url="/accounts/login/")
-def viewattendanceperstream(request, name, stream):
+def viewattendanceperstream(request, name, stream=None):
     attend = Attendance.attend.get_student_list_stream(name=name, stream=stream)
+    for i in attend:
+        print(i)
     context = {"title": "view attendance", "attend": attend}
     return render(request, "student/viewattend.html", context)
 
@@ -186,18 +188,20 @@ def objectnotfound(request):
     return render(request, "student/objectnotfound.html")
 
 
-# this changes everything for code
-# works as expects
 @login_required(login_url="/accounts/login/")
 def viewattendance(request):
     if request.method == "POST":
         selected_class = request.POST.get("selected_class")
         selected_stream = request.POST.get("selected_stream")
-        return redirect(
-            "student:viewattendanceperstream",
-            name=selected_class,
-            stream=selected_stream,
-        )
+        print(selected_stream)
+        if selected_stream:
+            return redirect(
+                "student:viewattendanceperstream",
+                name=selected_class,
+                stream=selected_stream,
+            )
+        else:
+            return redirect("student:viewattendanceperclass", name=selected_class)
     context = {"getclasses": Klass.objects.all(), "getstream": Stream.objects.all()}
     return render(request, "student/takeviewattendance.html", context)
 
