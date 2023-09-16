@@ -1,4 +1,5 @@
 {% extends 'student/base.html'%}
+{% load custom_filters %}
 {%block title%}{{title}}{%endblock%}
 {%block content%}
 {{idstudent.first_name|capfirst}}
@@ -45,13 +46,14 @@
         </tr>
     </thead>
     <tbody>
+        
         {% for pupil, marks in getterm.items%}
                 <tr>
                     <td>{{pupil}}</td>
                     {%for mark in marks%}
                     <td>{{mark}}</td>
                     {%endfor%}
-                    <td><a  href="{% url 'result:reportcard' classname student.id pupil %}" class="btn btn-primary btn-sm">Report Card {{student.id}}</a></td>
+                    <td><a  href="{% url 'result:reportcard' classname student.id pupil %}" class="btn btn-primary btn-sm">Report Card</a></td>
                 </tr>
         {%endfor%}            
     </tbody>

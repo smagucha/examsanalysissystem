@@ -119,29 +119,36 @@ def student_view(request, id, name, format=None, template_name=None):
         studenttotalmarks = totalmarks[getterms.name]
         if totalmarks[getterms.name]:
             termresults.append(studenttotalmarks)
-        getterm[getterms] = termresults
-        getclassnumber, getstreamnumber = get_all_student_result_for_class_and_stream(
-            student_stream, student_class, getterms
-        )
-        classnumber[getterms.name], getclassrankid = calculate_class_rank(
-            getclassnumber, student, totalclass, getclassrankid
-        )
 
-        streamnumber[getterms.name], getstreamrankid = calculate_stream_rank(
-            getstreamnumber, student, getstreamrankid
-        )
-        getterm = update_term_results(
-            getterm,
-            getterms,
-            getclassrankid,
-            getstreamrankid,
-            studenttotalmarks,
-            getsubjectcount,
-            subjectname,
-            Getgrading,
-        )
+        # getterm[getterms] = termresults
+        if sum([i for i in termresults if i != ""]):
+            getterm[getterms.name] = termresults
+
+            (
+                getclassnumber,
+                getstreamnumber,
+            ) = get_all_student_result_for_class_and_stream(
+                student_stream, student_class, getterms
+            )
+            classnumber[getterms.name], getclassrankid = calculate_class_rank(
+                getclassnumber, student, totalclass, getclassrankid
+            )
+
+            streamnumber[getterms.name], getstreamrankid = calculate_stream_rank(
+                getstreamnumber, student, getstreamrankid
+            )
+            getterm = update_term_results(
+                getterm,
+                getterms,
+                getclassrankid,
+                getstreamrankid,
+                studenttotalmarks,
+                getsubjectcount,
+                subjectname,
+                Getgrading,
+            )
+    print(getterm)
     context = {
-        "totalmarks": totalmarks,
         "classname": name,
         "getterm": getterm,
         "title": "student details",
@@ -509,7 +516,6 @@ def get_all_student_result_for_class_and_stream(student_stream, student_class, g
                 "marks", flat=True
             )
         )
-        print(getterm)
         if marks:
             if sum(marks):
                 getclassnumber[idstudent.id] = sum(marks)
@@ -568,18 +574,18 @@ def update_term_results(
     a = 0
     if getterm:
         try:
-            getterm[getterms] = (
-                [getstreamrankid[a]] + [getclassrankid[a]] + getterm[getterms]
+            getterm[getterms.name] = (
+                [getstreamrankid[a]] + [getclassrankid[a]] + getterm[getterms.name]
             )
             a += 1
 
             calcavg = round(calculate_average(totalmarks, getsubjectcount))
             if calcavg:
-                getterm[getterms].append(get_grade(Getgrading, calcavg).name)
-                getterm[getterms].append(get_grade(Getgrading, calcavg).points)
+                getterm[getterms.name].append(get_grade(Getgrading, calcavg).name)
+                getterm[getterms.name].append(get_grade(Getgrading, calcavg).points)
             else:
-                getterm[getterms].append("")
-                getterm[getterms].append("")
+                getterm[getterms.name].append("")
+                getterm[getterms.name].append("")
         except IndexError:
             pass
     return getterm
@@ -629,13 +635,16 @@ def getgrade():
 def get_grade(grades, percent_or_marks):
     grade_name = None
     for grade in grades:
-        if percent_or_marks >= grade.percent and percent_or_marks <= 100:
+        if (
+            percent_or_marks >= grade.percent
+            and percent_or_marks >= 0
+            and percent_or_marks <= 100
+        ):
             grade_name = grade
             break
     return grade_name
 
 
-# working ok
 def calculate_average(totalmarks, divider):
     try:
         getaverage = totalmarks / divider
