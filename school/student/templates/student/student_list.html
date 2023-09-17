@@ -21,6 +21,7 @@
     <table class="table table-striped table-hover mt-4">
         <thead>
             <tr>
+                <th>No</th>
                 <th>First Name</th>
                 <th>Middle Name</th>
                 <th>Admission No</th>
@@ -37,6 +38,7 @@
         <tbody>
             {% for detail in student %}
             <tr>
+                <td>{{forloop.counter}}</td>
                 <td>
                     {% if name %}
                     <a href="{% url 'result:student-detail' name detail.id %}">{{ detail.first_name }}</a>

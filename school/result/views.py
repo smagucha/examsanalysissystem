@@ -91,15 +91,10 @@ def student_view(request, id, name, format=None, template_name=None):
         name=student.class_name
     )
     getterm = {}
-    streamnumber = {}
-    classnumber = {}
     getavg = {}
-    points = []
     totalmarks = {}
     getclassrankid = []
     getstreamrankid = []
-    classnumber = {}
-    streamnumber = {}
     getsubjectcount = EnrollStudenttosubect.enroll.get_subjects_for_student_count(
         student=student
     )
@@ -119,8 +114,6 @@ def student_view(request, id, name, format=None, template_name=None):
         studenttotalmarks = totalmarks[getterms.name]
         if totalmarks[getterms.name]:
             termresults.append(studenttotalmarks)
-
-        # getterm[getterms] = termresults
         if sum([i for i in termresults if i != ""]):
             getterm[getterms.name] = termresults
 
@@ -130,11 +123,11 @@ def student_view(request, id, name, format=None, template_name=None):
             ) = get_all_student_result_for_class_and_stream(
                 student_stream, student_class, getterms
             )
-            classnumber[getterms.name], getclassrankid = calculate_class_rank(
+            _, getclassrankid = calculate_class_rank(
                 getclassnumber, student, totalclass, getclassrankid
             )
 
-            streamnumber[getterms.name], getstreamrankid = calculate_stream_rank(
+            _, getstreamrankid = calculate_stream_rank(
                 getstreamnumber, student, getstreamrankid
             )
             getterm = update_term_results(
@@ -147,7 +140,6 @@ def student_view(request, id, name, format=None, template_name=None):
                 subjectname,
                 Getgrading,
             )
-    print(getterm)
     context = {
         "classname": name,
         "getterm": getterm,
@@ -274,10 +266,6 @@ def get_grades_count(name, term, stream):
                 "marks", flat=True
             )
         )
-        # comment line bellow
-        # getstudentmark = [int(m) for m in marks if m != ""]
-        # if not marks:
-        #     continue
         avg_mark = round(calculate_average(sum(marks), len(marks)), 1)
         grades.append(get_grade(Getgrading, avg_mark).name)
     for grading in Getgrading:
@@ -449,11 +437,11 @@ def get_students_by_class_and_stream(name, stream):
     query_params = {"class_name__name": name}
     if stream:
         query_params["stream__name"] = stream
+        # add year on the query
     return Student.objects.filter(**query_params)
 
 
 def collect_student_marks(students, subjects, term):
-    # reduce this function to reduce database querying
     results = []
     for student in students:
         marks = []
@@ -483,7 +471,7 @@ def add_index_to_results(results):
 
 def calculate_average_marks_and_grading(indexed_results, getterms):
     avg_marks = []
-    grading_system = Grading.objects.all()
+    grading_system = getgrade()
     for result in indexed_results:
         subject_marks = result[2:-1]
         subject_marks_with_value = [int(mark) for mark in subject_marks if mark != ""]
@@ -715,6 +703,7 @@ def reportbook(request, name, id, termname):
             totalmarks[gettermname.name],
             getsubjectcount,
         )
+        print(getclassnumber)
     context = {
         "Grade": Gradeterm,
         "totalmarks": totalmarks,
@@ -903,7 +892,6 @@ def calculate_class_ranks(request):
     return render(request, "result/class_ranks.html", context)
 
 
-# this is working fine
 def get_student_avg_and_class_average(students):
     get_avg = []
     for student in students:
@@ -935,3 +923,53 @@ def select_class_for_stream_ranking(request):
         "getclasses": get_class(),
     }
     return render(request, "result/select_class_for_stream_ranking.html", context)
+
+
+@login_required(login_url="/accounts/login/")
+def select_stream_for_subject_ranking(request):
+    if request.method == "POST":
+        selected_class = request.POST.get("selected_class")
+        selected_subject = request.POST.get("selected_subject")
+        selected_term = request.POST.get("selected_term")
+        return redirect(
+            "result:subjectrankingstream",
+            class_name=selected_class,
+            term=selected_term,
+            subject=selected_subject,
+        )
+
+    context = {
+        "getclasses": get_class(),
+        "getterms": all_terms(),
+        "getsubjects": all_subjects(),
+    }
+    return render(request, "result/select_stream_ranking.html", context)
+
+
+@login_required(login_url="/accounts/login/")
+def class_stream_subject_ranking(request, class_name, term, subject):
+    stream = Stream.objects.all()
+    streamsubjectrank = {}
+    for streams in stream:
+        subjectclass = list(
+            Mark.mark.get_subject_marks_for_class_or_stream(
+                student_class_name=class_name,
+                Term=term,
+                subject_name=subject,
+                stream=streams.name,
+            ).values_list("marks", flat=True)
+        )
+        studentpersubject = EnrollStudenttosubect.enroll.student_per_subject_count(
+            subject="english", class_name="class one", stream=streams.name
+        )
+        if subjectclass:
+            streamsubjectrank[streams.name] = sum(subjectclass) / studentpersubject
+    sorted_subject_ranking = dict(
+        sorted(streamsubjectrank.items(), key=lambda item: item[1], reverse=True)
+    )
+    context = {
+        "subject_ranking": sorted_subject_ranking,
+        "subject": subject,
+        "class": class_name,
+    }
+    return render(request, "result/streamsubjectranking.html", context)

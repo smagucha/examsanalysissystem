@@ -164,4 +164,14 @@ urlpatterns = [
     path("select_class", views.select_class_for_stream_ranking, name="selectclass"),
     path("stream ranking/<str:name>", views.stream_ranking, name="streamranking"),
     path("classranking/", views.calculate_class_ranks, name="classranking"),
+    path(
+        "select_stream_for_subject_ranking/",
+        views.select_stream_for_subject_ranking,
+        name="streamsubjecranking",
+    ),
+    path(
+        "subjectrankingstream/<str:class_name>/<str:term>/<str:subject>/",
+        views.class_stream_subject_ranking,
+        name="subjectrankingstream",
+    ),
 ]

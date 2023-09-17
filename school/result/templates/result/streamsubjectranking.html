@@ -1,0 +1,31 @@
+{% extends 'student/base.html' %}
+{% block title %}{{ title }}{% endblock title %}
+{% block content %}
+<h1>{{subject}} ranking for {{class}} streams</h1>
+<div class="table-responsive">
+    <table class="table table-striped table-hover mt-4">
+<thead>
+    <tr>
+        <th>No</th>
+        <th>stream</th>
+        <th>mean</th>
+    </tr>
+</thead>
+<tbody>
+       {%for stream, value in subject_ranking.items%}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>
+                {{stream}}
+            </td>
+            <td>
+                {{value}}
+            </td>
+        </tr>
+       {%endfor%}  
+</tbody>
+</table>
+</div>
+{% endblock %}
+
+

@@ -4,6 +4,7 @@ from .forms import StudentForm, AttendForm, KlassForm, StreamForm, StudentParent
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from result.models import term
+from datetime import datetime
 
 
 @login_required(login_url="/accounts/login/")
@@ -139,9 +140,11 @@ def Take_Attandance(request, name, stream=None):
 # modify this function to fit if there is no stream (for class only)
 @login_required(login_url="/accounts/login/")
 def viewattendanceperstream(request, name, stream=None):
-    attend = Attendance.attend.get_student_list_stream(name=name, stream=stream)
-    for i in attend:
-        print(i)
+    current_year = datetime.now().year
+    current_month = datetime.now().month
+    attend = Attendance.attend.get_student_list_stream(name=name, stream=stream).filter(
+        dateattend__month=current_month,
+    )
     context = {"title": "view attendance", "attend": attend}
     return render(request, "student/viewattend.html", context)
 
