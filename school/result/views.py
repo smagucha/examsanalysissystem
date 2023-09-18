@@ -241,16 +241,17 @@ def get_best_students_data(name, term, stream, subjects):
             continue
 
         max_mark = max(marks)
-        best_student = Mark.objects.get(
+        best_student = Mark.objects.filter(
             student__class_name__name=name,
             Term__name=term,
             name__name=subject.name,
             marks=max_mark,
             year=year,
         )
-        best_students_data.append(
-            (best_student.student.get_student_name(), subject.name, max_mark)
-        )
+        for i in best_student:
+            best_students_data.append(
+                (i.student.get_student_name(), subject.name, max_mark)
+            )
 
     return best_students_data
 
@@ -856,10 +857,8 @@ def class_and_stream_ranking(request):
     return render(request, "result/class_and_stream_ranking.html")
 
 
-# this is working fine
-# add term to this to make it work properly
 @login_required(login_url="/accounts/login/")
-def stream_ranking(request, name):
+def stream_ranking(request, name, term):
     streams = get_stream()
     stream_ranks = {}
     get_avg = {}
@@ -867,21 +866,20 @@ def stream_ranking(request, name):
         students = Student.student.get_student_list_class_or_stream(
             name=name, stream=stream.name
         )
-        get_avg[stream.name] = get_student_avg_and_class_average(students, stream)
+        get_avg[stream.name] = get_student_avg_and_class_average(students, term)
         stream_ranks[stream.name] = calculate_average(
             sum(get_avg[stream.name]), len(get_avg[stream.name])
         )
-    print(stream_ranks)
     sorted_dict = dict(
         sorted(stream_ranks.items(), key=lambda item: item[1], reverse=True)
     )
-    context = {}  # "stream_ranks": sorted_dict, "name": name}
+    context = {"stream_ranks": sorted_dict, "name": name}
 
     return render(request, "result/stream_ranking.html", context)
 
 
 @login_required(login_url="/accounts/login/")
-def calculate_class_ranks(request):
+def calculate_class_ranks(request, term):
     classes = get_class()
     class_ranks = {}
     stream = None
@@ -889,7 +887,7 @@ def calculate_class_ranks(request):
         students = Student.student.get_student_list_class_or_stream(
             name=class_name, stream=stream
         )
-        get_avg = get_student_avg_and_class_average(students)
+        get_avg = get_student_avg_and_class_average(students, term)
         class_ranks[class_name.name] = calculate_average(sum(get_avg), len(get_avg))
     sorted_dict = dict(
         sorted(class_ranks.items(), key=lambda item: item[1], reverse=True)
@@ -898,13 +896,12 @@ def calculate_class_ranks(request):
     return render(request, "result/class_ranks.html", context)
 
 
-def get_student_avg_and_class_average(students, stream):
-    streams = get_stream()
+def get_student_avg_and_class_average(students, term):
     get_avg = []
-    for student in students.filter(stream__name=stream.name):
+    for student in students:
         query_params = {
             "student": student.id,
-            "Term__name": "first term",
+            "Term__name": term,
             "year": 2023,
         }
         get_marks = list(
@@ -922,13 +919,12 @@ def get_student_avg_and_class_average(students, stream):
 def select_class_for_stream_ranking(request):
     if request.method == "POST":
         selected_class = request.POST.get("selected_class")
+        selected_term = request.POST.get("selected_term")
 
-        return redirect(
-            "result:streamranking",
-            name=selected_class,
-        )
+        return redirect("result:streamranking", name=selected_class, term=selected_term)
     context = {
         "getclasses": get_class(),
+        "getterms": all_terms(),
     }
     return render(request, "result/select_class_for_stream_ranking.html", context)
 
@@ -981,3 +977,18 @@ def class_stream_subject_ranking(request, class_name, term, subject):
         "class": class_name,
     }
     return render(request, "result/streamsubjectranking.html", context)
+
+
+@login_required(login_url="/accounts/login/")
+def select_term_for_class_ranking(request):
+    if request.method == "POST":
+        selected_term = request.POST.get("selected_term")
+        return redirect(
+            "result:classranking",
+            term=selected_term,
+        )
+
+    context = {
+        "getterms": all_terms(),
+    }
+    return render(request, "result/select_term_for_class_ranking.html", context)

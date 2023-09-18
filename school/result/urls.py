@@ -160,10 +160,16 @@ urlpatterns = [
         views.update_subjects_enrolled_y_student,
         name="delete_subjects_enrolled_y_student",
     ),
-    path("classstreamraking", views.class_and_stream_ranking, name="classstreamraking"),
-    path("select_class", views.select_class_for_stream_ranking, name="selectclass"),
-    path("stream ranking/<str:name>", views.stream_ranking, name="streamranking"),
-    path("classranking/", views.calculate_class_ranks, name="classranking"),
+    path(
+        "classstreamraking/", views.class_and_stream_ranking, name="classstreamraking"
+    ),
+    path("select_class/", views.select_class_for_stream_ranking, name="selectclass"),
+    path(
+        "stream ranking/<str:name>/<str:term>/",
+        views.stream_ranking,
+        name="streamranking",
+    ),
+    path("classranking/<str:term>/", views.calculate_class_ranks, name="classranking"),
     path(
         "select_stream_for_subject_ranking/",
         views.select_stream_for_subject_ranking,
@@ -173,5 +179,10 @@ urlpatterns = [
         "subjectrankingstream/<str:class_name>/<str:term>/<str:subject>/",
         views.class_stream_subject_ranking,
         name="subjectrankingstream",
+    ),
+    path(
+        "termclassranking/",
+        views.select_term_for_class_ranking,
+        name="termclassranking",
     ),
 ]
