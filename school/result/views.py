@@ -857,20 +857,26 @@ def class_and_stream_ranking(request):
 
 
 # this is working fine
+# add term to this to make it work properly
 @login_required(login_url="/accounts/login/")
 def stream_ranking(request, name):
     streams = get_stream()
     stream_ranks = {}
-    for streamname in streams:
+    get_avg = {}
+    for stream in streams:
         students = Student.student.get_student_list_class_or_stream(
-            name=name, stream=streamname
+            name=name, stream=stream.name
         )
-        get_avg = get_student_avg_and_class_average(students)
-        stream_ranks[streamname.name] = calculate_average(sum(get_avg), len(get_avg))
+        get_avg[stream.name] = get_student_avg_and_class_average(students, stream)
+        stream_ranks[stream.name] = calculate_average(
+            sum(get_avg[stream.name]), len(get_avg[stream.name])
+        )
+    print(stream_ranks)
     sorted_dict = dict(
         sorted(stream_ranks.items(), key=lambda item: item[1], reverse=True)
     )
-    context = {"stream_ranks": sorted_dict, "name": name}
+    context = {}  # "stream_ranks": sorted_dict, "name": name}
+
     return render(request, "result/stream_ranking.html", context)
 
 
@@ -892,9 +898,10 @@ def calculate_class_ranks(request):
     return render(request, "result/class_ranks.html", context)
 
 
-def get_student_avg_and_class_average(students):
+def get_student_avg_and_class_average(students, stream):
+    streams = get_stream()
     get_avg = []
-    for student in students:
+    for student in students.filter(stream__name=stream.name):
         query_params = {
             "student": student.id,
             "Term__name": "first term",
@@ -907,6 +914,7 @@ def get_student_avg_and_class_average(students):
             get_avg.append(calculate_average(sum(get_marks), len(get_marks)))
         else:
             get_avg = [0]
+
     return get_avg
 
 

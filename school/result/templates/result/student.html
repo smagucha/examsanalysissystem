@@ -11,23 +11,16 @@
     <table class="table table-striped table-hover mt-4">
     <thead>
         <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Phone Number</th>
-            <th>Email</th>
-            <th>Physical Address</th>
+            <th>Parent</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>{{student.parent.user.first_name|capfirst}}</a></td>
-            <td>{{student.parent.user.last_name|capfirst}}</td>
-            <td>{{student.parent.phonenumber}}</td>
-            <td>{{student.parent.user.email}}</td>
-            <td>{{student.parent.physical_add|capfirst}}</td>
+            <td>{{student.parent}}</a></td>
         </tr>              
     </tbody>
 </table>
+</div>
 <h1> student results </h1>
 <div class="table-responsive">
     <table class="table table-striped table-hover mt-4">
