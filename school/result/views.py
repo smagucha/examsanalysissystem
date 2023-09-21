@@ -435,10 +435,12 @@ def getresultstreamterm(
 
 
 def get_students_by_class_and_stream(name, stream):
-    query_params = {"class_name__name": name}
+    query_params = {
+        "class_name__name": name,
+        "year": year,
+    }
     if stream:
         query_params["stream__name"] = stream
-        # add year on the query
     return Student.objects.filter(**query_params)
 
 
@@ -704,7 +706,6 @@ def reportbook(request, name, id, termname):
             totalmarks[gettermname.name],
             getsubjectcount,
         )
-        print(getclassnumber)
     context = {
         "Grade": Gradeterm,
         "totalmarks": totalmarks,
@@ -720,7 +721,6 @@ def reportbook(request, name, id, termname):
         "termname": termname,
         "outsubject": outsubject,
     }
-    # return render(request, "result/reportcard.html", context)
     return generate_pdf("result/reportcard.html", context)
 
 
@@ -860,6 +860,7 @@ def class_and_stream_ranking(request):
 @login_required(login_url="/accounts/login/")
 def stream_ranking(request, name, term):
     streams = get_stream()
+    grades = getgrade()
     stream_ranks = {}
     get_avg = {}
     for stream in streams:
@@ -867,9 +868,10 @@ def stream_ranking(request, name, term):
             name=name, stream=stream.name
         )
         get_avg[stream.name] = get_student_avg_and_class_average(students, term)
-        stream_ranks[stream.name] = calculate_average(
-            sum(get_avg[stream.name]), len(get_avg[stream.name])
-        )
+        stream_ranks[stream.name] = get_grade(
+            grades,
+            calculate_average(sum(get_avg[stream.name]), len(get_avg[stream.name])),
+        ).points
     sorted_dict = dict(
         sorted(stream_ranks.items(), key=lambda item: item[1], reverse=True)
     )
@@ -881,6 +883,7 @@ def stream_ranking(request, name, term):
 @login_required(login_url="/accounts/login/")
 def calculate_class_ranks(request, term):
     classes = get_class()
+    grades = getgrade()
     class_ranks = {}
     stream = None
     for class_name in classes:
@@ -888,7 +891,10 @@ def calculate_class_ranks(request, term):
             name=class_name, stream=stream
         )
         get_avg = get_student_avg_and_class_average(students, term)
-        class_ranks[class_name.name] = calculate_average(sum(get_avg), len(get_avg))
+        class_ranks[class_name.name] = get_grade(
+            grades,
+            calculate_average(sum(get_avg), len(get_avg)),
+        ).points
     sorted_dict = dict(
         sorted(class_ranks.items(), key=lambda item: item[1], reverse=True)
     )
@@ -953,6 +959,7 @@ def select_stream_for_subject_ranking(request):
 @login_required(login_url="/accounts/login/")
 def class_stream_subject_ranking(request, class_name, term, subject):
     stream = Stream.objects.all()
+    grades = getgrade()
     streamsubjectrank = {}
     for streams in stream:
         subjectclass = list(
@@ -967,7 +974,8 @@ def class_stream_subject_ranking(request, class_name, term, subject):
             subject="english", class_name="class one", stream=streams.name
         )
         if subjectclass:
-            streamsubjectrank[streams.name] = sum(subjectclass) / studentpersubject
+            avg = sum(subjectclass) / studentpersubject
+            streamsubjectrank[streams.name] = get_grade(grades, avg).points
     sorted_subject_ranking = dict(
         sorted(streamsubjectrank.items(), key=lambda item: item[1], reverse=True)
     )

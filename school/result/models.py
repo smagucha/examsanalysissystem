@@ -2,6 +2,8 @@ from django.db import models
 from student.models import Student, Klass, Stream
 from django.db.models import F
 from datetime import date
+from django.db.models import Sum
+
 
 year = str(date.today().year)
 
