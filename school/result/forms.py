@@ -30,3 +30,9 @@ class MarkForm(ModelForm):
     class Meta:
         model = Mark
         fields = "__all__"
+
+
+class UpdateMarksForm(ModelForm):
+    class Meta:
+        model = Mark
+        fields = ["student", "marks"]

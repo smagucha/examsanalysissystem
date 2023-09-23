@@ -185,4 +185,13 @@ urlpatterns = [
         views.select_term_for_class_ranking,
         name="termclassranking",
     ),
+    path(
+        "subject_results_class/<str:class_name>/<str:term>/<str:subject>/<str:stream>/",
+        views.subject_results_class,
+        name="sujectresults",
+    ),
+    path("updateresult/<int:id>/", views.updatemarks, name="updatemarks"),
+    path(
+        "select_result_to_update/", views.select_result_to_update, name="selectupdate"
+    ),
 ]

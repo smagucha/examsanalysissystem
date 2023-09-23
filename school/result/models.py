@@ -74,20 +74,26 @@ class MarkManager(models.Manager):
         )
 
     def get_subject_marks_for_class_or_stream(
+        self, student_class_name, Term, subject_name, stream
+    ):
+        return self.get_subject_marks_for_class_or_stream_marks(
+            student_class_name, Term, subject_name, stream
+        ).values_list("marks", flat=True)
+
+    def get_subject_marks_for_class_or_stream_marks(
         self, student_class_name, Term, subject_name, stream=None
     ):
         query_params = {
             "student__class_name__name": student_class_name,
             "Term__name": Term,
             "name__name": subject_name,
+            "year": year,
         }
         if stream:
             query_params["student__stream__name"] = stream
 
-        return (
-            self.select_related("student__class_name", "Term", "name")
-            .filter(**query_params)
-            .values_list("marks", flat=True)
+        return self.select_related("student__class_name", "Term", "name").filter(
+            **query_params
         )
 
 
@@ -143,7 +149,7 @@ class EnrollStudenttosubectManager(models.Manager):
     def get_subjects_for_student_count(self, student):
         return self.get_all_students_subject().filter(student=student).count()
 
-    def student_per_subject_count(self, subject, class_name, stream):
+    def student_per_subject_count(self, subject, class_name, stream=None):
         query_params = {
             "class_name__name": class_name,
             "subject__name": subject,

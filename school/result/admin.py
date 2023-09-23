@@ -11,7 +11,7 @@ admin.site.register(subject)
 class MarkAdmin(admin.ModelAdmin):
     search_fields = ["marks"]
     list_display = ["student", "name", "marks", "Term"]
-    list_filter = ["student", "name", "marks", "Term"]
+    list_filter = ["student__class_name__name", "student__stream__name", "name", "Term"]
 
 
 @admin.register(term)
@@ -23,6 +23,13 @@ class TermAdmin(admin.ModelAdmin):
 
 @admin.register(EnrollStudenttosubect)
 class EnrollStudenttosubectAdmin(admin.ModelAdmin):
-    # search_fields = ['student']
-    # list_display = ['student' ]
-    list_filter = ["subject"]
+    search_fields = ["student", "name"]
+    list_display = [
+        "student",
+        "subject",
+    ]
+    list_filter = [
+        "subject",
+        "student__stream__name",
+        "student__class_name__name",
+    ]

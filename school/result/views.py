@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import EnrollStudenttosubect, Mark, subject, term, Grading
 from student.models import Student, Klass, Stream, Attendance
 from parent.models import Parent
-from .forms import subjectForm, TermForm, GradeForm, EnrollForm
+from .forms import subjectForm, TermForm, GradeForm, EnrollForm, UpdateMarksForm
 from django.contrib.auth.decorators import login_required
 from datetime import date
 from io import BytesIO
@@ -967,11 +967,11 @@ def class_stream_subject_ranking(request, class_name, term, subject):
                 student_class_name=class_name,
                 Term=term,
                 subject_name=subject,
-                stream=streams.name,
-            ).values_list("marks", flat=True)
+                stream="red",
+            )
         )
         studentpersubject = EnrollStudenttosubect.enroll.student_per_subject_count(
-            subject="english", class_name="class one", stream=streams.name
+            subject=subject, class_name=class_name, stream="red"
         )
         if subjectclass:
             avg = sum(subjectclass) / studentpersubject
@@ -1000,3 +1000,44 @@ def select_term_for_class_ranking(request):
         "getterms": all_terms(),
     }
     return render(request, "result/select_term_for_class_ranking.html", context)
+
+
+@login_required(login_url="/accounts/login/")
+def select_result_to_update(request):
+    if request.method == "POST":
+        selected_term = request.POST.get("selected_term")
+        selected_class = request.POST.get("selected_class")
+        selected_subject = request.POST.get("selected_subject")
+        selected_stream = request.POST.get("selected_stream")
+        return redirect(
+            "result:sujectresults",
+            class_name=selected_class,
+            term=selected_term,
+            subject=selected_subject,
+            stream=selected_stream,
+        )
+
+    context = {
+        "getclasses": get_class(),
+        "getterms": all_terms(),
+        "getsubjects": all_subjects(),
+        "getstream": get_stream(),
+    }
+    return render(request, "result/select_result_to_update.html", context)
+
+
+@login_required(login_url="/accounts/login/")
+def subject_results_class(request, class_name, term, subject, stream):
+    subject_results = Mark.mark.get_subject_marks_for_class_or_stream_marks(
+        student_class_name=class_name,
+        Term=term,
+        subject_name=subject,
+        stream=stream,
+    )
+    context = {"subject_results": subject_results}
+    return render(request, "result/subject_results.html", context)
+
+
+@login_required(login_url="/accounts/login/")
+def updatemarks(request, id):
+    return database_operation(request, UpdateMarksForm, id)
