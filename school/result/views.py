@@ -76,20 +76,30 @@ def generate_pdf(template_name, context):
     return response
 
 
+def class_stream_count(name, stream=None):
+    if stream:
+        return Student.student.class_or_stream_count(name, stream)
+    return Student.student.class_or_stream_count(name)
+
+
+def student_stream_class(name, stream=None):
+    if stream:
+        return Student.student.get_student_list_class_or_stream(name, stream)
+    return Student.student.get_student_list_class_or_stream(name)
+
+
 @login_required(login_url="/accounts/login/")
 def student_view(request, id, name, format=None, template_name=None):
     student = get_object_or_404(Student, id=id)
-    totalclass = Student.student.class_or_stream_count(name)
-    streamtotal = Student.student.class_or_stream_count(name, student.stream)
-    subjectname = subject.objects.all()
-    terms = term.objects.all()
-    student_stream = Student.student.get_student_list_class_or_stream(
+    totalclass = class_stream_count(name=name)
+    subjectname = all_subjects()
+    terms = all_terms()
+    streamtotal = class_stream_count(name=name, stream=student.stream)
+    student_stream = student_stream_class(
         name=student.class_name, stream=student.stream
     )
     Getgrading = getgrade()
-    student_class = Student.student.get_student_list_class_or_stream(
-        name=student.class_name
-    )
+    student_class = student_stream_class(name=student.class_name)
     getterm = {}
     getavg = {}
     totalmarks = {}
@@ -646,8 +656,8 @@ def calculate_average(totalmarks, divider):
 
 def reportbook(request, name, id, termname):
     student = get_student(Student, id)
-    totalclass = Student.student.class_or_stream_count(name)
-    streamtotal = Student.student.class_or_stream_count(name, student.stream)
+    totalclass = class_stream_count(name=name)
+    streamtotal = class_stream_count(name=name, stream=student.stream)
     terms = all_terms()
     Getgrading = getgrade()
     classnumber = {}
@@ -655,12 +665,10 @@ def reportbook(request, name, id, termname):
     Gradeterm = {}
     totalmarks = {}
     subjectname = all_subjects()
-    student_stream = Student.student.get_student_list_class_or_stream(
+    student_stream = student_stream_class(
         name=student.class_name, stream=student.stream
     )
-    student_class = Student.student.get_student_list_class_or_stream(
-        name=student.class_name
-    )
+    student_class = student_stream_class(name=student.class_name)
     getsubjectcount = EnrollStudenttosubect.enroll.get_subjects_for_student_count(
         student=student
     )
@@ -1041,3 +1049,76 @@ def subject_results_class(request, class_name, term, subject, stream):
 @login_required(login_url="/accounts/login/")
 def updatemarks(request, id):
     return database_operation(request, UpdateMarksForm, id)
+
+
+def get_student_result():
+    student = Student.objects.get(id=8)
+    get_marks = Mark.mark.student_marks(student=student, term="first term")
+    student_class = Student.student.get_student_list_class_or_stream(
+        name=student.class_name
+    )
+    student_stream = Student.student.get_student_list_class_or_stream(
+        name=student.class_name, stream=student.stream
+    )
+    totalclass = Student.student.class_or_stream_count(name=student.class_name)
+    streamtotal = Student.student.class_or_stream_count(
+        name=student.class_name, stream=student.stream
+    )
+    getclassnumber, getstreamnumber = get_all_student_result_for_class_and_stream(
+        student_stream, student_class, "first term"
+    )
+    _, getclassrankid = calculate_class_rank(getclassnumber, student, totalclass, [])
+    result_for_student = {}
+    sum = 0
+    result_for_student["student"] = student.get_student_name()
+    for i in get_marks:
+        result_for_student[i.name.name] = i.marks
+        sum += i.marks
+    result_for_student["total marks"] = sum
+    result_for_student["position"] = getclassrankid[0]
+    return result_for_student
+
+
+print(get_student_result())
+# from twilio.rest import Client
+# from django.conf import settings
+
+# def send_sms(to, body):
+#     client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+
+#     # Check if 'to' is a single phone number or a list of phone numbers
+#     if isinstance(to, str):
+#         to_numbers = [to]
+#     elif isinstance(to, list):
+#         to_numbers = to
+#     else:
+#         raise ValueError("Invalid 'to' argument. It should be a string or a list of strings.")
+
+#     messages = []
+
+#     for phone_number in to_numbers:
+#         message = client.messages.create(
+#             body=body,
+#             from_=settings.TWILIO_PHONE_NUMBER,
+#             to=phone_number
+#         )
+#         messages.append(message)
+
+#     return messages
+# Sending SMS to a single recipient:
+# send_sms("1234567890", "Hello, this is a single recipient message.")
+# Sending SMS to multiple recipients:
+# recipient_numbers = ["1234567890", "9876543210", "5555555555"]
+# send_sms(recipient_numbers, "Hello, this is a message to multiple recipients.")
+# def send_sms_view(request):
+#     # Get the phone number and message from the request or form
+#     phone_number = request.POST.get('phone_number')
+#     message = request.POST.get('message')
+
+#     # Send the SMS
+#     send_sms(phone_number, message)
+
+#     # Handle the response and render a template
+#     # ...
+
+#     return render(request, 'sms_sent.html')

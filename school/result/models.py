@@ -96,6 +96,14 @@ class MarkManager(models.Manager):
             **query_params
         )
 
+    def student_marks(self, student, term):
+        query_params = {
+            "student": student,
+            "Term__name": term,
+            "year": year,
+        }
+        return self.select_related("Term").filter(**query_params)
+
 
 class Mark(models.Model):
     student = models.ForeignKey(
