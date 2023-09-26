@@ -35,10 +35,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # EMAIL_HOST_PASSWORD = 'mys3cr3tp4ssw0rd'
 # EMAIL_USE_TLS = True
 # DEFAULT_FROM_EMAIL = 'TestSite Team <noreply@example.com>'
-
-
-# settings.py
-
-# TWILIO_ACCOUNT_SID = config("TWILIO_ACCOUNT_SID"),
-# TWILIO_AUTH_TOKEN = config("TWILIO_AUTH_TOKEN"),
-# TWILIO_PHONE_NUMBER = config("TWILIO_PHONE_NUMBER"),

@@ -1,9 +1,0 @@
-{% extends 'student/base.html'%}
-{%block title%}{{title}}{%endblock%}
-{%block content%}
-<form method="POST" enctype='multipart/form-data'>
-	{%csrf_token%}
-	<p>are you sure you want to delete {{delparent.first_name}}</p>
-	<input type="submit" name="delete">
-</form>
-{%endblock%}

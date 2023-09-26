@@ -39,7 +39,6 @@ urlpatterns = [
         name="viewattendanceperclass",
     ),
     path("attendupdate/<int:id>/", views.attendupdate, name="updateattend"),
-    # path("getclasses/", views.getclasses, name="enterresulturl"),
     path(
         "takeattendance/",
         views.take_attendance,
@@ -49,20 +48,7 @@ urlpatterns = [
     path("schoolsetting/", views.schoolsetting, name="schoolsetting"),
     path("addclasses/", views.addclasses, name="addclasses"),
     path("addstreams/", views.addstreams, name="addstreams"),
-    path(
-        "allclasses/",
-        views.getclasses,
-        {"template_name": "student/classes.html"},
-        name="allclasses",
-    ),
-    path(
-        "stream/",
-        views.getstreams,
-        {"template_name": "student/stream.html"},
-        name="stream",
-    ),
     path("objectnotfound/", views.objectnotfound, name="objectnotfound"),
     path("deletestudent/<int:id>/", views.delete_student, name="delete_student"),
     path("viewattendance/", views.viewattendance, name="viewattendance"),
-    path("addparent", views.add_student_to_parent, name="addparent"),
 ]

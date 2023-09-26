@@ -8,24 +8,20 @@
     <tr>
         <th>Parents</th>
         <th>student</th>
-        <th>update parent</th>
-        <th>delete parent</th>
     </tr>
 </thead>
 <tbody>
 	{% for parent in getParents%}
     <tr>
         <td>{{parent.parent}}</td>
-        <td>{{parent.student}}</td>
-        <td><a href="{% url 'parent:updateparent' parent.id %}" class="btn btn-primary btn-sm">update</a></td>
-        <td><a href="{% url 'parent:delparent' parent.id %}" class="btn btn-danger btn-sm">delete</a></td>
+        <td>{{parent.parent_phone_number}}</td>
     </tr>
        {%endfor%} 
 </tbody>
 </table>
 </div>
 {%else%}
-<a href="">add parent</a>
+<h1> there are no parents in the system</h1>
 {%endif%}
 {%endblock%}
 

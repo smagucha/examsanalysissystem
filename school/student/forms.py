@@ -1,11 +1,20 @@
 from django.forms import ModelForm
-from .models import Student, Attendance, Klass, Stream, StudentParent
+from .models import Student, Attendance, Klass, Stream
+from django import forms
+
+
+class DateInput(forms.DateInput):
+    input_type = "date"
 
 
 class StudentForm(ModelForm):
     class Meta:
         model = Student
         fields = "__all__"
+        widgets = {
+            "date_of_birth": DateInput(),
+            "date_of_admission": DateInput(),
+        }
 
 
 class AttendForm(ModelForm):
@@ -23,10 +32,4 @@ class KlassForm(ModelForm):
 class StreamForm(ModelForm):
     class Meta:
         model = Stream
-        fields = "__all__"
-
-
-class StudentParentForm(ModelForm):
-    class Meta:
-        model = StudentParent
         fields = "__all__"

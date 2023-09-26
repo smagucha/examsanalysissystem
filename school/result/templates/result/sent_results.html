@@ -1,0 +1,32 @@
+{% extends 'student/base.html' %}
+{% block title %}{{ title }}{% endblock title %}
+{% block content %}
+<form method='POST' class="container">
+    {% csrf_token %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover mt-4">
+            <thead>
+                <tr>
+                    <th class="col-1">No</th>
+                    <th class="col-4">Parent Number</th>
+                    <th class="col-7">Message</th>
+                </tr>
+            </thead>
+            <tbody> 
+                {% for key, value in parent_message.items %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <input type="text" name="parent_phone_number" value="{{ key.parent_phone_number }}" class="form-control">
+                    </td>
+                    <td>
+                        <textarea name="message" class="form-control">{{ value }}</textarea>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <button type='submit' class="btn btn-primary">Send</button>
+</form>
+{% endblock %}

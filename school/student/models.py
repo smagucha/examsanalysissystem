@@ -1,6 +1,5 @@
 from django.db import models
 from datetime import date
-from parent.models import Parent
 
 
 class CommonInfo(models.Model):
@@ -66,6 +65,7 @@ class Student(models.Model):
     date_of_birth = models.DateField()
     date_of_admission = models.DateField()
     parent = models.CharField(max_length=50)
+    parent_phone_number = models.CharField(max_length=50, blank=True, null=True)
     class_name = models.ForeignKey(
         Klass,
         on_delete=models.CASCADE,
@@ -120,8 +120,3 @@ class Attendance(models.Model):
 
     objects = models.Manager()
     attend = AttendManager()
-
-
-class StudentParent(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    parent = models.ForeignKey(Parent, on_delete=models.CASCADE)

@@ -1,8 +1,6 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render
 from .forms import TeacherForm, DesignationForm, TeachersubjectForm
 from .models import Teacher, Designation, Teachersubjects
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User, Group
 from student.views import database_operation, delete_database_operation
 from django.contrib.auth.decorators import login_required
 

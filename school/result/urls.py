@@ -1,8 +1,6 @@
 from django.urls import path
 from . import views
 
-from student.views import getclasses, getstreams
-
 app_name = "result"
 urlpatterns = [
     path("allsubject/", views.allsubject, name="allsubject"),
@@ -192,6 +190,17 @@ urlpatterns = [
     ),
     path("updateresult/<int:id>/", views.updatemarks, name="updatemarks"),
     path(
+        "select_class_to_sent_result/",
+        views.select_class_to_sent_result,
+        name="selectclasstosentresult",
+    ),
+    path(
         "select_result_to_update/", views.select_result_to_update, name="selectupdate"
     ),
+    path(
+        "sent_results/<str:class_name>/<str:term>/",
+        views.sent_results,
+        name="sentresultspage",
+    ),
+    path("send_sms_view/", views.send_sms_view, name="messagesuccess"),
 ]

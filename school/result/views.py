@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import EnrollStudenttosubect, Mark, subject, term, Grading
 from student.models import Student, Klass, Stream, Attendance
-from parent.models import Parent
 from .forms import subjectForm, TermForm, GradeForm, EnrollForm, UpdateMarksForm
 from django.contrib.auth.decorators import login_required
 from datetime import date
@@ -15,6 +14,8 @@ from student.views import (
     delete_database_operation,
 )
 from student.views import get_class, get_stream
+from twilio.rest import Client
+from django.conf import settings
 
 
 year = str(date.today().year)
@@ -88,6 +89,10 @@ def student_stream_class(name, stream=None):
     return Student.student.get_student_list_class_or_stream(name)
 
 
+def student_subject_count(student):
+    return EnrollStudenttosubect.enroll.get_subjects_for_student_count(student=student)
+
+
 @login_required(login_url="/accounts/login/")
 def student_view(request, id, name, format=None, template_name=None):
     student = get_object_or_404(Student, id=id)
@@ -105,9 +110,7 @@ def student_view(request, id, name, format=None, template_name=None):
     totalmarks = {}
     getclassrankid = []
     getstreamrankid = []
-    getsubjectcount = EnrollStudenttosubect.enroll.get_subjects_for_student_count(
-        student=student
-    )
+    getsubjectcount = student_subject_count(student)
     outsubject = getsubjectcount * 100
     for getterms in terms:
         termresults = []
@@ -370,7 +373,7 @@ def enrolldelete(request, id):
 @login_required(login_url="/accounts/login")
 def enrollstudentstosubject(request, name, stream):
     getstudents = get_students_by_class_and_stream(name, stream)
-    getsubjects = subject.objects.all()
+    getsubjects = all_subjects()
     if request.method == "POST":
         getsubjectid = request.POST.getlist("subjectid")
         getstudentsub = []
@@ -421,7 +424,7 @@ def subjectperrank(
 def getresultstreamterm(
     request, name, term, stream=None, template_name=None, format=None
 ):
-    subjects = subject.objects.all()
+    subjects = all_subjects()
     students = get_students_by_class_and_stream(name, stream)
     results = collect_student_marks(students, subjects, term)
     sorted_results = sort_results_by_total_marks(results)
@@ -1051,21 +1054,21 @@ def updatemarks(request, id):
     return database_operation(request, UpdateMarksForm, id)
 
 
-def get_student_result():
-    student = Student.objects.get(id=8)
-    get_marks = Mark.mark.student_marks(student=student, term="first term")
-    student_class = Student.student.get_student_list_class_or_stream(
-        name=student.class_name
-    )
+def get_student_result(student, term, class_name):
+    grades = getgrade()
+    get_marks = Mark.mark.student_marks(student=student.id, term=term)
+    student_class = Student.student.get_student_list_class_or_stream(name=class_name)
     student_stream = Student.student.get_student_list_class_or_stream(
-        name=student.class_name, stream=student.stream
+        name=class_name, stream=student.stream
     )
-    totalclass = Student.student.class_or_stream_count(name=student.class_name)
+    subjectcount = getsubjectcount = student_subject_count(student)
+    totalmarks = subjectcount * 100
+    totalclass = Student.student.class_or_stream_count(name=class_name)
     streamtotal = Student.student.class_or_stream_count(
-        name=student.class_name, stream=student.stream
+        name=class_name, stream=student.stream
     )
     getclassnumber, getstreamnumber = get_all_student_result_for_class_and_stream(
-        student_stream, student_class, "first term"
+        student_stream, student_class, term
     )
     _, getclassrankid = calculate_class_rank(getclassnumber, student, totalclass, [])
     result_for_student = {}
@@ -1074,51 +1077,72 @@ def get_student_result():
     for i in get_marks:
         result_for_student[i.name.name] = i.marks
         sum += i.marks
-    result_for_student["total marks"] = sum
+    result_for_student["total marks"] = f"{sum}/{totalmarks}"
     result_for_student["position"] = getclassrankid[0]
+    result_for_student["Grade"] = get_grade(
+        grades, calculate_average(sum, subjectcount)
+    ).name
+
     return result_for_student
 
 
-print(get_student_result())
-# from twilio.rest import Client
-# from django.conf import settings
+@login_required(login_url="/accounts/login/")
+def select_class_to_sent_result(request):
+    if request.method == "POST":
+        selected_term = request.POST.get("selected_term")
+        selected_class = request.POST.get("selected_class")
+        return redirect(
+            "result:sentresultspage",
+            class_name=selected_class,
+            term=selected_term,
+        )
 
-# def send_sms(to, body):
-#     client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+    context = {
+        "getclasses": get_class(),
+        "getterms": all_terms(),
+    }
+    return render(request, "result/select_class_to_sent_result.html", context)
 
-#     # Check if 'to' is a single phone number or a list of phone numbers
-#     if isinstance(to, str):
-#         to_numbers = [to]
-#     elif isinstance(to, list):
-#         to_numbers = to
-#     else:
-#         raise ValueError("Invalid 'to' argument. It should be a string or a list of strings.")
 
-#     messages = []
+@login_required(login_url="/accounts/login/")
+def sent_results(request, class_name, term):
+    student = student_stream_class(name=class_name)
+    parent_message = {}
+    if request.method == "POST":
+        selected_parent = request.POST.getlist("parent_phone_number")
+        selected_message = request.POST.getlist("message")
+        for i in range(len(selected_message)):
+            to = selected_parent[i]
+            body = selected_message[i]
+            # send_sms(to, body)
+        return redirect("result:messagesuccess")
+    else:
+        for i in student:
+            parent_message[i] = ", ".join(
+                [
+                    f"{key}: {value}"
+                    for key, value in get_student_result(
+                        student=i, term=term, class_name=class_name
+                    ).items()
+                ]
+            )
+        selected_parent = request.POST.getlist("parent_phone_number")
+        selected_message = request.POST.getlist("message")
+    context = {"parent_message": parent_message}
+    return render(request, "result/sent_results.html", context)
 
-#     for phone_number in to_numbers:
-#         message = client.messages.create(
-#             body=body,
-#             from_=settings.TWILIO_PHONE_NUMBER,
-#             to=phone_number
-#         )
-#         messages.append(message)
 
-#     return messages
-# Sending SMS to a single recipient:
-# send_sms("1234567890", "Hello, this is a single recipient message.")
-# Sending SMS to multiple recipients:
-# recipient_numbers = ["1234567890", "9876543210", "5555555555"]
-# send_sms(recipient_numbers, "Hello, this is a message to multiple recipients.")
-# def send_sms_view(request):
-#     # Get the phone number and message from the request or form
-#     phone_number = request.POST.get('phone_number')
-#     message = request.POST.get('message')
+def send_sms(to, body):
+    # Initialize the Twilio client
+    client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
 
-#     # Send the SMS
-#     send_sms(phone_number, message)
+    # Send the SMS
+    message = client.messages.create(
+        body=body, from_=settings.TWILIO_PHONE_NUMBER, to=to
+    )
 
-#     # Handle the response and render a template
-#     # ...
+    return message
 
-#     return render(request, 'sms_sent.html')
+
+def send_sms_view(request):
+    return render(request, "result/sms_sent.html")

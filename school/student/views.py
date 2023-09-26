@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Student, Klass, Attendance, Stream
-from .forms import StudentForm, AttendForm, KlassForm, StreamForm, StudentParentForm
+from .forms import StudentForm, AttendForm, KlassForm, StreamForm
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
-from result.models import term
 from datetime import datetime
 
 
@@ -19,6 +17,7 @@ def database_operation(request, form_class, id=None):
         if form.is_valid():
             form.save()
             form = form_class()
+            return redirect("student:home")
     else:
         form = form_class(instance=instance)
 
@@ -34,25 +33,10 @@ def database_operation(request, form_class, id=None):
 def delete_database_operation(request, mymodel, id):
     try:
         instance = get_object_or_404(mymodel, id=id).delete()
+        return redirect("student:home")
     except:
         return redirect("student:objectnotfound")
     return render(request, "student/delete.html")
-
-
-# # # delete this function after through testing
-@login_required(login_url="/accounts/login/")
-def getclasses(request, template_name):
-    getallclasses = Klass.objects.all()
-    context = {"allclasses": getallclasses}
-    return render(request, template_name, context)
-
-
-# delete this function after through testing
-@login_required(login_url="/accounts/login/")
-def getstreams(request, template_name, name=None):
-    getstream = Stream.objects.all()
-    context = {"allstream": getstream, "name": name}
-    return render(request, template_name, context)
 
 
 @login_required(login_url="/accounts/login/")
@@ -137,7 +121,6 @@ def Take_Attandance(request, name, stream=None):
     return render(request, "student/attend.html", context)
 
 
-# modify this function to fit if there is no stream (for class only)
 @login_required(login_url="/accounts/login/")
 def viewattendanceperstream(request, name, stream=None):
     current_year = datetime.now().year
@@ -233,8 +216,3 @@ def take_attendance(request):
 
     context = {"getclasses": get_class(), "getstream": get_stream()}
     return render(request, "student/takeviewattendance.html", context)
-
-
-@login_required(login_url="/accounts/login/")
-def add_student_to_parent(request):
-    return database_operation(request, StudentParentForm)
