@@ -104,7 +104,7 @@ if not DEBUG:
     EMAIL_BACKEND = config("EMAIL_BACKEND")
     EMAIL_HOST_USER = config("EMAIL_HOST_USER")
     EMAIL_HOST = config("EMAIL_HOST")
-    EMAIL_PORT = config("EMAIL_PORT = 25")
+    EMAIL_PORT = config("EMAIL_PORT")
     EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool)
     EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 else:
@@ -114,3 +114,12 @@ else:
 TWILIO_ACCOUNT_SID = config("TWILIO_ACCOUNT_SID")
 TWILIO_AUTH_TOKEN = config("TWILIO_AUTH_TOKEN")
 TWILIO_PHONE_NUMBER = config("TWILIO_PHONE_NUMBER")
+
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
