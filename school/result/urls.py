@@ -163,7 +163,7 @@ urlpatterns = [
     ),
     path("select_class/", views.select_class_for_stream_ranking, name="selectclass"),
     path(
-        "stream ranking/<str:name>/<str:term>/",
+        "streamranking/<str:name>/<str:term>/",
         views.stream_ranking,
         name="streamranking",
     ),

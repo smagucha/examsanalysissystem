@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Student, Klass, Attendance, Stream
 from .forms import StudentForm, AttendForm, KlassForm, StreamForm
 from django.contrib.auth.decorators import login_required
+from .utils import get_class, get_stream
 from datetime import datetime
 
 
@@ -183,14 +184,6 @@ def viewattendance(request):
             return redirect("student:viewattendanceperclass", name=selected_class)
     context = {"getclasses": Klass.objects.all(), "getstream": Stream.objects.all()}
     return render(request, "student/takeviewattendance.html", context)
-
-
-def get_class():
-    return Klass.objects.all()
-
-
-def get_stream():
-    return Stream.objects.all()
 
 
 @login_required(login_url="/accounts/login/")

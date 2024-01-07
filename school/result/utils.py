@@ -268,16 +268,17 @@ def get_student_avg_and_class_average(students, term):
         query_params = {
             "student": student.id,
             "Term__name": term,
-            "year": 2023,
+            "year": year,
         }
         get_marks = list(
             Mark.objects.filter(**query_params).values_list("marks", flat=True)
         )
+
         if get_marks:
             get_avg.append(calculate_average(sum(get_marks), len(get_marks)))
         else:
-            get_avg = [0]
-
+            get_marks = [0]
+            get_avg.append(0)
     return get_avg
 
 
@@ -401,3 +402,15 @@ def calculate_average_marks_and_grading(indexed_results, getterms):
             result.append(get_grade(grading_system, avg_mark).name)
             result.append(get_grade(grading_system, avg_mark).points)
     return avg_marks
+
+
+def send_sms(to, body):
+    # Initialize the Twilio client
+    client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+
+    # Send the SMS
+    message = client.messages.create(
+        body=body, from_=settings.TWILIO_PHONE_NUMBER, to=to
+    )
+
+    return message

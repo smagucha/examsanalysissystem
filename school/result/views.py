@@ -43,6 +43,7 @@ from .utils import (
     sort_results_by_total_marks,
     add_index_to_results,
     calculate_average_marks_and_grading,
+    send_sms,
 )
 
 
@@ -571,6 +572,7 @@ def stream_ranking(request, name, term):
     sorted_dict = dict(
         sorted(stream_ranks.items(), key=lambda item: item[1], reverse=True)
     )
+    print(sorted_dict)
     context = {"stream_ranks": sorted_dict, "name": name}
 
     return render(request, "result/stream_ranking.html", context)
@@ -644,11 +646,11 @@ def class_stream_subject_ranking(request, class_name, term, subject):
                 student_class_name=class_name,
                 Term=term,
                 subject_name=subject,
-                stream="red",
+                stream=stream,
             )
         )
         studentpersubject = EnrollStudenttosubect.enroll.student_per_subject_count(
-            subject=subject, class_name=class_name, stream="red"
+            subject=subject, class_name=class_name, stream=stream
         )
         if subjectclass:
             avg = sum(subjectclass) / studentpersubject
@@ -764,18 +766,6 @@ def sent_results(request, class_name, term):
         selected_message = request.POST.getlist("message")
     context = {"parent_message": parent_message}
     return render(request, "result/sent_results.html", context)
-
-
-def send_sms(to, body):
-    # Initialize the Twilio client
-    client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-
-    # Send the SMS
-    message = client.messages.create(
-        body=body, from_=settings.TWILIO_PHONE_NUMBER, to=to
-    )
-
-    return message
 
 
 def send_sms_view(request):
