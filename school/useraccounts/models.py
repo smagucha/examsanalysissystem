@@ -125,8 +125,3 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 
     def get_username(self):
         return self.email
-
-
-# new_group, created = Group.objects.get_or_create(name="Admin")
-# new_group1, created = Group.objects.get_or_create(name="Teacher")
-# new_group2, created = Group.objects.get_or_create(name="Parent")

@@ -1,4 +1,5 @@
 from django import template
+from django.contrib.auth.models import Group
 from student.models import Klass, Stream
 
 register = template.Library()

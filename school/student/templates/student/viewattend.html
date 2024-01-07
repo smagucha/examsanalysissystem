@@ -1,4 +1,5 @@
 {% extends 'student/base.html'%}
+{% load custom_tags%}
 {%block title%}{{title}}{%endblock%}
 {%block content%}
 {% if attend%}
@@ -11,8 +12,11 @@
         <th>Date</th>
         <th>Present Status</th>
         <th>Reason</th>
+        {% if request.user|has_group:"Teacher" or request.user|has_group:"Admin" %}
         <th>Update</th>
         <th>delete</th>
+        {%endif%}
+
     </tr>
 </thead>
 <tbody>
@@ -23,8 +27,10 @@
         <td>{{student.dateattend }}</td>
         <td>{{student.present_status|capfirst }}</td>
         <td>{{student.absentwhy|capfirst }}</td>
+        {% if request.user|has_group:"Teacher" or request.user|has_group:"Admin" %}
         <td><a href="{% url 'student:updateattend' student.id %}" class="btn btn-primary btn-sm">update</a></td>
         <td><a href="{% url 'student:deleteattend' student.id %}" class="btn btn-danger btn-sm">delete</a></td>
+        {%endif%}
     </tr>
        {%endfor%}              
 </tbody>

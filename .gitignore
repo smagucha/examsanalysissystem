@@ -1,7 +1,10 @@
 __pycache__/
 venv/
 migrations/
-.env
+.env.prod
+.env.dev
 
 .coverage
 htmlcov/
+app.yaml
+.env.prod

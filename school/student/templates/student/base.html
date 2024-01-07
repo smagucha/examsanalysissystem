@@ -94,12 +94,14 @@
           <span>Dashboard</span>
         </a>
       </li>
+      {% if request.user|has_group:"Teacher" or request.user|has_group:"Admin" %}
       <li class="nav-item">
         <a class="nav-link " href="{% url 'parent:listparent' %}">
           <i class="bi bi-person-circle"></i>
           <span>parent</span>
         </a>
       </li>
+      {%endif%}
       <li class="nav-item">
         <a class="nav-link " href="{% url 'event:listevents' %}">
           <i class="bi bi-calendar-event"></i>
@@ -112,18 +114,21 @@
           <span>teachers</span>
         </a>
       </li>
+      {% if request.user|has_group:"Teacher" or request.user|has_group:"Admin" %}
        <li class="nav-item">
         <a class="nav-link " href="{% url 'student:takeattendance' %}">
           <i class="bi bi-card-list"></i>
           <span>take attendance</span>
         </a>
       </li>
+      {%endif%}
        <li class="nav-item">
         <a class="nav-link " href="{% url 'student:viewattendance' %}">
           <i class="bi bi-journal"></i>
           <span>view attendance</span>
         </a>
       </li>
+      {% if request.user|has_group:"Teacher" or request.user|has_group:"Admin" %}
       <li class="nav-item">
         <a class="nav-link " href="{% url 'result:enterresults' %}">
           <i class="bi bi-file-earmark-fill"></i>
@@ -136,6 +141,7 @@
           <span>update results</span>
         </a>
       </li>
+      {%endif%}
       <li class="nav-item">
         <a class="nav-link " href="{% url 'result:classubjectranking' %}">
           <i class="bi bi-file-earmark-easel"></i>
@@ -160,6 +166,7 @@
           <span>subject ranking per stream</span>
         </a>
       </li>
+      {% if request.user|has_group:"Teacher" or request.user|has_group:"Admin" %}
       <li class="nav-item">
         <a class="nav-link " href="{% url 'result:selectclasstosentresult' %}">
           <i class="bi bi-gear"></i>
@@ -172,6 +179,7 @@
           <span>settings</span>
         </a>
       </li>
+      {%endif%}
     </ul>
   </aside><!-- End Sidebar-->
   <main id="main" class="main">

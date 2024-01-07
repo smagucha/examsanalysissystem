@@ -12,20 +12,14 @@ def database_operation(request, form_class, id=None):
     else:
         instance = None
 
-    if request.method == "POST":
-        form = form_class(request.POST, instance=instance)
-        if form.is_valid():
-            form.save()
-            form = form_class()
-            return redirect("student:home")
-    else:
-        form = form_class(instance=instance)
+    form = form_class(request.POST or None, instance=instance)
 
-    if id:
-        title = "Update Data"
-    else:
-        title = "Add Data"
-    context = {"form": form, "title": title}
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        redirect_url = request.POST.get("next", "student:home")
+        return redirect(redirect_url)
+
+    context = {"form": form, "title": "Update Data" if id else "Add Data"}
     return render(request, "student/generalform.html", context)
 
 
@@ -179,7 +173,6 @@ def viewattendance(request):
     if request.method == "POST":
         selected_class = request.POST.get("selected_class")
         selected_stream = request.POST.get("selected_stream")
-        print(selected_stream)
         if selected_stream:
             return redirect(
                 "student:viewattendanceperstream",

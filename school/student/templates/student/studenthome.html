@@ -1,4 +1,5 @@
 {% extends 'student/base.html' %}
+{% load custom_tags%}
 {% block title %}{{ title }}{% endblock title %}
 {% block content %}
 <div class="col-lg-6 col-md-6 col-sm-12 w-100">
@@ -6,7 +7,7 @@
         <div class="card-body">
             <h5 class="card-title">
                 <p class="mb-0">Total students in school: {{ student_count }}</p>
-            <p class="mb-0">Total teachers in school: 96</p>
+            <p class="mb-0">Total teachers in school: 0</p>
             </h5>
         </div>
     </div>
@@ -26,11 +27,15 @@
     {% include 'student/divdown.html' %}
     {% endfor %}
 </div>
+{% if request.user|has_group:"Teacher" or request.user|has_group:"Admin" %}
 <button type="button" class="btn btn-outline-primary mt-3">
     <a href="{% url 'student:addstudent' %}" class="text-dark">Add Student to the System</a>
 </button>
+{%endif%}
 {% else %}
+{%if request.user|has_group:"Teacher" or request.user|has_group:"Admin"%}
 {% include 'student/buttonaddstudent.html' %}
+{%endif%}
 <p>To take attendance, streams need to be added.</p>
 {% endif %}
 {% endblock %}

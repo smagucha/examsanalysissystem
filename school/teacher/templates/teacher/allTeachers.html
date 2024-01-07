@@ -1,10 +1,13 @@
 {% extends 'student/base.html'%}
+{% load custom_tags%}
 {%block title%}{{title}}{%endblock%}
 {%block content%}
 {%if listTeacher%}
+{% if request.user|has_group:"Teacher" or request.user|has_group:"Admin" %}
 <button type="button" class="btn btn-outline-primary mt-3">
     <a href="{% url 'addTeacher' %}" class="text-dark">add teacher</a>
 </button>
+{%endif%}
 <div class="table-responsive">
     <table class="table table-striped table-hover mt-4">
 <thead>
@@ -16,8 +19,10 @@
         <th>Date Of Appointment</th>
         <th>Gender</th>
         <th>Designation</th>
+        {% if request.user|has_group:"Teacher" or request.user|has_group:"Admin" %}
         <th>Update</th>
         <th>Delete</th>
+        {%endif%}
     </tr>
 </thead>
 <tbody>
@@ -30,8 +35,10 @@
         <td>{{Teacher.date_of_appointment}}</td>
         <td>{{Teacher.gender|capfirst}}</td>
         <td>{{Teacher.designation|capfirst}}</td>
+        {% if request.user|has_group:"Teacher" or request.user|has_group:"Admin" %}
         <td><a href="{% url 'updateTeacher' Teacher.id%}" class="btn btn-primary btn-sm">Update</a></td>
         <td><a href="{% url 'deleteTeacher' Teacher.id%}" class="btn btn-danger btn-sm">Delete</a></td>
+        {%endif%}
     </tr>
        {%endfor%}              
 </tbody>
@@ -39,10 +46,12 @@
 </div>
 {%else%}
 <h1>There are no teachers in the system</h1>
+{% if request.user|has_group:"Teacher" or request.user|has_group:"Admin" %}
 <p>
 <button type="button" class="btn btn-outline-primary mt-3">
     <a href="{% url 'addTeacher' %}" class="text-dark">add teacher</a>
 </button>
 </p>
+{%endif%}
 {%endif%}
 {%endblock%}
