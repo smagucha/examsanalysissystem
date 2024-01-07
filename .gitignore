@@ -3,8 +3,7 @@ venv/
 migrations/
 .env.prod
 .env.dev
-
 .coverage
 htmlcov/
 app.yaml
-.env.prod
+.env
