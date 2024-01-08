@@ -4,7 +4,6 @@ from student.models import Student, Klass, Stream, Attendance
 from .forms import subjectForm, TermForm, GradeForm, EnrollForm, UpdateMarksForm
 from django.contrib.auth.decorators import login_required
 from datetime import date
-from io import BytesIO
 
 
 from student.views import (
