@@ -27,7 +27,9 @@ class Teacher(models.Model):
     )
     date_of_appointment = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=6, choices=Gender, blank=True)
-    designation = models.ForeignKey(Designation, on_delete=models.CASCADE, blank=True)
+    designation = models.ForeignKey(
+        Designation, on_delete=models.CASCADE, blank=True, null=True
+    )
 
 
 class Teachersubjects(models.Model):

@@ -405,10 +405,8 @@ def calculate_average_marks_and_grading(indexed_results, getterms):
 
 
 def send_sms(to, body):
-    # Initialize the Twilio client
     client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
 
-    # Send the SMS
     message = client.messages.create(
         body=body, from_=settings.TWILIO_PHONE_NUMBER, to=to
     )

@@ -91,7 +91,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     city = models.CharField(max_length=150, blank=True, null=True)
     picture = models.ImageField(blank=True, null=True)
     is_admin = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now, blank=True, null=True)
     objects = MyUserManager()
     USERNAME_FIELD = "email"

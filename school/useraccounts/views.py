@@ -15,9 +15,11 @@ def parentsignup(request):
             form.save()
             email = form.cleaned_data["email"]
             user = MyUser.objects.get(email=email)
-            group = Group.objects.get_or_create(name="Parent")
-            user.groups.add(group.name)
-            user.save()
+            group, created = Group.objects.get_or_create(name="Parent")
+            if created:
+                user.groups.add(group)
+            else:
+                user.groups.add(group.id)
             return redirect("student:home")
     else:
         form = CustomUserCreationForm()
@@ -32,11 +34,13 @@ def teachersignup(request):
             form.save()
             email = form.cleaned_data["email"]
             user = MyUser.objects.get(email=email)
-            group = Group.objects.get_or_create(name="Teacher")
-            user.groups.add(group.name)
-            user.save()
+            group, created = Group.objects.get_or_create(name="Teacher")
+            if created:
+                user.groups.add(group)
+            else:
+                user.groups.add(group.id)
             teacher_signup_signal.send(sender=MyUser, user=user)
-            return redirect("home")
+            return redirect("student:home")
     else:
         form = CustomUserCreationForm()
     context = {"form": form}
@@ -56,6 +60,13 @@ def updateprofile(request):
         "form": form,
     }
     return render(request, "useraccounts/updateprofile.html", context)
+
+
+@login_required(login_url="/accounts/login")
+def alluser(request):
+    users = MyUser.objects.all()
+    context = {"users": users}
+    return render(request, "useraccounts/alluser.html", context)
 
 
 def activateuser(request, id):
