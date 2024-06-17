@@ -1,18 +1,10 @@
 from pathlib import Path
 import os
-import environ
-import io
-
-from google.cloud import secretmanager
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-env = environ.Env(DEBUG=(bool, False))
-env_file = os.path.join(BASE_DIR, ".env")
-
-env.read_env(env_file)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -102,34 +94,6 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "HOST": "localhost",
-        "PORT": 3306,
-        "NAME": "schooldb",
-        "USER": "root",
-        "PASSWORD": "m34sopAn!",
-    }
-}
-
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
-AUTH_USER_MODEL = "useraccounts.MyUser"
-
-EMAIL_BACKEND = env("EMAIL_BACKEND")
-EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-EMAIL_HOST = env("EMAIL_HOST")
-EMAIL_PORT = env("EMAIL_PORT")
-EMAIL_USE_TLS = env("EMAIL_USE_TLS", cast=bool)
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
-
-
-TWILIO_ACCOUNT_SID = env("TWILIO_ACCOUNT_SID")
-TWILIO_AUTH_TOKEN = env("TWILIO_AUTH_TOKEN")
-TWILIO_PHONE_NUMBER = env("TWILIO_PHONE_NUMBER")
-
-
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 STATIC_URL = "/static/"
@@ -141,3 +105,7 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_TZ = True
 TIME_ZONE = "Africa/Nairobi"
 # TIME_ZONE = "UTC+3"
+
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+AUTH_USER_MODEL = "useraccounts.MyUser"
