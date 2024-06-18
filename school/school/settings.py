@@ -107,6 +107,9 @@ USE_TZ = True
 TIME_ZONE = "Africa/Nairobi"
 # TIME_ZONE = "UTC+3"
 
+LOGIN_URL = "/accounts/login/"
+LOGOUT_URL = "/accounts/logout/"
+
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 AUTH_USER_MODEL = "useraccounts.MyUser"
