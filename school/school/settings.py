@@ -121,7 +121,7 @@ EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "https://examsanalysissystem.up.railway.app/",
+    "https://examsanalysissystem-production.up.railway.app/",
 ]
 TWILIO_ACCOUNT_SID = config("TWILIO_ACCOUNT_SID")
 TWILIO_AUTH_TOKEN = config("TWILIO_AUTH_TOKEN")
