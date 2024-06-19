@@ -113,8 +113,19 @@ LOGOUT_URL = "/accounts/logout/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 AUTH_USER_MODEL = "useraccounts.MyUser"
-
-DATABASES = {"default": dj_database_url.config(default=config("DATABASE_URL"))}
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": config("ENGINE"),
+            "NAME": config("NAME"),
+            "HOST": config("HOST"),
+            "PORT": config("PORT"),
+            "USER": config("USER"),
+            "PASSWORD": config("PASSWORD"),
+        }
+    }
+else:
+    DATABASES = {"default": dj_database_url.config(default=config("DATABASE_URL"))}
 EMAIL_BACKEND = config("EMAIL_BACKEND")
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST = config("EMAIL_HOST")

@@ -70,7 +70,7 @@ def alluser(request):
 
 
 def activateuser(request, id):
-    user = User.objects.get(id=id)
+    user = MyUser.objects.get(id=id)
     if request.method == "POST":
         form = activeform(request.POST, instance=user)
         if form.is_valid():
@@ -81,3 +81,13 @@ def activateuser(request, id):
 
     context = {"form": form, "user": user}
     return render(request, "useraccounts/activateuser.html", context)
+
+
+@login_required(login_url="/accounts/login/")
+def deleteuser(request, id):
+    user = MyUser.objects.get(id=id)
+    if request.method == "POST":
+        user.delete()
+        return redirect("alluser")
+    context = {"user": user}
+    return render(request, "useraccounts/deleteuser.html", context)
