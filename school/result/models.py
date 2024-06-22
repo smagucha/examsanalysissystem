@@ -73,13 +73,6 @@ class MarkManager(models.Manager):
             .values_list("marks", flat=True)
         )
 
-    def get_subject_marks_for_class_or_stream(
-        self, student_class_name, Term, subject_name, stream
-    ):
-        return self.get_subject_marks_for_class_or_stream_marks(
-            student_class_name, Term, subject_name, stream
-        ).values_list("marks", flat=True)
-
     def get_subject_marks_for_class_or_stream_marks(
         self, student_class_name, Term, subject_name, stream=None
     ):
@@ -95,6 +88,13 @@ class MarkManager(models.Manager):
         return self.select_related("student__class_name", "Term", "name").filter(
             **query_params
         )
+
+    def get_subject_marks_for_class_or_stream(
+        self, student_class_name, Term, subject_name, stream
+    ):
+        return self.get_subject_marks_for_class_or_stream_marks(
+            student_class_name, Term, subject_name, stream
+        ).values_list("marks", flat=True)
 
     def student_marks(self, student, term):
         query_params = {

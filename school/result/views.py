@@ -645,11 +645,11 @@ def class_stream_subject_ranking(request, class_name, term, subject):
                 student_class_name=class_name,
                 Term=term,
                 subject_name=subject,
-                stream=stream,
+                stream=streams.name,
             )
         )
         studentpersubject = EnrollStudenttosubect.enroll.student_per_subject_count(
-            subject=subject, class_name=class_name, stream=stream
+            subject=subject, class_name=class_name, stream=streams.name
         )
         if subjectclass:
             avg = sum(subjectclass) / studentpersubject
@@ -657,6 +657,7 @@ def class_stream_subject_ranking(request, class_name, term, subject):
     sorted_subject_ranking = dict(
         sorted(streamsubjectrank.items(), key=lambda item: item[1], reverse=True)
     )
+
     context = {
         "subject_ranking": sorted_subject_ranking,
         "subject": subject,
