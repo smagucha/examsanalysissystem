@@ -106,11 +106,6 @@ USE_TZ = True
 TIME_ZONE = "Africa/Nairobi"
 # TIME_ZONE = "UTC+3"
 
-LOGIN_URL = "/accounts/login/"
-LOGOUT_URL = "/accounts/logout/"
-
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
 AUTH_USER_MODEL = "useraccounts.MyUser"
 if DEBUG:
     DATABASES = {
@@ -125,6 +120,13 @@ if DEBUG:
     }
 else:
     DATABASES = {"default": dj_database_url.config(default=config("DATABASE_URL"))}
+    # CSRF_COOKIE_SECURE = True
+    # SESSION_COOKIE_SECURE = True
+    # SECURE_SSL_REDIRECT = True
+    # SECURE_HSTS_SECONDS = 31536000  # 1 year
+    # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    # SECURE_HSTS_PRELOAD = True
+    # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 EMAIL_BACKEND = config("EMAIL_BACKEND")
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST = config("EMAIL_HOST")
@@ -140,12 +142,11 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
-# CSRF_COOKIE_SECURE = True
-# SESSION_COOKIE_SECURE = True
-# SECURE_SSL_REDIRECT = True
-# SECURE_HSTS_SECONDS = 31536000  # 1 year
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-# SECURE_HSTS_PRELOAD = True
-# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+LOGIN_URL = "/accounts/login/"
+LOGOUT_URL = "/accounts/logout/"
+
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
