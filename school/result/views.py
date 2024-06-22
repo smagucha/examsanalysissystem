@@ -242,12 +242,12 @@ def deletegrade(request):
 
 
 @login_required(login_url="/accounts/login/")
-def updatesubject(request):
+def updatesubject(request, id):
     return database_operation(request, subjectForm, id)
 
 
 @login_required(login_url="/accounts/login/")
-def subjectdelete(request):
+def subjectdelete(request, id):
     return delete_database_operation(request, subject, id)
 
 

@@ -80,49 +80,28 @@ def delete_student(request, id):
 def Take_Attandance(request, name, stream=None):
     takeattendance = Student.student.get_student_list_class_or_stream(name, stream)
     result = []
-
     if request.method == "POST":
         getreason = request.POST.getlist("reason")
         getpresent = request.POST.getlist("present_status")
-        getclass = Klass.objects.get(name=name)
-        x = [student.id for student in takeattendance]
-        result.append(x)
-        result.append(getclass.id)
-        result.append(getreason)
-        result.append(getpresent)
-        if stream:
-            getstream = Stream.objects.get(name=stream)
-            result.append(getstream.id)
-
-        for j in range(len(result[0])):
+        for i, student in enumerate(takeattendance):
             attendance_data = {
-                "class_name_id": result[1],
-                "student_id": result[0][j],
-                "present_status": result[3][j],
-                "absentwhy": result[2][j],
+                "class_name_id": student.class_name.id,
+                "student_id": student.id,
+                "present_status": getpresent[i],
+                "absentwhy": getreason[i],
+                "stream": student.stream,
             }
-            if stream:
-                attendance_data["stream_id"] = result[4]
-
             attend = Attendance.objects.create(**attendance_data)
             attend.save()
-
-        if stream:
-            return redirect("student:viewattendanceperstream", name=name, stream=stream)
-        else:
-            return redirect("student:viewattendanceperclass", name=name)
-
+        return redirect("student:viewattendanceperstream", name=name, stream=stream)
     context = {"exam": takeattendance}
     return render(request, "student/attend.html", context)
 
 
 @login_required(login_url="/accounts/login/")
 def viewattendanceperstream(request, name, stream=None):
-    current_year = datetime.now().year
     current_month = datetime.now().month
-    attend = Attendance.attend.get_student_list_stream(name=name, stream=stream).filter(
-        dateattend__month=current_month,
-    )
+    attend = Attendance.attend.get_student_list_stream(name=name, stream=stream)
     context = {"title": "view attendance", "attend": attend}
     return render(request, "student/viewattend.html", context)
 
