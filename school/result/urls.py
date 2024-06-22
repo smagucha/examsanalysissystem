@@ -144,7 +144,12 @@ urlpatterns = [
         name="resultpertermexcelstream",
     ),
     path(
-        "studentenrolledsubjects/",
+        "select_class_subject_enrolled",
+        views.select_class_subject_enrolled,
+        name="select_class_subject_enrolled",
+    ),
+    path(
+        "studentenrolledsubjects/<str:name>/<str:stream>/<str:subject>/",
         views.subjects_enrolled_y_student,
         name="studentenrolledsubjects",
     ),

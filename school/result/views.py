@@ -532,8 +532,31 @@ def enroll_students_to_student(request):
 
 
 @login_required(login_url="/accounts/login/")
-def subjects_enrolled_y_student(request):
-    allsubjectsbystudent = EnrollStudenttosubect.objects.filter(year=year)
+def select_class_subject_enrolled(request):
+    if request.method == "POST":
+        selected_class = request.POST.get("selected_class")
+        selected_stream = request.POST.get("selected_stream")
+        selected_subject = request.POST.get("selected_subject")
+
+        return redirect(
+            "result:studentenrolledsubjects",
+            name=selected_class,
+            stream=selected_stream,
+            subject=selected_subject,
+        )
+    context = {
+        "getclasses": get_class(),
+        "getstream": Stream.objects.all(),
+        "getsubjects": all_subjects(),
+    }
+    return render(request, "result/select_class_subject_enrolled.html", context)
+
+
+@login_required(login_url="/accounts/login/")
+def subjects_enrolled_y_student(request, name, subject, stream=None):
+    allsubjectsbystudent = EnrollStudenttosubect.objects.filter(
+        class_name__name=name, stream__name=stream, subject__name=subject, year=year
+    )
     context = {"allsubjectsbystudent": allsubjectsbystudent}
     return render(request, "result/allsubjectsbystudent.html", context)
 
