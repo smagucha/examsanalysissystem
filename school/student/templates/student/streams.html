@@ -2,16 +2,16 @@
 {% load custom_tags%}
 {% block title %}{{ title }}{% endblock title %}
 {% block content %}
-{%if classes%}
+{%if streams%}
   {% if request.user|has_group:"Admin" %}
-  <a href="{% url 'student:addclasses' %}" class="btn btn-primary btn-sm">add class</a>
+  <a href="{% url 'student:addclasses' %}" class="btn btn-primary btn-sm">add streams</a>
   {%endif%}
 <div class="table-responsive">
     <table class="table table-striped table-hover mt-4">
         <thead>
             <tr>
                 <th>No</th>
-                <th>class</th>
+                <th>stream</th>
                 {% if request.user|has_group:"Admin" %}
                 <th>Update</th>
                 <th>Delete</th>
@@ -19,13 +19,13 @@
             </tr>
         </thead>
         <tbody>
-            {% for class in classes %}
+            {% for stream in streams %}
             <tr>
                 <td>{{forloop.counter}}</td>
-                <td>{{class.name}}</td>
+                <td>{{stream.name}}</td>
                 {% if request.user|has_group:"Admin" %}
-                <td><a href="{% url 'student:updateclass' class.id %}" class="btn btn-primary btn-sm">Update</a></td>
-                <td><a href="{% url 'student:deleteclass' class.id %}" class="btn btn-danger btn-sm">Delete</a></td>
+                <td><a href="{% url 'student:updatestream' stream.id %}" class="btn btn-primary btn-sm">Update</a></td>
+                <td><a href="{% url 'student:deletestream' stream.id %}" class="btn btn-danger btn-sm">Delete</a></td>
                 {%endif%}
             </tr>
             {% endfor %}
@@ -35,7 +35,7 @@
 
 {% else %}
 {% if request.user|has_group:"Admin" %}
-<a href="{% url 'student:addclasses' %}" class="btn btn-primary btn-sm">add class</a>
+<a href="{% url 'student:addstream' %}" class="btn btn-primary btn-sm">add stream</a>
 {% endif %}
 {% endif %}
 {% endblock content%}

@@ -66,6 +66,8 @@ class MyUserManager(BaseUserManager):
         user.is_active = True
         user.set_password(password)
         user.save(using=self._db)
+        admin_group, created = Group.objects.get_or_create(name="Admin")
+        user.groups.add(admin_group)
         return user
 
 

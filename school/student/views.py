@@ -127,8 +127,40 @@ def addclasses(request):
 
 
 @login_required(login_url="/accounts/login/")
+def updateclass(request, id):
+    return database_operation(request, KlassForm, id)
+
+
+@login_required(login_url="/accounts/login/")
+def deleteclass(request, id):
+    return delete_database_operation(request, Klass, id)
+
+
+@login_required(login_url="/accounts/login/")
+def allclasses(request):
+    classes = Klass.objects.all()
+    return render(request, "student/allclasses.html", {"classes": classes})
+
+
+@login_required(login_url="/accounts/login/")
 def addstreams(request):
     return database_operation(request, StreamForm, id=None)
+
+
+@login_required(login_url="/accounts/login/")
+def updatestream(request, id):
+    return database_operation(request, StreamForm, id)
+
+
+@login_required(login_url="/accounts/login/")
+def deletestream(request, id):
+    return delete_database_operation(request, Stream, id)
+
+
+@login_required(login_url="/accounts/login/")
+def allstreams(request):
+    streams = Stream.objects.all()
+    return render(request, "student/streams.html", {"streams": streams})
 
 
 def not_found(request, exception):

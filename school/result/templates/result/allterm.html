@@ -1,31 +1,40 @@
 {% extends 'student/base.html'%}
-{%block title%}{{title}}{%endblock%}
-{%block content%}
+{% load custom_tags%}
+{%block title%}
+{{title}}
+{%endblock title%}
+{% block content%}
 {%if allterm%}
-please add more terms
-{% include 'result/buttonaddterm.html'%}
-<div class="table-responsive">
-    <table class="table table-striped table-hover mt-4">
-        <thead>
-            <tr>
-                <th>Term</th>
-                <th>Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            {%for term in allterm%}
-            <tr>
-                <td>{{term.name}}</td>
-                <td><a href="{% url 'result:deleteterm' term.id %}" class="btn btn-danger btn-sm">delete</a></td>   
-            </tr> 
-            {%endfor%}
-        </tbody>
-    </table>
-</div>
+<p>
+    <button type="button" class="btn btn-outline-primary mt-3">
+        <a href="{% url 'result:addterm' %}" class="text-dark">add term</a>
+    </button>
+</p>
+<h1>terms</h1>
+<table class='table'>
+<thead>
+    <tr>
+        <th>term</th>
+        {% if request.user|has_group:"Admin" %}
+        <th>delete</th>
+        {%endif%}
+    </tr>
+</thead>
+<tbody>
+    {%for term in allterm%}
+    <tr>
+        <td>{{term.name}}</td>
+        {% if request.user|has_group:"Admin" %}
+        <td><a href="'result:deleteterm' term.id %}" class="btn btn-danger btn-sm">delete</a></td> 
+        {%endif%}
+    </tr> 
+    {%endfor%}          
+</tbody>
+</table>
 {%else%}
-please add a term
-{% include 'result/buttonaddterm.html'%}
+<button type="button" class="btn btn-outline-primary mt-3">
+    <a href="{% url 'result:addterm' %}" class="text-dark">add term</a>
+</button>
 {%endif%}
-{%endblock%}
-
+{%endblock content%}
 

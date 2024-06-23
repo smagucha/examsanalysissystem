@@ -16,18 +16,14 @@
 {% include 'student/divup.html' %}
   <a href="{% url 'alluser' %}">all users</a>
 {% include 'student/divdown.html' %}
-{%if stream%}
-{% include 'student/divup.html' %}
-  <a href="{% url 'student:stream' %}">all stream</a>
-{% include 'student/divdown.html' %}
-{%endif%}
-{%if allclasses%}
-{% include 'student/divup.html' %}
-<a href="{% url 'student:allclasses' %}">all classes</a>
-{%endif%}
-{% include 'student/divdown.html' %}
 {% include 'student/divup.html' %}
 <a href="{% url 'result:select_class_subject_enrolled' %}">subjects enrolled by student</a>
+{% include 'student/divdown.html' %}
+{% include 'student/divup.html' %}
+<a href="{% url 'student:allclasses' %}">allclasses</a>
+{% include 'student/divdown.html' %}
+{% include 'student/divup.html' %}
+<a href="{% url 'student:allstreams' %}">allstreams</a>
 {% include 'student/divdown.html' %}
 </div>
 {%endblock content%}
