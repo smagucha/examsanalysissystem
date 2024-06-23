@@ -125,21 +125,17 @@ def enteresult(request, name, Term, Subject, stream=None):
     exam = EnrollStudenttosubect.enroll.get_students_subject(
         name=name, stream=stream, Subject=Subject
     )
-    result = [[] for _ in range(4)]
+    termid = term.objects.get(name=Term).id
+    subjectid = subject.objects.get(name=Subject).id
+    getmarks = request.POST.getlist("subjectname")
     if request.method == "POST":
-        getmarks = request.POST.getlist("subjectname")
-        result[0] = [i.student.id for i in exam]
-        result[1] = [subject.objects.get(name=Subject).id for i in exam]
-        result[2] = [term.objects.get(name=Term).id for i in exam]
-        result[3] = getmarks
-        for j in range(len(result[0])):
+        for i, v in enumerate(exam):
             Marks = Mark.objects.create(
-                student_id=result[0][j],
-                name_id=result[1][j],
-                Term_id=result[2][j],
-                marks=int(result[3][j]),
-            )
-            Marks.save()
+                student=v.student,
+                name_id=subjectid,
+                Term_id=termid,
+                marks=int(getmarks[i]),
+            ).save()
         return redirect("student:home")
     context = {
         "exam": exam,
@@ -698,9 +694,7 @@ def select_term_for_class_ranking(request):
             term=selected_term,
         )
 
-    context = {
-        "getterms": all_terms(),
-    }
+    context = {"getterms": all_terms(), "getclasses": get_class()}
     return render(request, "result/select_term_for_class_ranking.html", context)
 
 
@@ -711,13 +705,21 @@ def select_result_to_update(request):
         selected_class = request.POST.get("selected_class")
         selected_subject = request.POST.get("selected_subject")
         selected_stream = request.POST.get("selected_stream")
-        return redirect(
-            "result:sujectresults",
-            class_name=selected_class,
-            term=selected_term,
-            subject=selected_subject,
-            stream=selected_stream,
-        )
+        if selected_stream:
+            return redirect(
+                "result:sujectresults",
+                class_name=selected_class,
+                term=selected_term,
+                subject=selected_subject,
+                stream=selected_stream,
+            )
+        else:
+            return redirect(
+                "result:sujectresultsclass",
+                class_name=selected_class,
+                term=selected_term,
+                subject=selected_subject,
+            )
 
     context = {
         "getclasses": get_class(),
@@ -729,7 +731,7 @@ def select_result_to_update(request):
 
 
 @login_required(login_url="/accounts/login/")
-def subject_results_class(request, class_name, term, subject, stream):
+def subject_results_class(request, class_name, term, subject, stream=None):
     subject_results = Mark.mark.get_subject_marks_for_class_or_stream_marks(
         student_class_name=class_name,
         Term=term,

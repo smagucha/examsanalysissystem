@@ -193,6 +193,11 @@ urlpatterns = [
         views.subject_results_class,
         name="sujectresults",
     ),
+    path(
+        "subject_results_class/<str:class_name>/<str:term>/<str:subject>",
+        views.subject_results_class,
+        name="sujectresultsclass",
+    ),
     path("updateresult/<int:id>/", views.updatemarks, name="updatemarks"),
     path(
         "select_class_to_sent_result/",

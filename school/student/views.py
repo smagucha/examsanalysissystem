@@ -93,7 +93,10 @@ def Take_Attandance(request, name, stream=None):
             }
             attend = Attendance.objects.create(**attendance_data)
             attend.save()
-        return redirect("student:viewattendanceperstream", name=name, stream=stream)
+        if stream:
+            return redirect("student:viewattendanceperstream", name=name, stream=stream)
+        else:
+            return redirect("student:viewattendanceperclass", name=name)
     context = {"exam": takeattendance}
     return render(request, "student/attend.html", context)
 

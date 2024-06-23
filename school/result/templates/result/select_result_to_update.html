@@ -6,7 +6,21 @@
     {% include 'student/selected_class.html'%}
     {% include 'result/selected_term.html'%}
     {% include 'result/selected_subject.html'%}
-    {% include 'student/selected_stream.html'%}
+    <div class="form-group">
+    <label for="selected_stream">Stream:</label>
+    <div class="d-flex align-items-center">
+        <select class="form-control mr-2" id="selected_stream" name="selected_stream">
+            <option value="" disabled selected style="display:none;">Select stream</option>
+            {% if getstream %}
+                {% for stream in getstream %}
+                    <option value="{{ stream.name }}">{{ stream.name }}</option>
+                {% endfor %}
+            {% else %}
+                <option value="" disabled>No stream available</option>
+            {% endif %}
+        </select>
+    </div>
+</div>
     <button type="submit" class="btn btn-primary" name="submit">Submit</button>
 </form>
 {%endblock%}
